@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet">
+</head>
+<body>
+    <section class="uptab">
+        <section class="blackjacktab">
+            <h1 class="jackname">Blackjack</h1>
+            <section class="jackup">
+                <button class="jackbtn" id="betbtn">Bet</button>
+                <input class="jackbtn" type="number" id="numinput" placeholder="Type a number">
+                <button class="jackbtn" id="hitbtn">Hit</button>
+                <button class="jackbtn" id="standbtn">Stand</button>
+            </section>
+            <section class="jackdown">
+                <section class="jackcards">
+                    <img src="https://balatrowiki.org/images/Red_Deck.png?b56d3" class="card" id="card1">
+                    <img src="https://balatrowiki.org/images/Red_Deck.png?b56d3" class="card" id="card2">
+                    <img src="https://balatrowiki.org/images/Red_Deck.png?b56d3" class="card" id="card3">
+                    <img src="https://balatrowiki.org/images/Red_Deck.png?b56d3" class="card" id="card4">
+                </section>
+                <section class="jackinfo">
+                    <h1 id="cardval">Total value: None</h1>
+                    <h1 id="bet">Current bet: None</h1>
+                </section>
+                <section class="dealerside">
+                        <h1>Dealer</h1>
+                    <section class="jackdealercards">
+                        <img src="https://balatrowiki.org/images/Red_Deck.png?b56d3" class="card" id="dcard1">
+                        <img src="https://balatrowiki.org/images/Red_Deck.png?b56d3" class="card" id="dcard2">
+                        <img src="https://balatrowiki.org/images/Red_Deck.png?b56d3" class="card" id="dcard3">
+                        <img src="https://balatrowiki.org/images/Red_Deck.png?b56d3" class="card" id="dcard4">
+                    </section>
+                    <h1 id="dcardval">Total value: None</h1>
+                </section>
+            </section>
+        </section>
+        <section class="maintab">
+            <h1 id="amount">0 cookies</h1>
+            <img id="thecookie" src="https://png.pngtree.com/png-vector/20240310/ourmid/pngtree-cute-chocolate-chip-cookie-in-pixel-art-png-image_11926992.png">
+        </section>
+        <section class="sidetab">
+            <h1 class="sidebtn" id="btnclicker">Clicker: 20</h1>
+            <h1 class="sidebtn" id="btnupg">Upgrade: 40</h1>
+        </section>
+    </section>
+</body>
+<script type="module" src="script.js"></script>
+</html>
