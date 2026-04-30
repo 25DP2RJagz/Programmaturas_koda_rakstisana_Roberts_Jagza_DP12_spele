@@ -94,7 +94,7 @@ let currentbet = 0
 function startblackjack() {
         if (input.value > 0 && input.value <= amount && !blackjack) {
             amount -= input.value
-            counter.innerHTML = amount
+            counter.innerHTML = amount + " cookies"
             bet.innerHTML = "Current bet: " + input.value
             currentbet = parseInt(input.value)
             blackjack = true
@@ -156,7 +156,7 @@ function drawcard() {
     const drawn = choosecard()
     switch (card) {
         case 1:
-            card1.src = drawn.img
+            flipCard(card1, drawn.img)
             cardval1 = getCardValue(drawn)
             card++
             cardval.innerHTML = "Total value: " + (cardval1 + cardval2 + cardval3 + cardval4)
@@ -169,7 +169,7 @@ function drawcard() {
             }
             break
         case 2:
-            card2.src = drawn.img
+            flipCard(card2, drawn.img)
             cardval2 = getCardValue(drawn)
             card++
             cardval.innerHTML = "Total value: " + (cardval1 + cardval2 + cardval3 + cardval4)
@@ -182,7 +182,7 @@ function drawcard() {
             }
             break
         case 3:
-            card3.src = drawn.img
+            flipCard(card3, drawn.img)
             cardval3 = getCardValue(drawn)
             card++
             cardval.innerHTML = "Total value: " + (cardval1 + cardval2 + cardval3 + cardval4)
@@ -195,7 +195,7 @@ function drawcard() {
             }
             break
         case 4:
-            card4.src = drawn.img
+            flipCard(card4, drawn.img)
             cardval4 = getCardValue(drawn)
             card++
             cardval.innerHTML = "Total value: " + (cardval1 + cardval2 + cardval3 + cardval4)
@@ -216,11 +216,22 @@ hitbtn.addEventListener("click", () => {
         drawcard()
     }
 })
+function flipCard(cardElement, newSrc) {
+    cardElement.classList.add("flipping")
+
+    setTimeout(() => {
+        cardElement.src = newSrc
+    }, 200)
+
+    setTimeout(() => {
+        cardElement.classList.remove("flipping")
+    }, 400)
+}
 function dealerdrawcard() {
     const drawn = choosecard()
         switch (dcard) {
             case 1:
-                dcard1.src = drawn.img
+                flipCard(dcard1, drawn.img)
                 dcardval1 = getCardValue(drawn)
                 dcard++
                 dcardval.innerHTML = "Total value: " + (dcardval1 + dcardval2 + dcardval3 + dcardval4)
@@ -232,7 +243,7 @@ function dealerdrawcard() {
                 }
                 break
             case 2:
-                dcard2.src = drawn.img
+                flipCard(dcard2, drawn.img)
                 dcardval2 = getCardValue(drawn)
                 dcard++
                 dcardval.innerHTML = "Total value: " + (dcardval1 + dcardval2 + dcardval3 + dcardval4)
@@ -244,7 +255,7 @@ function dealerdrawcard() {
                 }
                 break
             case 3:
-                dcard3.src = drawn.img
+                flipCard(dcard3, drawn.img)
                 dcardval3 = getCardValue(drawn)
                 dcard++
                 dcardval.innerHTML = "Total value: " + (dcardval1 + dcardval2 + dcardval3 + dcardval4)
@@ -256,7 +267,7 @@ function dealerdrawcard() {
                 }
                 break
             case 4:
-                dcard4.src = drawn.img
+                flipCard(dcard4, drawn.img)
                 dcardval4 = getCardValue(drawn)
                 dcard++
                 dcardval.innerHTML = "Total value: " + (dcardval1 + dcardval2 + dcardval3 + dcardval4)
