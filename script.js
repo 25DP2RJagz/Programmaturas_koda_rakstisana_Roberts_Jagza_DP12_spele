@@ -6,6 +6,7 @@ const input = document.getElementById("numinput")
 const bet = document.getElementById("bet")
 const hitbtn = document.getElementById("hitbtn")
 const betbtn = document.getElementById("betbtn")
+const allinbtn = document.getElementById("allinbtn")
 const standbtn = document.getElementById("standbtn")
 const cardval = document.getElementById("cardval")
 const dcardval = document.getElementById("dcardval")
@@ -159,12 +160,11 @@ let stand = false
 let dstand = false
 let currentbet = 0
 
-function startblackjack() {
-        if (input.value > 0 && input.value <= amount && !blackjack) {
-            amount -= input.value
+function startblackjack(betamount) {
+            amount -= betamount
             counter.innerHTML = formatNumber(amount) + " cookies"
-            bet.innerHTML = "Current bet: " + formatNumber(parseInt(input.value))
-            currentbet = parseInt(input.value)
+            bet.innerHTML = "Current bet: " + formatNumber(parseInt(betamount))
+            currentbet = parseInt(betamount)
             blackjack = true
             deck = [...fulldeck]
             cardval1 = 0
@@ -192,19 +192,27 @@ function startblackjack() {
             dcardval.innerHTML = "Total value: " + (dcardval1 + dcardval2 + dcardval3 + dcardval4)
             drawcard()
             dealerdrawcard()
-    }
 }
 betbtn.addEventListener("click", () => {
-    startblackjack()
+    if (input.value > 0 && input.value <= amount && !blackjack) {
+                    startblackjack(input.value)
+    }
 })
 input.addEventListener("keydown", () => {
     if (event.key === "Enter") {
-        startblackjack()
+        if (input.value > 0 && input.value <= amount && !blackjack) {
+                    startblackjack(input.value)
+        }
 }})
 standbtn.addEventListener("click", () => {
     if (!busted && !stand) {
         stand = true
         dealerplay()
+    }
+})
+allinbtn.addEventListener("click", () => {
+    if (!blackjack) {
+            startblackjack(amount)
     }
 })
 function getCardValue(card) {
