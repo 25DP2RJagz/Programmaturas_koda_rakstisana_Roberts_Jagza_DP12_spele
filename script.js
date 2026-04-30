@@ -9,6 +9,16 @@ const betbtn = document.getElementById("betbtn")
 const standbtn = document.getElementById("standbtn")
 const cardval = document.getElementById("cardval")
 const dcardval = document.getElementById("dcardval")
+const clickervalue = document.getElementById("clickerprice")
+const clickeramount = document.getElementById("clickeramount")
+const upgprice = document.getElementById("upgprice")
+const upgamount = document.getElementById("upgamount")
+const cdbtn = document.getElementById("cdupg")
+const cdprice = document.getElementById("cdprice")
+const cdamount = document.getElementById("cdamount")
+const pwbtn = document.getElementById("pwupg")
+const pwprice = document.getElementById("pwprice")
+const pwamount = document.getElementById("pwamount")
 import { fulldeck } from "./deck.js"
 
 let amount = 0
@@ -16,7 +26,13 @@ let clicker = 0
 let upg = 1
 let clickercost = 20
 let upgcost = 40
+let cdcost = 50
+let cd = 0
+let clickerrunning = false
+let pw = 0
+let pwcost = 500
 
+let gainHistory = []
 
 const card1 = document.getElementById("card1")
 const card2 = document.getElementById("card2")
@@ -29,44 +45,96 @@ const dcard3 = document.getElementById("dcard3")
 const dcard4 = document.getElementById("dcard4")
 
 const cardbackimage = [
-    "https://balatrowiki.org/images/Red_Deck.png?b56d3","https://balatrowiki.org/images/Red_Deck.png?b56d3","https://balatrowiki.org/images/Yellow_Deck.png?9cdee",
-    "https://balatrowiki.org/images/Magic_Deck.png?e8151"
+
 ]
+const baseSpeed = 2000
+function clickLoop() {
+    amount += clicker * Math.pow(3, pw)
+    spawnFloatingNumber(clicker * Math.pow(3, pw))
+    trackGain(clicker * Math.pow(3, pw))
+    counter.innerHTML = formatNumber(amount) + " cookies"
 
-setInterval(() => {
-    for ( let i = 0; i < clicker; i++) {
-        amount += 1
-        spawnFloatingNumber(1)
-        counter.innerHTML = amount + " cookies"
-        cookie.classList.remove("cookie-click")
-        void cookie.offsetWidth
-        cookie.classList.add("cookie-click")
+    setTimeout(clickLoop, getClickInterval())
+}
+function getClickInterval() {
+    return baseSpeed * Math.pow(0.7, cd) * Math.pow(0.25, pw)
+}
+function formatNumber(num) {
+    const abs = Math.abs(num)
+
+    if (abs >= 1e21) {
+        return (num / 1e21).toFixed(1).replace(/\.0$/, "") + "Sx"
     }
-}, 1000);
+    if (abs >= 1e18) {
+        return (num / 1e18).toFixed(1).replace(/\.0$/, "") + "Qi"
+    }
+    if (abs >= 1e15) {
+        return (num / 1e15).toFixed(1).replace(/\.0$/, "") + "Qa"
+    }
+    if (abs >= 1e12) {
+        return (num / 1e12).toFixed(1).replace(/\.0$/, "") + "T"
+    }
+    if (abs >= 1e9) {
+        return (num / 1e9).toFixed(1).replace(/\.0$/, "") + "B"
+    }
+    if (abs >= 1e6) {
+        return (num / 1e6).toFixed(1).replace(/\.0$/, "") + "M"
+    }
+    if (abs >= 1e3) {
+        return (num / 1e3).toFixed(1).replace(/\.0$/, "") + "K"
+    }
 
+    return num.toString()
+}
 clickerupg.addEventListener("click", () => {
     if (amount >= clickercost) {
         amount -= clickercost
-        counter.innerHTML = amount + " cookies"
-        clickercost = Math.round(clickercost * 1.3)
+        counter.innerHTML = formatNumber(amount) + " cookies"
+        clickercost = Math.round(clickercost * 1.15)
         clicker += 1
-        clickerupg.innerHTML = "Clicker: " + clickercost
+        clickervalue.innerHTML = "Clicker: " + formatNumber(clickercost)
+        clickeramount.innerHTML = clicker
+        if (!clickerrunning) {
+            clickerrunning = true
+            clickLoop()
+        }
     }
 })
 upgupg.addEventListener("click", () => {
     if (amount >= upgcost) {
         amount -= upgcost
-        counter.innerHTML = amount + " cookies"
-        upgcost = Math.round(upgcost * 1.6)
+        counter.innerHTML = formatNumber(amount) + " cookies"
+        upgcost = Math.round(upgcost * 1.2)
         upg += 1
-        upgupg.innerHTML = "Upgrade: " + upgcost
+        upgprice.innerHTML = "Mouse: " + formatNumber(upgcost)
+        upgamount.innerHTML = upg
     }
 })
-
+cdbtn.addEventListener("click", () => {
+    if (amount >= cdcost) {
+        amount -= cdcost
+        counter.innerHTML = formatNumber(amount) + " cookies"
+        cdcost = Math.round(cdcost * 1.25)
+        cd += 1
+        cdprice.innerHTML = "Clicker CD: " + formatNumber(cdcost)
+        cdamount.innerHTML = cd
+    }
+})
+pwbtn.addEventListener("click", () => {
+    if (amount >= pwcost) {
+        amount -= pwcost
+        counter.innerHTML = formatNumber(amount) + " cookies"
+        pwcost = Math.round(Math.pow(pwcost, 2))
+        pw += 1
+        pwprice.innerHTML = "Clicker PW: " + formatNumber(pwcost)
+        pwamount.innerHTML = pw
+    }
+})
 cookie.addEventListener("click", () => {
     amount += upg
+    trackGain(upg)
     spawnFloatingNumber(upg)
-    counter.innerHTML = amount + " cookies"
+    counter.innerHTML = formatNumber(amount) + " cookies"
     cookie.classList.remove("cookie-click")
     void cookie.offsetWidth
     cookie.classList.add("cookie-click")
@@ -94,8 +162,8 @@ let currentbet = 0
 function startblackjack() {
         if (input.value > 0 && input.value <= amount && !blackjack) {
             amount -= input.value
-            counter.innerHTML = amount + " cookies"
-            bet.innerHTML = "Current bet: " + input.value
+            counter.innerHTML = formatNumber(amount) + " cookies"
+            bet.innerHTML = "Current bet: " + formatNumber(parseInt(input.value))
             currentbet = parseInt(input.value)
             blackjack = true
             deck = [...fulldeck]
@@ -298,13 +366,16 @@ function finishmatch() {
     if (!blackjack) return
     if ((!busted && (dcardval1 + dcardval2 + dcardval3 + dcardval4) < (cardval1 + cardval2 + cardval3 + cardval4)) || (dbusted && !busted)) {
         amount += parseInt(currentbet) * 2
-        spawnFloatingNumber(parseInt(currentbet) * 2)
+        spawnFloatingNumberBlack(parseInt(currentbet) * 2)
+        trackGain(parseInt(currentbet) * 2)
         blackjack = false
-        counter.innerHTML = amount + " cookies"
+        counter.innerHTML = formatNumber(amount) + " cookies"
     } else if (!busted && (dcardval1 + dcardval2 + dcardval3 + dcardval4) == (cardval1 + cardval2 + cardval3 + cardval4) && !dbusted) {
         amount += parseInt(currentbet)
         blackjack = false
-        counter.innerHTML = amount + " cookies"
+        counter.innerHTML = formatNumber(amount) + " cookies"
+        spawnFloatingNumberBlack(parseInt(currentbet))
+        trackGain(parseInt(currentbet))
     } else {
         blackjack = false
     }
@@ -314,6 +385,9 @@ function spawnFloatingNumber(value) {
     const number = document.createElement("div")
     number.className = "floating-number"
     number.textContent = "+" + value
+
+    const rotation = getRotation()
+    number.style.setProperty('--rot', rotation + 'deg')
 
     const cookieRect = cookie.getBoundingClientRect()
     const parentRect = document.querySelector(".maintab").getBoundingClientRect()
@@ -326,7 +400,55 @@ function spawnFloatingNumber(value) {
 
     document.querySelector(".maintab").appendChild(number)
 
-    setTimeout(() => {
-        number.remove()
-    }, 300)
+    setTimeout(() => number.remove(), 300)
 }
+function spawnFloatingNumberBlack(value) {
+    const number = document.createElement("div")
+    number.className = "floating-number-blackjack"
+    number.textContent = "+" + value
+
+    const rotation = getRotation()
+    number.style.setProperty('--rot', rotation + 'deg')
+
+    const cookieRect = cookie.getBoundingClientRect()
+    const parentRect = document.querySelector(".maintab").getBoundingClientRect()
+
+    const x = cookieRect.left - parentRect.left + Math.random() * cookieRect.width
+    const y = cookieRect.top - parentRect.top + Math.random() * cookieRect.height
+
+    number.style.left = x + "px"
+    number.style.top = y + "px"
+
+    document.querySelector(".maintab").appendChild(number)
+
+    setTimeout(() => number.remove(), 300)
+}
+function getRotation() {
+    return (Math.random() - 0.5) * 60
+}
+function trackGain(amount) {
+    const now = Date.now()
+
+    gainHistory.push({ time: now, amount: amount })
+
+    gainHistory = gainHistory.filter(entry => now - entry.time <= 2000)
+}
+function getCPS() {
+    const now = Date.now()
+
+    gainHistory = gainHistory.filter(entry => now - entry.time <= 5000)
+
+    const total = gainHistory.reduce((sum, entry) => sum + entry.amount, 0)
+
+    return total / 2
+}
+function updateCPSDisplay() {
+    const cps = getCPS()
+
+    document.getElementById("cps").innerHTML =
+        formatNumber(cps) + " cookies/sec"
+
+    requestAnimationFrame(updateCPSDisplay)
+}
+
+updateCPSDisplay()
