@@ -26,7 +26,7 @@ import { gfulldeck } from "./gdeck.js"
 import { nfulldeck } from "./ndeck.js"
 import { blfulldeck } from "./bldeck.js"
 
-let amount = BigInt("99999999999999999999999999999")
+let amount = BigInt("0")
 let clicker = 0
 let upg = BigInt("1")
 let clickercost = BigInt("20")
