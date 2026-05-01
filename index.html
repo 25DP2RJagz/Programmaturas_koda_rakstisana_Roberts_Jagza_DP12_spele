@@ -10,42 +10,103 @@
 <body>
     <section class="uptab">
         <section class="blackjacktab">
-            <h1 class="jackname">Blackjack</h1>
-            <section class="jackup">
-                <button class="jackbtn" id="allinbtn">All In</button>
-                <button class="jackbtn" id="betbtn">Bet</button>
-                <input class="jackbtn" type="number" id="numinput" placeholder="Type a number">
-                <button class="jackbtn" id="hitbtn">Hit</button>
-                <button class="jackbtn" id="standbtn">Stand</button>
-            </section>
-            <section class="jackdown">
-                <section class="jackcards">
-                    <div class="carddiv">
-                        <img src="https://balatrowiki.org/images/Red_Deck.png?b56d3" class="card" id="card1">
-                    </div>
-                    <div class="carddiv">
-                        <img src="https://balatrowiki.org/images/Red_Deck.png?b56d3" class="card" id="card2">
-                    </div>
-                    <div class="carddiv">
-                        <img src="https://balatrowiki.org/images/Red_Deck.png?b56d3" class="card" id="card3">
-                    </div>
-                    <div class="carddiv">
-                        <img src="https://balatrowiki.org/images/Red_Deck.png?b56d3" class="card" id="card4">
-                    </div>
+            <div class="buttons">
+                <button id="playtab" class="tabbtn">Play</button>
+                <button id="decktab" class="tabbtn">Decks</button>
+            </div>
+            <section class="playingsection">
+                <h1 class="jackname">Blackjack</h1>
+                <section class="jackup">
+                    <button class="jackbtn" id="allinbtn">All In</button>
+                    <button class="jackbtn" id="betbtn">Bet</button>
+                    <input class="jackbtn" type="number" id="numinput" placeholder="Type a number">
+                    <button class="jackbtn" id="hitbtn">Hit</button>
+                    <button class="jackbtn" id="standbtn">Stand</button>
                 </section>
-                <section class="jackinfo">
-                    <h1 id="cardval">Total value: None</h1>
-                    <h1 id="bet">Current bet: None</h1>
-                </section>
-                <section class="dealerside">
-                        <h1>Dealer</h1>
-                    <section class="jackdealercards">
+                <section class="jackdown">
+                    <section class="jackcards">
+                        <div class="carddiv">
+                            <img src="https://balatrowiki.org/images/Red_Deck.png?b56d3" class="card" id="card1">
+                        </div>
+                        <div class="carddiv">
+                            <img src="https://balatrowiki.org/images/Red_Deck.png?b56d3" class="card" id="card2">
+                        </div>
+                        <div class="carddiv">
+                            <img src="https://balatrowiki.org/images/Red_Deck.png?b56d3" class="card" id="card3">
+                        </div>
+                        <div class="carddiv">
+                            <img src="https://balatrowiki.org/images/Red_Deck.png?b56d3" class="card" id="card4">
+                        </div>
+                    </section>
+                    <section class="jackinfo">
+                        <h1 id="cardval">Total value: None</h1>
+                        <h1 id="bet">Current bet: None</h1>
+                    </section>
+                    <section class="dealerside">
+                        <section class="dealertop">
+                            <h1 id="dcardval">Total value: None</h1>
+                            <h1>Dealer</h1>
+                        </section>
+                        <section class="jackdealercards">
                             <img src="https://balatrowiki.org/images/Red_Deck.png?b56d3" class="card" id="dcard1">
                             <img src="https://balatrowiki.org/images/Red_Deck.png?b56d3" class="card" id="dcard2">
                             <img src="https://balatrowiki.org/images/Red_Deck.png?b56d3" class="card" id="dcard3">
                             <img src="https://balatrowiki.org/images/Red_Deck.png?b56d3" class="card" id="dcard4">
+                        </section>
                     </section>
-                    <h1 id="dcardval">Total value: None</h1>
+                </section>
+            </section>
+
+            <section class="customdecks">
+                <div id="deckdisplaydiv">
+                    <h1 id="deckdisplay">Custom decks</h1>
+                </div>
+                <section class="decks">
+                    <div class="deck" id="rdeck">
+                        <h1 class="nomargin smalltext">Red Deck</h1>
+                        <img class="deckimg" src="https://balatrowiki.org/images/Red_Deck.png?b56d3">
+                        <h1 class="nomargin smalltext" id="rstatus">Selected</h1>
+                    </div>
+                    <div class="deck" id="ydeck">
+                        <h1 class="nomargin smalltext">Yellow Deck</h1>
+                        <img class="deckimg" src="https://balatrowiki.org/images/Yellow_Deck.png?9cdee">
+                        <h1 class="nomargin smalltext" id="ystatus">Selected</h1>
+                    </div>
+                    <div class="deck" id="bdeck">
+                        <h1 class="nomargin smalltext">Blue Deck</h1>
+                        <img class="deckimg" src="https://balatrowiki.org/images/Blue_Deck.png?00228">
+                        <h1 class="nomargin smalltext" id="bstatus">Selected</h1>
+                    </div>
+                    <div class="deck" id="grdeck">
+                        <h1 class="nomargin smalltext">Green Deck</h1>
+                        <img class="deckimg" src="https://balatrowiki.org/images/Green_Deck.png?5f8ea">
+                        <h1 class="nomargin smalltext" id="grstatus">Selected</h1>
+                    </div>
+                    <div class="deck" id="bldeck">
+                        <h1 class="nomargin smalltext">Black Deck</h1>
+                        <img class="deckimg" src="https://balatrowiki.org/images/Black_Deck.png?0e79f">
+                        <h1 class="nomargin smalltext" id="blstatus">Selected</h1>
+                    </div>
+                    <div class="deck" id="gdeck">
+                        <h1 class="nomargin smalltext">Ghost Deck</h1>
+                        <img class="deckimg" src="https://balatrowiki.org/images/Ghost_Deck.png?4aae9">
+                        <h1 class="nomargin smalltext" id="gstatus">Selected</h1>
+                    </div>
+                    <div class="deck" id="mdeck">
+                        <h1 class="nomargin smalltext">Magic Deck</h1>
+                        <img class="deckimg" src="https://balatrowiki.org/images/Magic_Deck.png?e8151">
+                        <h1 class="nomargin smalltext" id="mstatus">Selected</h1>
+                    </div>
+                    <div class="deck" id="ndeck">
+                        <h1 class="nomargin smalltext">Nebula Deck</h1>
+                        <img class="deckimg" src="https://balatrowiki.org/images/Nebula_Deck.png?38113">
+                        <h1 class="nomargin smalltext" id="nstatus">Selected</h1>
+                    </div>
+                    <div class="deck" id="zdeck">
+                        <h1 class="nomargin smalltext">Erratic Deck</h1>
+                        <img class="deckimg" src="https://balatrowiki.org/images/Erratic_Deck.png?171f6">
+                        <h1 class="nomargin smalltext" id="zstatus">Selected</h1>
+                    </div>
                 </section>
             </section>
         </section>
