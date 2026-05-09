@@ -7,6 +7,8 @@ const bet = document.getElementById("bet")
 const hitbtn = document.getElementById("hitbtn")
 const betbtn = document.getElementById("betbtn")
 const allinbtn = document.getElementById("allinbtn")
+const bet12btn = document.getElementById("bet12btn")
+const bet14btn = document.getElementById("bet14btn")
 const standbtn = document.getElementById("standbtn")
 const cardval = document.getElementById("cardval")
 const dcardval = document.getElementById("dcardval")
@@ -14,12 +16,6 @@ const clickervalue = document.getElementById("clickerprice")
 const clickeramount = document.getElementById("clickeramount")
 const upgprice = document.getElementById("upgprice")
 const upgamount = document.getElementById("upgamount")
-const cdbtn = document.getElementById("cdupg")
-const cdprice = document.getElementById("cdprice")
-const cdamount = document.getElementById("cdamount")
-const pwbtn = document.getElementById("pwupg")
-const pwprice = document.getElementById("pwprice")
-const pwamount = document.getElementById("pwamount")
 import { fulldeck } from "./deck.js"
 import { bfulldeck } from "./bdeck.js"
 import { gfulldeck } from "./gdeck.js"
@@ -30,13 +26,7 @@ let amount = BigInt("0")
 let clicker = 0
 let upg = BigInt("1")
 let clickercost = BigInt("20")
-let upgcost = BigInt("40")
-let cdcost = BigInt("50")
-let cd = 0
-let clickerrunning = false
-let pw = 0
-let pwcost = BigInt("500")
-let clickdelay = 1
+let upgcost = BigInt("10")
 
 let gainHistory = []
 
@@ -50,18 +40,6 @@ const dcard2 = document.getElementById("dcard2")
 const dcard3 = document.getElementById("dcard3")
 const dcard4 = document.getElementById("dcard4")
 
-const baseSpeed = 1000
-function clickLoop() {
-    amount += BigInt(Math.round(clicker * Math.pow(2.5, pw)))
-    spawnFloatingNumber(clicker * Math.pow(2.5, pw))
-    trackGain(clicker * Math.pow(2.5, pw))
-    counter.innerHTML = formatNumber(amount) + " cookies"
-
-    setTimeout(clickLoop, getClickInterval())
-}
-function getClickInterval() {
-    return baseSpeed * Math.pow(0.9, cd) * Math.pow(1.5, pw)
-}
 function formatNumber(num) {
     if (typeof num === 'bigint') {
         const numStr = num.toString()
@@ -95,55 +73,151 @@ function formatNumber(num) {
 
     return formatNumber(BigInt(Math.floor(num)))
 }
+const amount1 = document.getElementById("amount1")
+const amount5 = document.getElementById("amount5")
+const amount25 = document.getElementById("amount25")
+const amountmax = document.getElementById("amountmax")
+let buyamount = 1
+amount1.addEventListener("click", () => {buyamount = 1; updateprices()})
+amount5.addEventListener("click", () => {buyamount = 5; updateprices()})
+amount25.addEventListener("click", () => {buyamount = 25; updateprices()})
+amountmax.addEventListener("click", () => {buyamount = 0; updateprices()})
+function updateprices() {
+    updateClickerPrice(); updateUpgPrice()
+}
+updateprices()
+const upgrades = document.getElementById("upgrades")
+clickerupg.addEventListener("mouseenter", () => {upgrades.innerHTML = "Joe makes the best pizzas, 1 p/s."})
+clickerupg.addEventListener("mouseleave", () => {upgrades.innerHTML = "Upgrades"})
+upgupg.addEventListener("mouseenter", () => {upgrades.innerHTML = "Oven for making pizzas manually."})
+upgupg.addEventListener("mouseleave", () => {upgrades.innerHTML = "Upgrades"})
+setInterval(() => {
+    if (clicker > 0) {
+        amount += BigInt(clicker)
+
+        trackGain(clicker)
+        spawnFloatingNumber(clicker)
+
+        counter.innerHTML =
+            formatNumber(amount) + " pizzas"
+    }
+
+
+
+
+    updateprices()
+
+}, 1000)
+function getBulkCost(startCost, multiplier, amountToBuy) {
+    let cost = startCost
+    let total = 0n
+
+    for (let i = 0; i < amountToBuy; i++) {
+        total += cost
+        cost = cost * BigInt(multiplier) / 100n
+    }
+
+    return total
+}
+function getMaxAffordable(startCost, multiplier) {
+    let cost = startCost
+    let total = 0n
+    let bought = 0
+
+    while (total + cost <= amount) {
+        total += cost
+        cost = cost * BigInt(multiplier) / 100n
+        bought++
+    }
+
+    return bought
+}
 clickerupg.addEventListener("click", () => {
-    if (amount >= clickercost) {
-        amount -= clickercost
-        counter.innerHTML = formatNumber(amount) + " cookies"
-        clickercost = clickercost * BigInt(115) / BigInt(100)
-        clicker += 1
-        clickervalue.innerHTML = "Clicker: " + formatNumber(clickercost)
-        clickeramount.innerHTML = clicker
-        if (!clickerrunning) {
-            clickerrunning = true
-            clickLoop()
+    let amountToBuy = buyamount
+
+    if (buyamount === 0) {
+        amountToBuy = getMaxAffordable(clickercost, 115)
+    }
+
+    const totalCost = getBulkCost(clickercost, 115, amountToBuy)
+
+    if (amount >= totalCost) {
+        amount -= totalCost
+
+        for (let i = 0; i < amountToBuy; i++) {
+            clickercost = clickercost * 115n / 100n
+            clicker += 1
         }
+
+        counter.innerHTML = formatNumber(amount) + " pizzas"
+
+        clickervalue.innerHTML =
+            "Joe x" + amountToBuy + ": " + formatNumber(totalCost)
+
+        clickeramount.innerHTML = clicker
+
+        updateClickerPrice()
+
     }
 })
+function updateClickerPrice() {
+    let amountToBuy = buyamount
+
+    if (buyamount === 0) {
+        amountToBuy = getMaxAffordable(clickercost, 115)
+    }
+
+    const totalCost = getBulkCost(clickercost, 115, amountToBuy)
+
+    clickervalue.innerHTML =
+        "Joe x" + amountToBuy + ": " + formatNumber(totalCost)
+}
 upgupg.addEventListener("click", () => {
-    if (amount >= upgcost) {
-        amount -= upgcost
-        counter.innerHTML = formatNumber(amount) + " cookies"
-        upgcost = upgcost * BigInt(120) / BigInt(100)
-        upg += BigInt("1")
-        upgprice.innerHTML = "Mouse: " + formatNumber(upgcost)
+    let amountToBuy = buyamount
+
+    if (buyamount === 0) {
+        amountToBuy = getMaxAffordable(upgcost, 130)
+    }
+
+    const totalCost = getBulkCost(upgcost, 130, amountToBuy)
+
+    if (amount >= totalCost) {
+        amount -= totalCost
+
+        for (let i = 0; i < amountToBuy; i++) {
+            upgcost = upgcost * 130n / 100n
+            upg += 1n
+        }
+
+        counter.innerHTML = formatNumber(amount) + " pizzas"
+
+        upgprice.innerHTML =
+            "Oven x" + amountToBuy + ": " + formatNumber(upgcost)
+
         upgamount.innerHTML = upg
+
+        updateUpgPrice()
+
     }
 })
-cdbtn.addEventListener("click", () => {
-    if (amount >= cdcost) {
-        amount -= cdcost
-        counter.innerHTML = formatNumber(amount) + " cookies"
-        cdcost = cdcost * BigInt(125) / BigInt(100)
-        cd += 1
-        cdprice.innerHTML = "Clicker CD: " + formatNumber(cdcost)
-        cdamount.innerHTML = cd
+function updateUpgPrice() {
+    let amountToBuy = buyamount
+
+    if (buyamount === 0) {
+        amountToBuy = getMaxAffordable(upgcost, 130)
     }
-})
-pwbtn.addEventListener("click", () => {
-    if (amount >= pwcost) {
-        amount -= pwcost
-        counter.innerHTML = formatNumber(amount) + " cookies"
-        pwcost = pwcost * BigInt(230) / BigInt(100)
-        pw += 1
-        pwprice.innerHTML = "Clicker PW: " + formatNumber(pwcost)
-        pwamount.innerHTML = pw
-    }
-})
+
+    const totalCost = getBulkCost(upgcost, 130, amountToBuy)
+
+    upgprice.innerHTML =
+        "Oven x" + amountToBuy + ": " + formatNumber(totalCost)
+}
 cookie.addEventListener("click", () => {
     amount += BigInt(upg)
     trackGain(upg)
     spawnFloatingNumber(upg)
-    counter.innerHTML = formatNumber(amount) + " cookies"
+    updateprices()
+    counter.innerHTML = formatNumber(amount) + " pizzas"
     cookie.classList.remove("cookie-click")
     void cookie.offsetWidth
     cookie.classList.add("cookie-click")
@@ -184,8 +258,8 @@ function deckattributes() {
             winmult = 190
             break
         case 3:
-            bustamount = 20
-            winmult = 400
+            bustamount = 19
+            winmult = 300
             break
         case 4:
             bustamount = 10000
@@ -235,9 +309,11 @@ function assigndeck() {
             return [...fulldeck]
     }
 }
+let hasface = false
+let dhasface = false
 function startblackjack(betamount) {
             amount -= betamount
-            counter.innerHTML = formatNumber(amount) + " cookies"
+            counter.innerHTML = formatNumber(amount) + " pizzas"
             bet.innerHTML = "Current bet: " + formatNumber(parseInt(betamount))
             currentbet = betamount
             blackjack = true
@@ -257,6 +333,8 @@ function startblackjack(betamount) {
             busted = false
             dstand = false
             dbusted = false
+            hasface = false
+            dhasface = false
             deckattributes()
             if (card2.src != deckimg(currentdeck)) {
                 flipCard(card2, deckimg(currentdeck))
@@ -300,6 +378,16 @@ standbtn.addEventListener("click", () => {
         dealerplay()
     }
 })
+bet12btn.addEventListener("click", () => {
+    if (!blackjack) {
+            startblackjack(amount / BigInt(2))
+    }
+})
+bet14btn.addEventListener("click", () => {
+    if (!blackjack) {
+            startblackjack(amount / BigInt(4))
+    }
+})
 allinbtn.addEventListener("click", () => {
     if (!blackjack) {
             startblackjack(amount)
@@ -311,6 +399,10 @@ function getCardValue(card) {
     if (value === "a") return 11
     if (["k", "q", "j"].includes(value)) return 10
     return parseInt(value)
+}
+function facecheck(card) {
+    const value = card.name.slice(0, -1)
+    if (["k", "q", "j"].includes(value)) return true
 }
 function choosecard() {
     const index = Math.floor(Math.random() * deck.length)
@@ -329,6 +421,16 @@ function choosedealercard() {
     ddeck.splice(index, 1)
     return card
 }
+function acecheck() {
+    if (cardval1 + cardval2 + cardval3 + cardval4 > bustamount && cardval1 == 11) cardval1 = 1
+    if (cardval1 + cardval2 + cardval3 + cardval4 > bustamount && cardval2 == 11) cardval2 = 1
+    if (cardval1 + cardval2 + cardval3 + cardval4 > bustamount && cardval3 == 11) cardval3 = 1
+    if (cardval1 + cardval2 + cardval3 + cardval4 > bustamount && cardval4 == 11) cardval4 = 1
+    if (dcardval1 + dcardval2 + dcardval3 + dcardval4 > 21 && dcardval1 == 11) dcardval1 = 1
+    if (dcardval1 + dcardval2 + dcardval3 + dcardval4 > 21 && dcardval2 == 11) dcardval2 = 1 
+    if (dcardval1 + dcardval2 + dcardval3 + dcardval4 > 21 && dcardval3 == 11) dcardval3 = 1 
+    if (dcardval1 + dcardval2 + dcardval3 + dcardval4 > 21 && dcardval4 == 11) dcardval4 = 1 
+}
 let drawn = 0
 function drawcard() {
     if (currentdeck == 9) {
@@ -341,6 +443,8 @@ function drawcard() {
             flipCard(card1, drawn.img)
             cardval1 = getCardValue(drawn)
             card++
+            acecheck()
+            if (!hasface) hasface = facecheck(drawn)
             cardval.innerHTML = "Total value: " + (cardval1 + cardval2 + cardval3 + cardval4)
             if (cardval1 + cardval2 + cardval3 + cardval4 == bustamount) {
                 if (!busted && !stand) {
@@ -359,6 +463,8 @@ function drawcard() {
             flipCard(card2, drawn.img)
             cardval2 = getCardValue(drawn)
             card++
+            acecheck()
+            if (!hasface) hasface = facecheck(drawn)
             cardval.innerHTML = "Total value: " + (cardval1 + cardval2 + cardval3 + cardval4)
             if (cardval1 + cardval2 + cardval3 + cardval4 == bustamount) {
                 if (!busted && !stand) {
@@ -377,6 +483,7 @@ function drawcard() {
             flipCard(card3, drawn.img)
             cardval3 = getCardValue(drawn)
             card++
+            acecheck()
             cardval.innerHTML = "Total value: " + (cardval1 + cardval2 + cardval3 + cardval4)
             if (cardval1 + cardval2 + cardval3 + cardval4 == bustamount) {
                 if (!busted && !stand) {
@@ -395,6 +502,7 @@ function drawcard() {
             flipCard(card4, drawn.img)
             cardval4 = getCardValue(drawn)
             card++
+            acecheck()
             cardval.innerHTML = "Total value: " + (cardval1 + cardval2 + cardval3 + cardval4)
             if (cardval1 + cardval2 + cardval3 + cardval4 == bustamount) {
                 if (!busted && !stand) {
@@ -458,6 +566,8 @@ function dealerdrawcard() {
                 flipCard(dcard1, drawn.img)
                 dcardval1 = getCardValue(drawn)
                 dcard++
+                acecheck()
+                if (!dhasface) dhasface = facecheck(drawn)
                 dcardval.innerHTML = "Total value: " + (dcardval1 + dcardval2 + dcardval3 + dcardval4)
                 if (dcardval1 + dcardval2 + dcardval3 + dcardval4 > 21) {
                     dcardval.innerHTML = "Total value: " + (dcardval1 + dcardval2 + dcardval3 + dcardval4) + " (busted)"
@@ -470,6 +580,8 @@ function dealerdrawcard() {
                 flipCard(dcard2, drawn.img)
                 dcardval2 = getCardValue(drawn)
                 dcard++
+                acecheck()
+                if (!dhasface) dhasface = facecheck(drawn)
                 dcardval.innerHTML = "Total value: " + (dcardval1 + dcardval2 + dcardval3 + dcardval4)
                 if (dcardval1 + dcardval2 + dcardval3 + dcardval4 > 21) {
                     dcardval.innerHTML = "Total value: " + (dcardval1 + dcardval2 + dcardval3 + dcardval4) + " (busted)"
@@ -482,6 +594,7 @@ function dealerdrawcard() {
                 flipCard(dcard3, drawn.img)
                 dcardval3 = getCardValue(drawn)
                 dcard++
+                acecheck()
                 dcardval.innerHTML = "Total value: " + (dcardval1 + dcardval2 + dcardval3 + dcardval4)
                 if (dcardval1 + dcardval2 + dcardval3 + dcardval4 > 21) {
                     dcardval.innerHTML = "Total value: " + (dcardval1 + dcardval2 + dcardval3 + dcardval4) + " (busted)"
@@ -494,6 +607,7 @@ function dealerdrawcard() {
                 flipCard(dcard4, drawn.img)
                 dcardval4 = getCardValue(drawn)
                 dcard++
+                acecheck()
                 dcardval.innerHTML = "Total value: " + (dcardval1 + dcardval2 + dcardval3 + dcardval4)
                 if (dcardval1 + dcardval2 + dcardval3 + dcardval4 > 21) {
                     dcardval.innerHTML = "Total value: " + (dcardval1 + dcardval2 + dcardval3 + dcardval4) + " (busted)"
@@ -520,29 +634,35 @@ function dealerplay() {
 }
 let nebulachance = 0
 function finishmatch() {
-    if ((!busted && (dcardval1 + dcardval2 + dcardval3 + dcardval4) < (cardval1 + cardval2 + cardval3 + cardval4)) || (dbusted && !busted)) {
+    if ((!busted && (dcardval1 + dcardval2 + dcardval3 + dcardval4) < (cardval1 + cardval2 + cardval3 + cardval4)) || (dbusted && !busted) || ((dcardval1 + dcardval2 + dcardval3 + dcardval4) == (cardval1 + cardval2 + cardval3 + cardval4) && !busted && !dbusted && hasface && !hasface && cardval3 == 0 && cardval4 == 0 && (cardval1 == 11 || cardval2 == 11))) {
         amount += currentbet * (BigInt(winmult) + magicmult) / BigInt(100)
+        questwin()
         spawnFloatingNumber(currentbet * (BigInt(winmult) +magicmult) / BigInt(100))
         blackjack = false
         magicmult += BigInt(100)
-        counter.innerHTML = formatNumber(amount) + " cookies"
-    } else if (!busted && (dcardval1 + dcardval2 + dcardval3 + dcardval4) == (cardval1 + cardval2 + cardval3 + cardval4) && !dbusted) {
+        counter.innerHTML = formatNumber(amount) + " pizzas"
+    } else if ((!busted && (dcardval1 + dcardval2 + dcardval3 + dcardval4) == (cardval1 + cardval2 + cardval3 + cardval4) && !dbusted && ((!hasface && !dhasface) || (hasface && dhasface)))) {
         amount += currentbet
         blackjack = false
-        counter.innerHTML = formatNumber(amount) + " cookies"
+        counter.innerHTML = formatNumber(amount) + " pizzas"
         spawnFloatingNumber(currentbet)
     } else {
         magicmult = BigInt(0)
         nebulachance = Math.random()
         if (nebulachance <= 0.4 && currentdeck == 8) {
             amount += currentbet
-            counter.innerHTML = formatNumber(amount) + " cookies"
+            counter.innerHTML = formatNumber(amount) + " pizzas"
             spawnFloatingNumber(currentbet)
         }
         blackjack = false
     }
 }
-
+function questwin() {
+    if (currentdeck == 1) {redwins += 1}
+    if (currentdeck == 2) {yellowwins += 1}
+    if (currentdeck == 3) {bluewins += 1}
+    jackearnings += currentbet * (BigInt(winmult) + magicmult) / BigInt(200)
+}
 function spawnFloatingNumber(value) {
     const number = document.createElement("div")
     number.className = "floating-number"
@@ -587,7 +707,7 @@ function updateCPSDisplay() {
     const cps = getCPS()
 
     document.getElementById("cps").innerHTML =
-        formatNumber(cps) + " cookies/sec"
+        formatNumber(cps) + " pizzas/sec"
 
     requestAnimationFrame(updateCPSDisplay)
 }
@@ -599,16 +719,8 @@ let currentdeck = 1
 function setdeckstatus(number) {
     magicmult = BigInt("0")
     rstatus.innerHTML = "Owned"
-    if (bdeckowned) {
-        bstatus.innerHTML = "Owned"
-    } else {
-        bstatus.innerHTML = "Price: " + formatNumber(bdeckprice)
-    }
-    if (ydeckowned) {
-        ystatus.innerHTML = "Owned"
-    } else {
-        ystatus.innerHTML = "Price: " + formatNumber(ydeckprice)
-    }
+    bstatus.innerHTML = "Owned"
+    ystatus.innerHTML = "Owned"
     if (gdeckowned) {
         gstatus.innerHTML = "Owned"
     } else {
@@ -648,22 +760,18 @@ function setdeckstatus(number) {
             flipCard(card4, deckimg(currentdeck))
             break
         case 2:
-            if (bdeckowned) {
-                bstatus.innerHTML = "Selected"
-                flipCard(card1, deckimg(currentdeck))
-                flipCard(card2, deckimg(currentdeck))
-                flipCard(card3, deckimg(currentdeck))
-                flipCard(card4, deckimg(currentdeck))
-            }
+            bstatus.innerHTML = "Selected"
+            flipCard(card1, deckimg(currentdeck))
+            flipCard(card2, deckimg(currentdeck))
+            flipCard(card3, deckimg(currentdeck))
+            flipCard(card4, deckimg(currentdeck))
             break
         case 3:
-            if (ydeckowned) {
-                ystatus.innerHTML = "Selected"
-                flipCard(card1, deckimg(currentdeck))
-                flipCard(card2, deckimg(currentdeck))
-                flipCard(card3, deckimg(currentdeck))
-                flipCard(card4, deckimg(currentdeck))
-            }
+            ystatus.innerHTML = "Selected"
+            flipCard(card1, deckimg(currentdeck))
+            flipCard(card2, deckimg(currentdeck))
+            flipCard(card3, deckimg(currentdeck))
+            flipCard(card4, deckimg(currentdeck))
             break
         case 4:
             if (gdeckowned) {
@@ -741,10 +849,6 @@ const ndeck = document.getElementById("ndeck")
 const zstatus = document.getElementById("zstatus")
 const zdeck = document.getElementById("zdeck")
 
-let bdeckprice = BigInt("5000000")
-let bdeckowned = false
-let ydeckprice = BigInt("100000")
-let ydeckowned = false
 let gdeckprice = BigInt("13000000000000")
 let gdeckowned = false
 let grdeckprice = BigInt("100000000")
@@ -765,21 +869,13 @@ rdeck.addEventListener("click", () => {
     }
 })
 bdeck.addEventListener("click", () => {
-    if (amount >= bdeckprice) {
-        amount -= bdeckprice
-        bdeckowned = true
-    }
-    if (!blackjack && bdeckowned) {
+    if (!blackjack) {
         currentdeck = 2
         setdeckstatus(2)
     }
 })
 ydeck.addEventListener("click", () => {
-    if (amount >= ydeckprice) {
-        amount -= ydeckprice
-        ydeckowned = true
-    }
-    if (!blackjack && ydeckowned) {
+    if (!blackjack) {
         currentdeck = 3
         setdeckstatus(3)
     }
@@ -846,23 +942,67 @@ zdeck.addEventListener("click", () => {
 })
 setdeckstatus(1)
 
+const questview = document.querySelector(".queststab")
 const gameview = document.querySelector(".playingsection")
 const deckview = document.querySelector(".customdecks")
 
 const playtab = document.getElementById("playtab")
 const decktab = document.getElementById("decktab")
+const questtab = document.getElementById("questtab")
 
 playtab.addEventListener("click", () => {
     gameview.style.display = "block"
     deckview.style.display = "none"
+    questview.style.display = "none"
 })
 
 decktab.addEventListener("click", () => {
     if (!blackjack) {
         gameview.style.display = "none"
         deckview.style.display = "block"
+        questview.style.display = "none"
     }
 })
+questtab.addEventListener("click", () => {
+    if (!blackjack) {
+        gameview.style.display = "none"
+        deckview.style.display = "none"
+        questview.style.display = "block"
+        updatequests()
+    }
+})
+let lv = 1
+let xp = 0
+let redwins = 0
+let yellowwins = 0
+let bluewins = 0
+let jackearnings = 0n
+const quest1 = document.getElementById("quest1")
+const quest2 = document.getElementById("quest2")
+const quest3 = document.getElementById("quest3")
+const quest4 = document.getElementById("quest4")
+const quest1prog = document.getElementById("quest1prog")
+const quest2prog = document.getElementById("quest2prog")
+const quest3prog = document.getElementById("quest3prog")
+const quest4prog = document.getElementById("quest4prog")
+let quest1stat = false
+let quest2stat = false
+let quest3stat = false
+let quest4stat = false
+function updatequests() {
+    quest1prog.innerHTML = formatNumber(jackearnings) + " / 10k"
+    quest2prog.innerHTML = redwins + " / 10"
+    quest3prog.innerHTML = yellowwins + " / 10"
+    quest4prog.innerHTML = bluewins + " / 10"
+    if (jackearnings >= 10000) quest1stat = true
+    if (redwins >= 10) quest2stat = true
+    if (yellowwins >= 10) quest3stat = true
+    if (bluewins >= 10) quest4stat = true
+}
+quest1.addEventListener("click", () => {if (quest1stat) {quest1.style.display = "none"; xp += 1}})
+quest2.addEventListener("click", () => {if (quest2stat) {quest2.style.display = "none"; xp += 1}})
+quest3.addEventListener("click", () => {if (quest3stat) {quest3.style.display = "none"; xp += 1}})
+quest4.addEventListener("click", () => {if (quest4stat) {quest4.style.display = "none"; xp += 1}})
 const deckdisp = document.getElementById("deckdisplay")
 rdeck.addEventListener("mouseenter", () => {
     deckdisp.innerHTML = "Red Deck: Nothing of note, just the starting deck."
@@ -871,7 +1011,7 @@ rdeck.addEventListener("mouseleave", () => {
     deckdisp.innerHTML = "Custom decks"
 })
 ydeck.addEventListener("mouseenter", () => {
-    deckdisp.innerHTML = "Yellow Deck: Winning mult = x4, but bust from 21."
+    deckdisp.innerHTML = "Yellow Deck: Winning mult = x3, but bust from 20."
 })
 ydeck.addEventListener("mouseleave", () => {
     deckdisp.innerHTML = "Custom decks"

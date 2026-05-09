@@ -6,13 +6,17 @@
     <title>Document</title>
     <link rel="stylesheet" href="main.css">
     <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="\sprites\favicon.ico">
+    <title>Mafia Blicker</title>
 </head>
 <body>
     <section class="uptab">
         <section class="blackjacktab">
             <div class="buttons">
-                <button id="playtab" class="tabbtn">Play</button>
+                <button id="playtab" class="tabbtn">Jack</button>
                 <button id="decktab" class="tabbtn">Decks</button>
+                <button id="questtab" class="tabbtn">Quests</button>
+                <button id="infotab" class="tabbtn">Info</button>
             </div>
             <section class="playingsection">
                 <h1 class="jackname">Blackjack</h1>
@@ -20,6 +24,10 @@
                     <button class="jackbtn" id="allinbtn">All In</button>
                     <button class="jackbtn" id="betbtn">Bet</button>
                     <input class="jackbtn" type="number" id="numinput" placeholder="Type a number">
+                    <button class="jackbtn" id="bet12btn">Bet 1/2</button>
+                    <button class="jackbtn" id="bet14btn">Bet 1/4</button>
+                </section>
+                <section class="jackmid">
                     <button class="jackbtn" id="hitbtn">Hit</button>
                     <button class="jackbtn" id="standbtn">Stand</button>
                 </section>
@@ -109,32 +117,64 @@
                     </div>
                 </section>
             </section>
+            <section class="queststab">
+                <div class="quest" id="quest1">
+                    <h1 class="questname">Makin' dough</h1>
+                    <h1 class="questdesc">Earn 10k from blackjack</h1>
+                    <h1 class="questprogress" id="quest1prog">0 / 10k</h1>
+                </div>
+                <div class="quest" id="quest2">
+                    <h1 class="questname">The classics</h1>
+                    <h1 class="questdesc">Win 10 times with red deck</h1>
+                    <h1 class="questprogress" id="quest2prog">0 / 10</h1>
+                </div>
+                <div class="quest" id="quest3">
+                    <h1 class="questname">Go big</h1>
+                    <h1 class="questdesc">Win 10 times with yellow deck</h1>
+                    <h1 class="questprogress" id="quest3prog">0 / 10</h1>
+                </div>
+                <div class="quest" id="quest4">
+                    <h1 class="questname">Go home</h1>
+                    <h1 class="questdesc">Win 10 times with blue deck</h1>
+                    <h1 class="questprogress" id="quest4prog">0 / 10</h1>
+                </div>
+            </section>
         </section>
         <section class="maintab">
-            <h1 id="amount">0 cookies</h1>
-            <h1 id="cps">0 C/s</h1>
-            <img id="thecookie" src="https://png.pngtree.com/png-vector/20240310/ourmid/pngtree-cute-chocolate-chip-cookie-in-pixel-art-png-image_11926992.png">
+            <div class="topdisplay">
+                <div></div>
+                <h1 id="amount">0 Pizzas</h1>
+                <h1 id="level"></h1>
+            </div>
+            <h1 id="cps"></h1>
+            <img id="thecookie" src="\sprites\thepizza.png">
         </section>
         <section class="sidetab">
             <h1 id="upgrades">Upgrades</h1>
+            <div class="amountbtns">
+                <button class="amountbtn" id="amount1">1</button>
+                <button class="amountbtn" id="amount5">5</button>
+                <button class="amountbtn" id="amount25">25</button>
+                <button class="amountbtn" id="amountmax">Max</button>
+            </div>
             <section class="upgrades">
-                <div class="sidebtn" id="btnclicker">
-                    <h1 id="clickerprice" class="sidebtntext">
-                        Clicker: 20
-                    </h1>
-                    <h1 id="clickeramount" class="sidebtntext">0</h1>
-                </div>
                 <div class="sidebtn" id="btnupg">
-                    <h1 class="sidebtntext" id="upgprice">Mouse: 40</h1>
-                    <h1 class="sidebtntext" id="upgamount">1</h1>
+                <img class="upgimg" src="\sprites\oven.png">
+                    <div class="flex">
+                        <h1 class="sidebtntext" id="upgprice">Oven: 10</h1>
+                        <h1 class="sidebtntext" id="upgamount">1</h1>
+                    </div>
                 </div>
-                <div class="sidebtn" id="cdupg">
-                    <h1 class="sidebtntext" id="cdprice">Clicker CD: 50</h1>
-                    <h1 class="sidebtntext" id="cdamount">0</h1>
+                <div class="sidebtn" id="btnclicker">
+                <img class="upgimg" src="\sprites\joe.png">
+                    <div class="flex">
+                        <h1 class="sidebtntext" id="clickerprice">Joe: 20</h1>
+                        <h1 class="sidebtntext" id="clickeramount">0</h1>
+                    </div>
                 </div>
-                <div class="sidebtn" id="pwupg">
-                    <h1 class="sidebtntext" id="pwprice">Clicker PW: 500</h1>
-                    <h1 class="sidebtntext" id="pwamount">0</h1>
+                <div class="lockbtn">
+                    <img class="lock" src="\sprites\lock.png">
+                    <h1 class="">Level 2</h1>
                 </div>
             </section>
         </section>
