@@ -6,7 +6,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="main.css">
     <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="\sprites\favicon.ico">
+    <link rel="icon" type="image/x-icon" href="sprites\favicon.ico">
     <title>Mafia Blicker</title>
 </head>
 <body>
@@ -16,7 +16,6 @@
                 <button id="playtab" class="tabbtn">Jack</button>
                 <button id="decktab" class="tabbtn">Decks</button>
                 <button id="questtab" class="tabbtn">Quests</button>
-                <button id="infotab" class="tabbtn">Info</button>
             </div>
             <section class="playingsection">
                 <h1 class="jackname">Blackjack</h1>
@@ -63,13 +62,17 @@
                         </section>
                     </section>
                 </section>
+                    <div class="jackpopup">
+                        <h1 id="tpoptext"></h1>
+                        <h1 id="bpoptext"></h1>
+                    </div>
             </section>
 
             <section class="customdecks">
                 <div id="deckdisplaydiv">
                     <h1 id="deckdisplay">Custom decks</h1>
                 </div>
-                <section class="decks">
+                <section class="decks" id="page1">
                     <div class="deck" id="rdeck">
                         <h1 class="nomargin smalltext">Red Deck</h1>
                         <img class="deckimg" src="https://balatrowiki.org/images/Red_Deck.png?b56d3">
@@ -85,65 +88,213 @@
                         <img class="deckimg" src="https://balatrowiki.org/images/Blue_Deck.png?00228">
                         <h1 class="nomargin smalltext" id="bstatus">Selected</h1>
                     </div>
-                    <div class="deck" id="grdeck">
-                        <h1 class="nomargin smalltext">Green Deck</h1>
-                        <img class="deckimg" src="https://balatrowiki.org/images/Green_Deck.png?5f8ea">
-                        <h1 class="nomargin smalltext" id="grstatus">Selected</h1>
+                    <div class="lockdeckbtn" id="lvl2decklock">
+                        <img class="lock" src="sprites\lock.png">
+                        <h1>Level 2</h1>
                     </div>
-                    <div class="deck" id="bldeck">
-                        <h1 class="nomargin smalltext">Black Deck</h1>
-                        <img class="deckimg" src="https://balatrowiki.org/images/Black_Deck.png?0e79f">
-                        <h1 class="nomargin smalltext" id="blstatus">Selected</h1>
+                    <div class="deckcont" id="lvl2decks">
+                        <div class="deck" id="grdeck">
+                            <h1 class="nomargin smalltext">Green Deck</h1>
+                            <img class="deckimg" src="https://balatrowiki.org/images/Green_Deck.png?5f8ea">
+                            <h1 class="nomargin smalltext" id="grstatus">Selected</h1>
+                        </div>
+                        <div class="deck" id="bldeck">
+                            <h1 class="nomargin smalltext">Black Deck</h1>
+                            <img class="deckimg" src="https://balatrowiki.org/images/Black_Deck.png?0e79f">
+                            <h1 class="nomargin smalltext" id="blstatus">Selected</h1>
+                        </div>
+                        <div class="deck" id="adeck">
+                            <h1 class="nomargin smalltext">Decayed Deck</h1>
+                            <img class="deckimg" src="https://balatrowiki.org/images/Abandoned_Deck.png?e6d1d">
+                            <h1 class="nomargin smalltext" id="astatus">Selected</h1>
+                        </div>
                     </div>
-                    <div class="deck" id="gdeck">
-                        <h1 class="nomargin smalltext">Ghost Deck</h1>
-                        <img class="deckimg" src="https://balatrowiki.org/images/Ghost_Deck.png?4aae9">
-                        <h1 class="nomargin smalltext" id="gstatus">Selected</h1>
+                    <div class="lockdeckbtn" id="lvl3decklock">
+                        <img class="lock" src="sprites\lock.png">
+                        <h1>Level 3</h1>
                     </div>
-                    <div class="deck" id="mdeck">
-                        <h1 class="nomargin smalltext">Magic Deck</h1>
-                        <img class="deckimg" src="https://balatrowiki.org/images/Magic_Deck.png?e8151">
-                        <h1 class="nomargin smalltext" id="mstatus">Selected</h1>
-                    </div>
-                    <div class="deck" id="ndeck">
-                        <h1 class="nomargin smalltext">Nebula Deck</h1>
-                        <img class="deckimg" src="https://balatrowiki.org/images/Nebula_Deck.png?38113">
-                        <h1 class="nomargin smalltext" id="nstatus">Selected</h1>
-                    </div>
-                    <div class="deck" id="zdeck">
-                        <h1 class="nomargin smalltext">Erratic Deck</h1>
-                        <img class="deckimg" src="https://balatrowiki.org/images/Erratic_Deck.png?171f6">
-                        <h1 class="nomargin smalltext" id="zstatus">Selected</h1>
+                    <div class="deckcont" id="lvl3decks">
+                        <div class="deck" id="andeck">
+                            <h1 class="nomargin smalltext">Twin Deck</h1>
+                            <img class="deckimg" src="https://balatrowiki.org/images/Anaglyph_Deck.png?97cb8">
+                            <h1 class="nomargin smalltext" id="anstatus">Selected</h1>
+                        </div>
+                        <div class="deck" id="pdeck">
+                            <h1 class="nomargin smalltext">Painted Deck</h1>
+                            <img class="deckimg" src="https://balatrowiki.org/images/Painted_Deck.png?5fdce">
+                            <h1 class="nomargin smalltext" id="pstatus">Selected</h1>
+                        </div>
+                        <div class="deck" id="hdeck">
+                            <h1 class="nomargin smalltext">Halo Deck</h1>
+                            <img class="deckimg" src="https://static.wikitide.net/balatromodswiki/3/31/Orbit_Deck_%28Monarchy%29.png">
+                            <h1 class="nomargin smalltext" id="hstatus">Selected</h1>
+                        </div>
                     </div>
                 </section>
+                <section class="decks" id="page2">
+                    <div class="lockdeckbtn" id="lvl4decklock">
+                        <img class="lock" src="sprites\lock.png">
+                        <h1>Level 4</h1>
+                    </div>
+                    <div class="deckcont" id="lvl4decks">
+                        <div class="deck" id="gdeck">
+                            <h1 class="nomargin smalltext">Ghost Deck</h1>
+                            <img class="deckimg" src="https://balatrowiki.org/images/Ghost_Deck.png?4aae9">
+                            <h1 class="nomargin smalltext" id="gstatus">Selected</h1>
+                        </div>
+                        <div class="deck" id="mdeck">
+                            <h1 class="nomargin smalltext">Magic Deck</h1>
+                            <img class="deckimg" src="https://balatrowiki.org/images/Magic_Deck.png?e8151">
+                            <h1 class="nomargin smalltext" id="mstatus">Selected</h1>
+                        </div>
+                        <div class="deck" id="ndeck">
+                            <h1 class="nomargin smalltext">Nebula Deck</h1>
+                            <img class="deckimg" src="https://balatrowiki.org/images/Nebula_Deck.png?38113">
+                            <h1 class="nomargin smalltext" id="nstatus">Selected</h1>
+                        </div>
+                    </div>
+                    <div class="lockdeckbtn" id="lvl5decklock">
+                        <img class="lock" src="sprites\lock.png">
+                        <h1>Level 5</h1>
+                    </div>
+                    <div class="deckcont" id="lvl5decks">
+                        <div class="deck" id="zdeck">
+                        <h1 class="nomargin smalltext">Sacred Deck</h1>
+                        <img class="deckimg" src="https://static.wikitide.net/balatromodswiki/a/ac/Sacred_Deck_%28Ortalab%29.png">
+                        <h1 class="nomargin smalltext" id="zstatus">Selected</h1>
+                    </div>
+                        <div class="deck" id="mdeck">
+                            <h1 class="nomargin smalltext">Magic Deck</h1>
+                            <img class="deckimg" src="https://balatrowiki.org/images/Magic_Deck.png?e8151">
+                            <h1 class="nomargin smalltext" id="mstatus">Selected</h1>
+                        </div>
+                        <div class="deck" id="ndeck">
+                            <h1 class="nomargin smalltext">Nebula Deck</h1>
+                            <img class="deckimg" src="https://balatrowiki.org/images/Nebula_Deck.png?38113">
+                            <h1 class="nomargin smalltext" id="nstatus">Selected</h1>
+                        </div>
+                    </div>
+                    <div class="lockdeckbtn" id="lvl6decklock">
+                        <img class="lock" src="sprites\lock.png">
+                        <h1>Level 6</h1>
+                    </div>
+                    <div class="deckcont" id="lvl6decks">
+                        <div class="deck" id="gdeck">
+                            <h1 class="nomargin smalltext">Ghost Deck</h1>
+                            <img class="deckimg" src="https://balatrowiki.org/images/Ghost_Deck.png?4aae9">
+                            <h1 class="nomargin smalltext" id="gstatus">Selected</h1>
+                        </div>
+                        <div class="deck" id="mdeck">
+                            <h1 class="nomargin smalltext">Magic Deck</h1>
+                            <img class="deckimg" src="https://balatrowiki.org/images/Magic_Deck.png?e8151">
+                            <h1 class="nomargin smalltext" id="mstatus">Selected</h1>
+                        </div>
+                        <div class="deck" id="ndeck">
+                            <h1 class="nomargin smalltext">Nebula Deck</h1>
+                            <img class="deckimg" src="https://balatrowiki.org/images/Nebula_Deck.png?38113">
+                            <h1 class="nomargin smalltext" id="nstatus">Selected</h1>
+                        </div>
+                    </div>
+                </section>
+                <div class="pagebtns">
+                    <button class="pagebtn" id="page1btn">1</button>
+                    <button class="pagebtn" id="page2btn">2</button>
+                </div>
             </section>
             <section class="queststab">
-                <div class="quest" id="quest1">
-                    <h1 class="questname">Makin' dough</h1>
-                    <h1 class="questdesc">Earn 10k from blackjack</h1>
-                    <h1 class="questprogress" id="quest1prog">0 / 10k</h1>
+                <div id="lv1quests">
+                    <div class="quest" id="quest1">
+                        <h1 class="questname">Makin' dough</h1>
+                        <h1 class="questdesc">Earn 25K from blackjack</h1>
+                        <h1 class="questprogress" id="quest1prog">0 / 25K</h1>
+                    </div>
+                    <div class="quest" id="quest2">
+                        <h1 class="questname">The classics</h1>
+                        <h1 class="questdesc">Win 5 times with red deck</h1>
+                        <h1 class="questprogress" id="quest2prog">0 / 5</h1>
+                    </div>
+                    <div class="quest" id="quest3">
+                        <h1 class="questname">Go big</h1>
+                        <h1 class="questdesc">Win 5 times with yellow deck</h1>
+                        <h1 class="questprogress" id="quest3prog">0 / 5</h1>
+                    </div>
+                    <div class="quest" id="quest4">
+                        <h1 class="questname">Go home</h1>
+                        <h1 class="questdesc">Win 5 times with blue deck</h1>
+                        <h1 class="questprogress" id="quest4prog">0 / 5</h1>
+                    </div>    
                 </div>
-                <div class="quest" id="quest2">
-                    <h1 class="questname">The classics</h1>
-                    <h1 class="questdesc">Win 10 times with red deck</h1>
-                    <h1 class="questprogress" id="quest2prog">0 / 10</h1>
+                <div id="lv2quests">
+                    <div class="quest" id="quest21">
+                        <h1 class="questname">Big cheese</h1>
+                        <h1 class="questdesc">Earn 1M from blackjack</h1>
+                        <h1 class="questprogress" id="quest21prog">0 / 1M</h1>
+                    </div>
+                    <div class="quest" id="quest22">
+                        <h1 class="questname">Green thumb</h1>
+                        <h1 class="questdesc">Win 5 times with green deck</h1>
+                        <h1 class="questprogress" id="quest22prog">0 / 5</h1>
+                    </div>
+                    <div class="quest" id="quest23">
+                        <h1 class="questname">Capisce?</h1>
+                        <h1 class="questdesc">Win 5 times with black deck</h1>
+                        <h1 class="questprogress" id="quest23prog">0 / 5</h1>
+                    </div>
+                    <div class="quest" id="quest24">
+                        <h1 class="questname">Forget about it</h1>
+                        <h1 class="questdesc">Win 5 times with decayed deck</h1>
+                        <h1 class="questprogress" id="quest24prog">0 / 5</h1>
+                    </div>
+                    <div class="quest" id="quest25">
+                        <h1 class="questname">Money talks</h1>
+                        <h1 class="questdesc">Win with a bet over 200K</h1>
+                        <h1 class="questprogress" id="quest25prog">0 / 1</h1>
+                    </div>
+                    <div class="quest" id="quest26">
+                        <h1 class="questname">House rules</h1>
+                        <h1 class="questdesc">Win while standing on 23</h1>
+                        <h1 class="questprogress" id="quest26prog">0 / 1</h1>
+                    </div>
                 </div>
-                <div class="quest" id="quest3">
-                    <h1 class="questname">Go big</h1>
-                    <h1 class="questdesc">Win 10 times with yellow deck</h1>
-                    <h1 class="questprogress" id="quest3prog">0 / 10</h1>
+                <div id="lv3quests">
+                    <div class="quest" id="quest31">
+                        <h1 class="questname">Filthy rich</h1>
+                        <h1 class="questdesc">Earn 100M from blackjack</h1>
+                        <h1 class="questprogress" id="quest31prog">0 / 100M</h1>
+                    </div>
+                    <div class="quest" id="quest32">
+                        <h1 class="questname">Color me impressed</h1>
+                        <h1 class="questdesc">Win 5 times with painted deck</h1>
+                        <h1 class="questprogress" id="quest32prog">0 / 5</h1>
+                    </div>
+                    <div class="quest" id="quest33">
+                        <h1 class="questname">Seein' double</h1>
+                        <h1 class="questdesc">Win 5 times with twin deck</h1>
+                        <h1 class="questprogress" id="quest33prog">0 / 5</h1>
+                    </div>
+                    <div class="quest" id="quest34">
+                        <h1 class="questname">Walk it off</h1>
+                        <h1 class="questdesc">Win 5 times with halo deck</h1>
+                        <h1 class="questprogress" id="quest34prog">0 / 5</h1>
+                    </div>
+                    <div class="quest" id="quest35">
+                        <h1 class="questname">Put it all on red</h1>
+                        <h1 class="questdesc">Win with a bet over 25M</h1>
+                        <h1 class="questprogress" id="quest35prog">0 / 1</h1>
+                    </div>
+                    <div class="quest" id="quest36">
+                        <h1 class="questname">One too many</h1>
+                        <h1 class="questdesc">Trigger twin deck effect twice</h1>
+                        <h1 class="questprogress" id="quest36prog">0 / 2</h1>
+                    </div>
                 </div>
-                <div class="quest" id="quest4">
-                    <h1 class="questname">Go home</h1>
-                    <h1 class="questdesc">Win 10 times with blue deck</h1>
-                    <h1 class="questprogress" id="quest4prog">0 / 10</h1>
-                </div>
+                <h1 id="levelprog">0 / 4 to level 2</h1>
             </section>
         </section>
         <section class="maintab">
             <div class="topdisplay">
                 <div></div>
-                <h1 id="amount">0 Pizzas</h1>
+                <h1 id="amount">100 Pizzas</h1>
                 <h1 id="level"></h1>
             </div>
             <h1 id="cps"></h1>
@@ -172,13 +323,20 @@
                         <h1 class="sidebtntext" id="clickeramount">0</h1>
                     </div>
                 </div>
-                <div class="lockbtn">
+                <div class="lockbtn" id="lvl2">
                     <img class="lock" src="sprites\lock.png">
                     <h1 class="">Level 2</h1>
+                </div>
+                <div class="sidebtn" id="btnpizzer">
+                <img class="upgimg" src="sprites\pizzeria.png">
+                    <div class="flex">
+                        <h1 class="sidebtntext" id="pizzerprice">Pizzeria: 5k</h1>
+                        <h1 class="sidebtntext" id="pizzeramount">0</h1>
+                    </div>
                 </div>
             </section>
         </section>
     </section>
 </body>
-<script type="module" src="script.js"></script>
+<script type="module" src="script.js" defer></script>
 </html>
