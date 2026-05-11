@@ -33,7 +33,7 @@ import { blfulldeck } from "./bldeck.js"
 import { afulldeck } from "./adeck.js"
 import { pfulldeck } from "./pdeck.js"
 
-let amount = BigInt("10000000000000")
+let amount = BigInt("100")
 let clicker = 0n
 let upg = BigInt("1")
 let clickercost = BigInt("20")
@@ -1562,7 +1562,7 @@ const lvl3 = document.getElementById("lvl3")
 const lvl3decklock = document.getElementById("lvl3decklock")
 const lvl4 = document.getElementById("lvl4")
 const lvl4decklock = document.getElementById("lvl4decklock")
-let lv = 4
+let lv = 1
 let xp = 0
 let redwins = 0
 let yellowwins = 0
