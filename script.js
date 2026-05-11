@@ -33,7 +33,7 @@ import { blfulldeck } from "./bldeck.js"
 import { afulldeck } from "./adeck.js"
 import { pfulldeck } from "./pdeck.js"
 
-let amount = BigInt("100")
+let amount = BigInt("10000000000000")
 let clicker = 0n
 let upg = BigInt("1")
 let clickercost = BigInt("20")
@@ -425,8 +425,8 @@ function deckattributes() {
             winmult = 200
             break
         case 3: //yellow
-            bustamount = 19
-            winmult = 300
+            bustamount = 20
+            winmult = 260
             break
         case 4: //ghost
             bustamount = 10000
@@ -932,7 +932,7 @@ function finishmatch() {
             duration: 3000
         })
         blackjack = false
-        magicmult += BigInt(100)
+        magicmult += BigInt(25)
         counter.innerHTML = formatNumber(amount) + " pizzas"
     } else if ((!busted && (dcardval1 + dcardval2 + dcardval3 + dcardval4) == (cardval1 + cardval2 + cardval3 + cardval4) && !dbusted)) {
         amount += currentbet
@@ -966,10 +966,15 @@ function questwin() {
     if (currentdeck == 12) {paintedwins += 1}
     if (currentdeck == 13) {anaglyphwins += 1}
     if (currentdeck == 11) {halowins += 1}
+    if (currentdeck == 4) {ghostwins += 1}
+    if (currentdeck == 6) {magicwins += 1}
+    if (currentdeck == 8) {nebulawins += 1}
     jackearnings += currentbet * (BigInt(winmult) + magicmult) / BigInt(200)
     if (currentbet >= 200000) {win200k += 1}
     if (cardval1 + cardval2 + cardval3 + cardval4 == 23 && currentdeck == 5) {triggergreen += 1}
     if (currentbet >= 25000000) {win25m += 1}
+    if (currentbet >= 1000000000) {win1b += 1}
+    if (magicmult >= 4) {magicstreak += 1}
     updatequests()
 }
 function spawnFloatingNumber(value, options = {}) {
@@ -1242,7 +1247,7 @@ let gdeckprice = BigInt("200000000")
 let gdeckowned = false
 let grdeckprice = BigInt("25000")
 let grdeckowned = false
-let mdeckprice = BigInt("5000000000000000")
+let mdeckprice = BigInt("200000000")
 let mdeckowned = false
 let hdeckprice = BigInt("1000000")
 let hdeckowned = false
@@ -1250,7 +1255,7 @@ let pdeckprice = BigInt("1000000")
 let pdeckowned = false
 let bldeckprice = BigInt("25000")
 let bldeckowned = false
-let ndeckprice = BigInt("500000000000000000")
+let ndeckprice = BigInt("200000000")
 let ndeckowned = false
 let zdeckprice = BigInt("3700000000000000000")
 let zdeckowned = false
@@ -1394,6 +1399,19 @@ const decktab = document.getElementById("decktab")
 const questtab = document.getElementById("questtab")
 const page1 = document.getElementById("page1")
 const page2 = document.getElementById("page2")
+const upgradestab = document.getElementById("upgradetab")
+const buffstab = document.getElementById("buffstab")
+const boxestab = document.getElementById("boxesstab")
+const itemstab = document.getElementById("itemstab")
+const upgradesbtn = document.getElementById("upgradesbtn")
+const buffsbtn = document.getElementById("buffsbtn")
+const boxesbtn = document.getElementById("boxesbtn")
+const itemsbtn = document.getElementById("itemsbtn")
+const leveltab = document.getElementById("levelquests")
+const endlesstab = document.getElementById("endlessquests")
+const levelbtn = document.getElementById("levelbtn")
+const endlessbtn = document.getElementById("endlessbtn")
+
 playtab.addEventListener("click", () => {
     gameview.style.display = "block"
     deckview.style.display = "none"
@@ -1423,13 +1441,128 @@ page2btn.addEventListener("click", () => {
     page1.style.display = "none"
     page2.style.display = "flex"
 })
+levelbtn.addEventListener("click", () => {
+    leveltab.style.display = "block"
+    endlesstab.style.display = "none"
+})
+endlessbtn.addEventListener("click", () => {
+    leveltab.style.display = "none"
+    endlesstab.style.display = "block"
+})
+upgradesbtn.addEventListener("click", () => {
+    upgradestab.style.display = "block"
+    buffstab.style.display = "none"
+    boxestab.style.display = "none"
+    itemsbtn.style.display = "none"
+})
+buffsbtn.addEventListener("click", () => {
+    upgradestab.style.display = "none"
+    buffstab.style.display = "block"
+    boxestab.style.display = "none"
+    itemsbtn.style.display = "none"
+})
+boxesbtn.addEventListener("click", () => {
+    upgradestab.style.display = "none"
+    buffstab.style.display = "none"
+    boxestab.style.display = "block"
+    itemsbtn.style.display = "none"
+})
+itemsbtn.addEventListener("click", () => {
+    upgradestab.style.display = "none"
+    buffstab.style.display = "none"
+    boxestab.style.display = "none"
+    itemsbtn.style.display = "block"
+})
+let reqadd = 1.4
+let chipadd = 1.1
+const end1 = document.getElementById("end1")
+const end1prog = document.getElementById("end1prog")
+const end1chip = document.getElementById("end1chip")
+let end1ch = 300
+let end1req = 3
+end1.addEventListener("click", () => {if (redwins >= end1req) {end1req = Math.floor(end1req * reqadd); chips += end1ch; end1ch = Math.floor(end1ch * chipadd); updatequests(); chipcounter.innerHTML = formatNumber(chips)}})
+const end2 = document.getElementById("end2")
+const end2prog = document.getElementById("end2prog")
+const end2chip = document.getElementById("end2chip")
+let end2ch = 300
+let end2req = 3
+end2.addEventListener("click", () => {if (yellowwins >= end2req) {end2req = Math.floor(end2req * reqadd); chips += end2ch; end2ch = Math.floor(end2ch * chipadd); updatequests(); chipcounter.innerHTML = formatNumber(chips)}})
+
+const end3 = document.getElementById("end3")
+const end3prog = document.getElementById("end3prog")
+const end3chip = document.getElementById("end3chip")
+let end3ch = 300
+let end3req = 3
+end3.addEventListener("click", () => {if (bluewins >= end3req) {end3req = Math.floor(end3req * reqadd); chips += end3ch; end3ch = Math.floor(end3ch * chipadd); updatequests(); chipcounter.innerHTML = formatNumber(chips)}})
+
+const end4 = document.getElementById("end4")
+const end4prog = document.getElementById("end4prog")
+const end4chip = document.getElementById("end4chip")
+let end4ch = 300
+let end4req = 3
+end4.addEventListener("click", () => {if (blackwins >= end4req) {end4req = Math.floor(end4req * reqadd); chips += end4ch; end4ch = Math.floor(end4ch * chipadd); updatequests(); chipcounter.innerHTML = formatNumber(chips)}})
+
+const end5 = document.getElementById("end5")
+const end5prog = document.getElementById("end5prog")
+const end5chip = document.getElementById("end5chip")
+let end5ch = 300
+let end5req = 3
+end5.addEventListener("click", () => {if (decayedwins >= end5req) {end5req = Math.floor(end5req * reqadd); chips += end5ch; end5ch = Math.floor(end5ch * chipadd); updatequests(); chipcounter.innerHTML = formatNumber(chips)}})
+const end6 = document.getElementById("end6")
+const end6prog = document.getElementById("end6prog")
+const end6chip = document.getElementById("end6chip")
+let end6ch = 300
+let end6req = 3
+end6.addEventListener("click", () => {if (greenwins >= end6req) {end6req = Math.floor(end6req * reqadd); chips += end6ch; end6ch = Math.floor(end6ch * chipadd); updatequests(); chipcounter.innerHTML = formatNumber(chips)}})
+
+const end7 = document.getElementById("end7")
+const end7prog = document.getElementById("end7prog")
+const end7chip = document.getElementById("end7chip")
+let end7ch = 300
+let end7req = 3
+end7.addEventListener("click", () => {if (anaglyphwins >= end7req) {end7req = Math.floor(end7req * reqadd); chips += end7ch; end7ch = Math.floor(end7ch * chipadd); updatequests(); chipcounter.innerHTML = formatNumber(chips)}})
+
+const end8 = document.getElementById("end8")
+const end8prog = document.getElementById("end8prog")
+const end8chip = document.getElementById("end8chip")
+let end8ch = 300
+let end8req = 3
+end8.addEventListener("click", () => {if (paintedwins >= end8req) {end8req = Math.floor(end8req * reqadd); chips += end8ch; end8ch = Math.floor(end8ch * chipadd); updatequests(); chipcounter.innerHTML = formatNumber(chips)}})
+
+const end9 = document.getElementById("end9")
+const end9prog = document.getElementById("end9prog")
+const end9chip = document.getElementById("end9chip")
+let end9ch = 300
+let end9req = 3
+end9.addEventListener("click", () => {if (halowins >= end9req) {end9req = Math.floor(end9req * reqadd); chips += end9ch; end9ch = Math.floor(end9ch * chipadd); updatequests(); chipcounter.innerHTML = formatNumber(chips)}})
+
+const end10 = document.getElementById("end10")
+const end10prog = document.getElementById("end10prog")
+const end10chip = document.getElementById("end10chip")
+let end10ch = 300
+let end10req = 3
+end10.addEventListener("click", () => {if (ghostwins >= end10req) {end10req = Math.floor(end10req * reqadd); chips += end10ch; end10ch = Math.floor(end10ch * chipadd); updatequests(); chipcounter.innerHTML = formatNumber(chips)}})
+
+const end11 = document.getElementById("end11")
+const end11prog = document.getElementById("end11prog")
+const end11chip = document.getElementById("end11chip")
+let end11ch = 300
+let end11req = 3
+end11.addEventListener("click", () => {if (magicwins >= end11req) {end11req = Math.floor(end11req * reqadd); chips += end11ch; end11ch = Math.floor(end11ch * chipadd); updatequests(); chipcounter.innerHTML = formatNumber(chips)}})
+
+const end12 = document.getElementById("end12")
+const end12prog = document.getElementById("end12prog")
+const end12chip = document.getElementById("end12chip")
+let end12ch = 300
+let end12req = 3
+end12.addEventListener("click", () => {if (nebulawins >= end12req) {end12req = Math.floor(end12req * reqadd); chips += end12ch; end12ch = Math.floor(end12ch * chipadd); updatequests(); chipcounter.innerHTML = formatNumber(chips)}})
 const lvl2 = document.getElementById("lvl2")
 const lvl2decklock = document.getElementById("lvl2decklock")
 const lvl3 = document.getElementById("lvl3")
 const lvl3decklock = document.getElementById("lvl3decklock")
 const lvl4 = document.getElementById("lvl4")
 const lvl4decklock = document.getElementById("lvl4decklock")
-let lv = 1
+let lv = 4
 let xp = 0
 let redwins = 0
 let yellowwins = 0
@@ -1445,6 +1578,11 @@ let win25m = 0
 let triggergreen = 0
 let win200k = 0
 let jackearnings = 0n
+let ghostwins = 0
+let magicwins = 0
+let nebulawins = 0
+let win1b = 0
+let magicstreak = 0
 const levelprog = document.getElementById("levelprog")
 const quest1 = document.getElementById("quest1")
 const quest2 = document.getElementById("quest2")
@@ -1478,6 +1616,18 @@ const quest35 = document.getElementById("quest35")
 const quest35prog = document.getElementById("quest35prog")
 const quest36 = document.getElementById("quest36")
 const quest36prog = document.getElementById("quest36prog")
+const quest41prog = document.getElementById("quest41prog")
+const quest42prog = document.getElementById("quest42prog")
+const quest43prog = document.getElementById("quest43prog")
+const quest44prog = document.getElementById("quest44prog")
+const quest45prog = document.getElementById("quest45prog")
+const quest46prog = document.getElementById("quest46prog")
+const quest41 = document.getElementById("quest41")
+const quest42 = document.getElementById("quest42")
+const quest43 = document.getElementById("quest43")
+const quest44 = document.getElementById("quest44")
+const quest45 = document.getElementById("quest45")
+const quest46 = document.getElementById("quest46")
 let quest1stat = false
 let quest2stat = false
 let quest3stat = false
@@ -1494,7 +1644,16 @@ let quest33stat = false
 let quest34stat = false
 let quest35stat = false
 let quest36stat = false
+let tier4_1stat = false
+let tier4_2stat = false
+let tier4_3stat = false
+let tier4_4stat = false
+let tier4_5stat = false
+let tier4_6stat = false
+let chips = 0
 function updatequests() {
+    end1prog.innerHTML = redwins + " / " + end1req
+    end1chip.innerHTML = end1ch
     let completedquests = []
     quest1prog.innerHTML = formatNumber(jackearnings) + " / 25K"
     quest2prog.innerHTML = redwins + " / 5"
@@ -1512,6 +1671,12 @@ function updatequests() {
     quest34prog.innerHTML = halowins + " / 5"
     quest35prog.innerHTML = win25m + " / 1"
     quest36prog.innerHTML = triggeranaglyph + " / 2"
+    quest41prog.innerHTML = formatNumber(jackearnings) + " / 10B"
+    quest42prog.innerHTML = ghostwins + " / 5"
+    quest43prog.innerHTML = magicwins + " / 5"
+    quest44prog.innerHTML = nebulawins + " / 5"
+    quest45prog.innerHTML = win1b + " / 1"
+    quest46prog.innerHTML = magicstreak + " / 4"
 if (jackearnings >= 25000 && !quest1stat) {quest1stat = true; completedquests.push("Makin' dough")}
 if (redwins >= 5 && !quest2stat) {quest2stat = true; completedquests.push("The classics")}
 if (yellowwins >= 5 && !quest3stat) {quest3stat = true; completedquests.push("Go big")}
@@ -1528,25 +1693,38 @@ if (anaglyphwins >= 5 && !quest33stat) {quest33stat = true; completedquests.push
 if (halowins >= 5 && !quest34stat) {quest34stat = true; completedquests.push("Walk it off")}
 if (win25m >= 1 && !quest35stat) {quest35stat = true; completedquests.push("Put it all on red")}
 if (triggeranaglyph >= 2 && !quest36stat) {quest36stat = true; completedquests.push("One too many")}
+if (jackearnings >= 10000000000n && !tier4_1stat) {tier4_1stat = true; completedquests.push("Infinite money glitch")}
+if (ghostwins >= 5 && !tier4_2stat) {tier4_2stat = true; completedquests.push("Who you gonna call?")}
+if (magicwins >= 5 && !tier4_3stat) {tier4_3stat = true; completedquests.push("Wizard money")}
+if (nebulawins >= 5 && !tier4_4stat) {tier4_4stat = true; completedquests.push("Astronomical odds")}
+if (win1b && !tier4_5stat) {tier4_5stat = true; completedquests.push("Call Jack, I'm in")}
+if (magicstreak >= 4 && !tier4_6stat) {tier4_6stat = true; completedquests.push("Magic touch")}
 if (completedquests.length > 0) {
     showpopup(2, completedquests)}
 }
-quest1.addEventListener("click", () => {if (quest1stat) {quest1.style.display = "none"; xp += 1; levelunlocks()}})
-quest2.addEventListener("click", () => {if (quest2stat) {quest2.style.display = "none"; xp += 1; levelunlocks()}})
-quest3.addEventListener("click", () => {if (quest3stat) {quest3.style.display = "none"; xp += 1; levelunlocks()}})
-quest4.addEventListener("click", () => {if (quest4stat) {quest4.style.display = "none"; xp += 1; levelunlocks()}})
-quest21.addEventListener("click", () => {if (quest21stat) {quest21.style.display = "none"; xp += 1; levelunlocks()}})
-quest22.addEventListener("click", () => {if (quest22stat) {quest22.style.display = "none"; xp += 1; levelunlocks()}})
-quest23.addEventListener("click", () => {if (quest23stat) {quest23.style.display = "none"; xp += 1; levelunlocks()}})
-quest24.addEventListener("click", () => {if (quest24stat) {quest24.style.display = "none"; xp += 1; levelunlocks()}})
-quest25.addEventListener("click", () => {if (quest25stat) {quest25.style.display = "none"; xp += 1; levelunlocks()}})
-quest26.addEventListener("click", () => {if (quest26stat) {quest26.style.display = "none"; xp += 1; levelunlocks()}})
-quest31.addEventListener("click", () => {if (quest31stat) {quest31.style.display = "none"; xp += 1; levelunlocks()}})
-quest32.addEventListener("click", () => {if (quest32stat) {quest32.style.display = "none"; xp += 1; levelunlocks()}})
-quest33.addEventListener("click", () => {if (quest33stat) {quest33.style.display = "none"; xp += 1; levelunlocks()}})
-quest34.addEventListener("click", () => {if (quest34stat) {quest34.style.display = "none"; xp += 1; levelunlocks()}})
-quest35.addEventListener("click", () => {if (quest35stat) {quest35.style.display = "none"; xp += 1; levelunlocks()}})
-quest36.addEventListener("click", () => {if (quest36stat) {quest36.style.display = "none"; xp += 1; levelunlocks()}})
+const chipcounter = document.getElementById("chipcounter")
+quest1.addEventListener("click", () => {if (quest1stat) {quest1.style.display = "none"; xp += 1; levelunlocks(); chips += 300; chipcounter.innerHTML = formatNumber(chips)}})
+quest2.addEventListener("click", () => {if (quest2stat) {quest2.style.display = "none"; xp += 1; levelunlocks(); chips += 300; chipcounter.innerHTML = formatNumber(chips)}})
+quest3.addEventListener("click", () => {if (quest3stat) {quest3.style.display = "none"; xp += 1; levelunlocks(); chips += 300; chipcounter.innerHTML = formatNumber(chips)}})
+quest4.addEventListener("click", () => {if (quest4stat) {quest4.style.display = "none"; xp += 1; levelunlocks(); chips += 300; chipcounter.innerHTML = formatNumber(chips)}})
+quest21.addEventListener("click", () => {if (quest21stat) {quest21.style.display = "none"; xp += 1; levelunlocks(); chips += 500; chipcounter.innerHTML = formatNumber(chips)}})
+quest22.addEventListener("click", () => {if (quest22stat) {quest22.style.display = "none"; xp += 1; levelunlocks(); chips += 500; chipcounter.innerHTML = formatNumber(chips)}})
+quest23.addEventListener("click", () => {if (quest23stat) {quest23.style.display = "none"; xp += 1; levelunlocks(); chips += 500; chipcounter.innerHTML = formatNumber(chips)}})
+quest24.addEventListener("click", () => {if (quest24stat) {quest24.style.display = "none"; xp += 1; levelunlocks(); chips += 500; chipcounter.innerHTML = formatNumber(chips)}})
+quest25.addEventListener("click", () => {if (quest25stat) {quest25.style.display = "none"; xp += 1; levelunlocks(); chips += 500; chipcounter.innerHTML = formatNumber(chips)}})
+quest26.addEventListener("click", () => {if (quest26stat) {quest26.style.display = "none"; xp += 1; levelunlocks(); chips += 500; chipcounter.innerHTML = formatNumber(chips)}})
+quest31.addEventListener("click", () => {if (quest31stat) {quest31.style.display = "none"; xp += 1; levelunlocks(); chips += 800; chipcounter.innerHTML = formatNumber(chips)}})
+quest32.addEventListener("click", () => {if (quest32stat) {quest32.style.display = "none"; xp += 1; levelunlocks(); chips += 800; chipcounter.innerHTML = formatNumber(chips)}})
+quest33.addEventListener("click", () => {if (quest33stat) {quest33.style.display = "none"; xp += 1; levelunlocks(); chips += 800; chipcounter.innerHTML = formatNumber(chips)}})
+quest34.addEventListener("click", () => {if (quest34stat) {quest34.style.display = "none"; xp += 1; levelunlocks(); chips += 800; chipcounter.innerHTML = formatNumber(chips)}})
+quest35.addEventListener("click", () => {if (quest35stat) {quest35.style.display = "none"; xp += 1; levelunlocks(); chips += 800; chipcounter.innerHTML = formatNumber(chips)}})
+quest36.addEventListener("click", () => {if (quest36stat) {quest36.style.display = "none"; xp += 1; levelunlocks(); chips += 800; chipcounter.innerHTML = formatNumber(chips)}})
+quest41.addEventListener("click", () => {if (tier4_1stat) {quest41.style.display = "none"; xp += 1; levelunlocks(); chips += 1500; chipcounter.innerHTML = formatNumber(chips)}})
+quest42.addEventListener("click", () => {if (tier4_2stat) {quest42.style.display = "none"; xp += 1; levelunlocks(); chips += 1500; chipcounter.innerHTML = formatNumber(chips)}})
+quest43.addEventListener("click", () => {if (tier4_3stat) {quest43.style.display = "none"; xp += 1; levelunlocks(); chips += 1500; chipcounter.innerHTML = formatNumber(chips)}})
+quest44.addEventListener("click", () => {if (tier4_4stat) {quest44.style.display = "none"; xp += 1; levelunlocks(); chips += 1500; chipcounter.innerHTML = formatNumber(chips)}})
+quest45.addEventListener("click", () => {if (tier4_5stat) {quest45.style.display = "none"; xp += 1; levelunlocks(); chips += 1500; chipcounter.innerHTML = formatNumber(chips)}})
+quest46.addEventListener("click", () => {if (tier4_6stat) {quest46.style.display = "none"; xp += 1; levelunlocks(); chips += 1500; chipcounter.innerHTML = formatNumber(chips)}})
 const lvl2decks = document.getElementById("lvl2decks")
 const lvl3decks = document.getElementById("lvl3decks")
 const lvl4decks = document.getElementById("lvl4decks")
@@ -1565,6 +1743,10 @@ function levelunlocks() {
     }
     if (xp == 6 && lv == 3) {
         lv = 4
+        xp = 0
+    }
+    if (xp == 6 && lv == 4) {
+        lv = 5
         xp = 0
     }
     if (lv >= 2) {
@@ -1595,6 +1777,7 @@ function levelunlocks() {
     if (lv == 1) levelprog.innerHTML = xp + " / 4 until level 2"
     if (lv == 2) levelprog.innerHTML = xp + " / 6 until level 3"
     if (lv == 3) levelprog.innerHTML = xp + " / 6 until level 4"
+    if (lv == 4) levelprog.innerHTML = xp + " / 6 until level 5"
 }
 const deckdisp = document.getElementById("deckdisplay")
 levelunlocks()
@@ -1683,7 +1866,7 @@ zdeck.addEventListener("mouseleave", () => {
     deckdisp.innerHTML = "Custom decks"
 })
 adeck.addEventListener("mouseenter", () => {
-    deckdisp.innerHTML = "Decayed deck: Removes every face card, winning mult = 2.5x."
+    deckdisp.innerHTML = "Tainted deck: Removes every face card, winning mult = 2.5x."
 })
 adeck.addEventListener("mouseleave", () => {
     deckdisp.innerHTML = "Custom decks"
