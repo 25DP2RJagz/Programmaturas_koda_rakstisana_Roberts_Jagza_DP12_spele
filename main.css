@@ -130,6 +130,11 @@ h1 {
     flex-wrap: wrap;
     align-content: center;
 }
+#lv4quests {
+    display: none;
+    flex-wrap: wrap;
+    align-content: center;
+}
 #page2 {
     display: none;
 }
@@ -170,6 +175,12 @@ h1 {
     border-color: #052fff;
 }
 #btnpizzer {
+    display: none;
+}
+#btnmattress {
+    display: none;
+}
+#btnconstruction {
     display: none;
 }
 .questname {
@@ -280,6 +291,12 @@ h1 {
     text-align: right;
 }
 #pizzeramount {
+    text-align: right;
+}
+#mattressamount {
+    text-align: right;
+}
+#constructionamount {
     text-align: right;
 }
 #upgamount {

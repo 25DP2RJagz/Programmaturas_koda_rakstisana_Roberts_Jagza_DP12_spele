@@ -19,6 +19,12 @@ const upgamount = document.getElementById("upgamount")
 const pizzerupg = document.getElementById("btnpizzer")
 const pizzervalue = document.getElementById("pizzerprice")
 const pizzeramount = document.getElementById("pizzeramount")
+const mattressbtn = document.getElementById("btnmattress")
+const mattressvalue = document.getElementById("mattressprice")
+const mattressamount = document.getElementById("mattressamount")
+const constructionbtn = document.getElementById("btnconstruction")
+const constructionvalue = document.getElementById("constructionprice")
+const constructionamount = document.getElementById("constructionamount")
 import { fulldeck } from "./deck.js"
 import { bfulldeck } from "./bdeck.js"
 import { gfulldeck } from "./gdeck.js"
@@ -27,16 +33,22 @@ import { blfulldeck } from "./bldeck.js"
 import { afulldeck } from "./adeck.js"
 import { pfulldeck } from "./pdeck.js"
 
-let amount = BigInt("0")
-let clicker = 0
+let amount = BigInt("100")
+let clicker = 0n
 let upg = BigInt("1")
 let clickercost = BigInt("20")
 let upgcost = BigInt("15")
 let pizzer = BigInt(0)
 let pizzercost = BigInt("5000")
 let clickermult = 105n
-let pizzermult = 110n
+let pizzermult = 106n
 let upgmult = 107n
+let mattress = BigInt(0)
+let mattresscost = BigInt("100000")
+let mattressmult = 107n
+let construction = 0n   
+let constructioncost = BigInt("25000000")
+let constructionmult = 108n
 
 let gainHistory = []
 
@@ -93,7 +105,7 @@ amount5.addEventListener("click", () => {buyamount = 5; updateprices()})
 amount25.addEventListener("click", () => {buyamount = 25; updateprices()})
 amountmax.addEventListener("click", () => {buyamount = 0; updateprices()})
 function updateprices() {
-    updateClickerPrice(); updateUpgPrice(); updatePizzerPrice();
+    updateClickerPrice(); updateUpgPrice(); updatePizzerPrice(); updateMattressPrice(); updateconstructionPrice();
 }
 const upgrades = document.getElementById("upgrades")
 clickerupg.addEventListener("mouseenter", () => {upgrades.innerHTML = "Joe makes the best pizzas, 4 p/s."})
@@ -102,6 +114,10 @@ upgupg.addEventListener("mouseenter", () => {upgrades.innerHTML = "Oven for maki
 upgupg.addEventListener("mouseleave", () => {upgrades.innerHTML = "Upgrades"})
 pizzerupg.addEventListener("mouseenter", () => {upgrades.innerHTML = "Five nights at pizza, 100 p/s."})
 pizzerupg.addEventListener("mouseleave", () => {upgrades.innerHTML = "Upgrades"})
+mattressbtn.addEventListener("mouseenter", () => {upgrades.innerHTML = "Who buys this many mattresses? 2.5K p/s."})
+mattressbtn.addEventListener("mouseleave", () => {upgrades.innerHTML = "Upgrades"})
+constructionbtn.addEventListener("mouseenter", () => {upgrades.innerHTML = "No show jobs, 70K p/s."})
+constructionbtn.addEventListener("mouseleave", () => {upgrades.innerHTML = "Upgrades"})
 setInterval(() => {
     if (clicker > 0) {
         amount += BigInt(clicker)
@@ -120,7 +136,22 @@ setInterval(() => {
 
         counter.innerHTML = formatNumber(amount) + " pizzas"
     }
+    if (mattress > 0) {
+        amount += mattress * 625n
 
+        trackGain(mattress * 625n)
+        spawnFloatingNumber(mattress * 625n)
+
+        counter.innerHTML = formatNumber(amount) + " pizzas"
+    }
+    if (construction > 0) {
+        amount += construction * 17500n
+
+        trackGain(construction * 17500n)
+        spawnFloatingNumber(construction * 17500n)
+
+        counter.innerHTML = formatNumber(amount) + " pizzas"
+    }
     updateprices()
 
 }, 250)
@@ -162,7 +193,7 @@ clickerupg.addEventListener("click", () => {
 
         for (let i = 0; i < amountToBuy; i++) {
             clickercost = clickercost * clickermult / 100n
-            clicker += 1
+            clicker += 1n
         }
 
         counter.innerHTML = formatNumber(amount) + " pizzas"
@@ -227,6 +258,86 @@ function updatePizzerPrice() {
 
     pizzervalue.innerHTML =
         "Pizzeria x" + amountToBuy + ": " + formatNumber(totalCost)
+}
+mattressbtn.addEventListener("click", () => {
+    let amountToBuy = buyamount
+
+    if (buyamount === 0) {
+        amountToBuy = getMaxAffordable(mattresscost, mattressmult)
+    }
+
+    const totalCost = getBulkCost(mattresscost, mattressmult, amountToBuy)
+
+    if (amount >= totalCost) {
+        amount -= totalCost
+
+        for (let i = 0; i < amountToBuy; i++) {
+            mattresscost = mattresscost * mattressmult / 100n
+            mattress += 1n
+        }
+
+        counter.innerHTML = formatNumber(amount) + " pizzas"
+
+        mattressvalue.innerHTML =
+            "Mattress x" + amountToBuy + ": " + formatNumber(totalCost)
+
+        mattressamount.innerHTML = mattress
+
+        updateMattressPrice()
+
+    }
+})
+function updateMattressPrice() {
+    let amountToBuy = buyamount
+
+    if (buyamount === 0) {
+        amountToBuy = getMaxAffordable(mattresscost, mattressmult)
+    }
+
+    const totalCost = getBulkCost(mattresscost, mattressmult, amountToBuy)
+
+    mattressvalue.innerHTML =
+        "Mattress x" + amountToBuy + ": " + formatNumber(totalCost)
+}
+constructionbtn.addEventListener("click", () => {
+    let amountToBuy = buyamount
+
+    if (buyamount === 0) {
+        amountToBuy = getMaxAffordable(construcitoncost, constructionmult)
+    }
+
+    const totalCost = getBulkCost(constructioncost, constructionmult, amountToBuy)
+
+    if (amount >= totalCost) {
+        amount -= totalCost
+
+        for (let i = 0; i < amountToBuy; i++) {
+            constructioncost = constructioncost * constructionmult / 100n
+            construction += 1n
+        }
+
+        counter.innerHTML = formatNumber(amount) + " pizzas"
+
+        constructionvalue.innerHTML =
+            "Construction x" + amountToBuy + ": " + formatNumber(totalCost)
+
+        constructionamount.innerHTML = construction
+
+        updateconstructionPrice()
+
+    }
+})
+function updateconstructionPrice() {
+    let amountToBuy = buyamount
+
+    if (buyamount === 0) {
+        amountToBuy = getMaxAffordable(constructioncost, constructionmult)
+    }
+
+    const totalCost = getBulkCost(constructioncost, constructionmult, amountToBuy)
+
+    constructionvalue.innerHTML =
+        "Construction x" + amountToBuy + ": " + formatNumber(totalCost)
 }
 upgupg.addEventListener("click", () => {
     let amountToBuy = buyamount
@@ -347,7 +458,7 @@ function deckattributes() {
             break
         case 11: //halo
             bustamount = 21
-            winmult = 200
+            winmult = 180
             break
         case 12: //painted
             bustamount = 21
@@ -547,10 +658,28 @@ function checkanaglyph() {
         }
     }
 }
+function halodeck(curr) {
+    let total = cardval1 + cardval2 + cardval3 + cardval4
+    let newtotal = total + getCardValue(curr)
+
+    if (newtotal > bustamount && currentdeck == 11) {
+        spawnFloatingNumber(0, {
+            text: "HALO GRACE",
+            color: "white",
+            size: "70px",
+            duration: 5000
+        })
+
+        return choosecard()
+    }
+
+    return curr
+}
 function drawcard() {
     drawn = choosecard()
     switch (card) {
         case 1:
+            drawn = halodeck(drawn)
             flipCard(card1, drawn.img)
             cardval1 = getCardValue(drawn)
             card++
@@ -572,6 +701,7 @@ function drawcard() {
             }
             break
         case 2:
+            drawn = halodeck(drawn)
             flipCard(card2, drawn.img)
             cardval2 = getCardValue(drawn)
             card++
@@ -593,6 +723,7 @@ function drawcard() {
             }
             break
         case 3:
+            drawn = halodeck(drawn)
             flipCard(card3, drawn.img)
             cardval3 = getCardValue(drawn)
             card++
@@ -614,6 +745,7 @@ function drawcard() {
             }
             break
         case 4:
+            drawn = halodeck(drawn)
             flipCard(card4, drawn.img)
             cardval4 = getCardValue(drawn)
             card++
@@ -814,6 +946,12 @@ function finishmatch() {
             amount += currentbet
             counter.innerHTML = formatNumber(amount) + " pizzas"
             spawnFloatingNumber(currentbet)
+            spawnFloatingNumber(0, {
+            text: "NEBULA SAVE",
+            color: "purple",
+            size: "70px",
+            duration: 5000
+        })
         }
         blackjack = false
     }
@@ -1100,7 +1238,7 @@ let adeckprice = BigInt("25000")
 let adeckowned = false
 let andeckprice = BigInt("1000000")
 let andeckowned = false
-let gdeckprice = BigInt("25000")
+let gdeckprice = BigInt("200000000")
 let gdeckowned = false
 let grdeckprice = BigInt("25000")
 let grdeckowned = false
@@ -1287,9 +1425,9 @@ page2btn.addEventListener("click", () => {
 })
 const lvl2 = document.getElementById("lvl2")
 const lvl2decklock = document.getElementById("lvl2decklock")
-
+const lvl3 = document.getElementById("lvl3")
 const lvl3decklock = document.getElementById("lvl3decklock")
-
+const lvl4 = document.getElementById("lvl4")
 const lvl4decklock = document.getElementById("lvl4decklock")
 let lv = 1
 let xp = 0
@@ -1415,6 +1553,7 @@ const lvl4decks = document.getElementById("lvl4decks")
 const lv1quests = document.getElementById("lv1quests")
 const lv2quests = document.getElementById("lv2quests")
 const lv3quests = document.getElementById("lv3quests")
+const lv4quests = document.getElementById("lv4quests")
 function levelunlocks() {
     if (xp == 4 && lv == 1) {
         lv = 2
@@ -1441,6 +1580,17 @@ function levelunlocks() {
         lvl3decks.style.display = "flex"
         lv2quests.style.display = "none"
         lv3quests.style.display = "flex"
+        lvl3.style.display = "none"
+        mattressbtn.style.display = "flex"
+    }
+    if (lv >= 4) {
+        lvl4decklock.style.display = "none"
+        lvl4decks.style.display = "flex"
+        lv2quests.style.display = "none"
+        lv3quests.style.display = "none"
+        lv4quests.style.display = "flex"
+        lvl4.style.display = "none"
+        constructionbtn.style.display = "flex"
     }
     if (lv == 1) levelprog.innerHTML = xp + " / 4 until level 2"
     if (lv == 2) levelprog.innerHTML = xp + " / 6 until level 3"
@@ -1452,6 +1602,12 @@ lvl2.addEventListener("mouseenter", () => {
     upgrades.innerHTML = "Complete quests to get to level 2."
 })
 lvl2.addEventListener("mouseleave", () => {
+    upgrades.innerHTML = "Upgrades"
+})
+lvl3.addEventListener("mouseenter", () => {
+    upgrades.innerHTML = "Complete quests to get to level 3."
+})
+lvl3.addEventListener("mouseleave", () => {
     upgrades.innerHTML = "Upgrades"
 })
 lvl2decklock.addEventListener("mouseenter", () => {
@@ -1533,7 +1689,7 @@ adeck.addEventListener("mouseleave", () => {
     deckdisp.innerHTML = "Custom decks"
 })
 hdeck.addEventListener("mouseenter", () => {
-    deckdisp.innerHTML = "Halo deck: Once per round rerolls the latest card, when you bust."
+    deckdisp.innerHTML = "Halo deck: Once per round rerolls the latest card, when you bust, win mult reduced to 1.8x."
 })
 hdeck.addEventListener("mouseleave", () => {
     deckdisp.innerHTML = "Custom decks"
