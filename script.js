@@ -1818,7 +1818,7 @@ rdeck.addEventListener("mouseleave", () => {
     deckdisp.innerHTML = "Custom decks"
 })
 ydeck.addEventListener("mouseenter", () => {
-    deckdisp.innerHTML = "Yellow Deck: Winning mult = x3, but bust from 20."
+    deckdisp.innerHTML = "Yellow Deck: Winning mult = x2.6, but bust from 21."
 })
 ydeck.addEventListener("mouseleave", () => {
     deckdisp.innerHTML = "Custom decks"

@@ -610,6 +610,12 @@ input::-webkit-inner-spin-button {
     width: 190px;
     margin-bottom: 10px ;
 }
+#endlessquests {
+    display: none;
+}
+#buffstab {
+    display: none;
+}
 .pagebtns {
     display: flex;
     align-items: flex-end;
