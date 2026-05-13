@@ -33,22 +33,33 @@ import { blfulldeck } from "./bldeck.js"
 import { afulldeck } from "./adeck.js"
 import { pfulldeck } from "./pdeck.js"
 
-let amount = BigInt("100")
+let amount = 100n
+let chips = 0
+let lv = 1
 let clicker = 0n
-let upg = BigInt("1")
-let clickercost = BigInt("20")
-let upgcost = BigInt("15")
-let pizzer = BigInt(0)
-let pizzercost = BigInt("5000")
+let clickercost = 20n
 let clickermult = 105n
-let pizzermult = 106n
+let clickerbuff = 100n
+let clickerspeed = 250
+let upg = 1n
 let upgmult = 107n
-let mattress = BigInt(0)
-let mattresscost = BigInt("100000")
+let upgcost = 15n
+let upgbuff = 100n
+let pizzer = 0n
+let pizzerbuff = 100n
+let pizzercost = 5000n
+let pizzermult = 106n
+let pizzerspeed = 250
+let mattress = 0n
+let mattresscost = 100000n
 let mattressmult = 107n
+let mattressbuff = 100n
+let mattressspeed = 250
 let construction = 0n   
-let constructioncost = BigInt("25000000")
+let constructioncost = 25000000n
 let constructionmult = 108n
+let constructionbuff = 100n
+let constructionspeed = 250
 
 let gainHistory = []
 
@@ -108,9 +119,19 @@ function updateprices() {
     updateClickerPrice(); updateUpgPrice(); updatePizzerPrice(); updateMattressPrice(); updateconstructionPrice();
 }
 const upgrades = document.getElementById("upgrades")
-clickerupg.addEventListener("mouseenter", () => {upgrades.innerHTML = "Joe makes the best pizzas, 4 p/s."})
+function updateupgcps(upgrad) {
+    switch (upgrad) {
+        case 1:
+            upgrades.innerHTML = "Joe makes the best pizzas<br/>" + formatNumber(((clicker * clickerbuff) / 100n) * 4n) + " pizzas / second"
+            break
+        case 2:
+            upgrades.innerHTML = "Oven for making pizzas manually<br/>" + formatNumber((upg * upgbuff) / 100n) + " pizzas per click"
+            break
+    }
+}
+clickerupg.addEventListener("mouseenter", () => {updateupgcps(1)})
 clickerupg.addEventListener("mouseleave", () => {upgrades.innerHTML = "Upgrades"})
-upgupg.addEventListener("mouseenter", () => {upgrades.innerHTML = "Oven for making pizzas manually."})
+upgupg.addEventListener("mouseenter", () => {updateupgcps(2)})
 upgupg.addEventListener("mouseleave", () => {upgrades.innerHTML = "Upgrades"})
 pizzerupg.addEventListener("mouseenter", () => {upgrades.innerHTML = "Five nights at pizza, 100 p/s."})
 pizzerupg.addEventListener("mouseleave", () => {upgrades.innerHTML = "Upgrades"})
@@ -120,41 +141,40 @@ constructionbtn.addEventListener("mouseenter", () => {upgrades.innerHTML = "No s
 constructionbtn.addEventListener("mouseleave", () => {upgrades.innerHTML = "Upgrades"})
 setInterval(() => {
     if (clicker > 0) {
-        amount += BigInt(clicker)
-
-        trackGain(clicker)
-        spawnFloatingNumber(clicker)
-
-        counter.innerHTML =
-            formatNumber(amount) + " pizzas"
-    }
-    if (pizzer > 0) {
-        amount += pizzer * 25n
-
-        trackGain(pizzer * 25n)
-        spawnFloatingNumber(pizzer * 25n)
-
-        counter.innerHTML = formatNumber(amount) + " pizzas"
-    }
-    if (mattress > 0) {
-        amount += mattress * 625n
-
-        trackGain(mattress * 625n)
-        spawnFloatingNumber(mattress * 625n)
-
-        counter.innerHTML = formatNumber(amount) + " pizzas"
-    }
-    if (construction > 0) {
-        amount += construction * 17500n
-
-        trackGain(construction * 17500n)
-        spawnFloatingNumber(construction * 17500n)
-
+        amount += (clicker * clickerbuff) / 100n
+        trackGain((clicker * clickerbuff) / 100n)
+        spawnFloatingNumber((clicker * clickerbuff) / 100n)
         counter.innerHTML = formatNumber(amount) + " pizzas"
     }
     updateprices()
-
-}, 250)
+}, clickerspeed)
+setInterval(() => {
+    if (pizzer > 0) {
+        amount += (pizzer * pizzerbuff) / 100n * 25n
+        trackGain((pizzer * pizzerbuff) / 100n * 25n)
+        spawnFloatingNumber((pizzer * pizzerbuff) / 100n * 25n)
+        counter.innerHTML = formatNumber(amount) + " pizzas"
+    }
+    updateprices()
+}, pizzerspeed)
+setInterval(() => {
+    if (mattress > 0) {
+        amount += (mattress * mattressbuff) / 100n * 625n
+        trackGain((mattress * mattressbuff) / 100n * 625n)
+        spawnFloatingNumber((mattress * mattressbuff) / 100n * 625n)
+        counter.innerHTML = formatNumber(amount) + " pizzas"
+    }
+    updateprices()
+}, mattressspeed)
+setInterval(() => {
+    if (construction > 0) {
+        amount += (construction * constructionbuff) / 100n * 17500n
+        trackGain((construction * constructionbuff) / 100n * 17500n)
+        spawnFloatingNumber((construction * constructionbuff) / 100n * 17500n)
+        counter.innerHTML = formatNumber(amount) + " pizzas"
+    }
+    updateprices()
+}, constructionspeed)
 function getBulkCost(startCost, multiplier, amountToBuy) {
     let cost = startCost
     let total = 0n
@@ -170,217 +190,161 @@ function getMaxAffordable(startCost, multiplier) {
     let cost = startCost
     let total = 0n
     let bought = 0
-
     while (total + cost <= amount) {
         total += cost
         cost = cost * BigInt(multiplier) / 100n
         bought++
     }
-
     return bought
 }
 clickerupg.addEventListener("click", () => {
     let amountToBuy = buyamount
-
     if (buyamount === 0) {
         amountToBuy = getMaxAffordable(clickercost, clickermult)
     }
-
     const totalCost = getBulkCost(clickercost, clickermult, amountToBuy)
-
     if (amount >= totalCost) {
         amount -= totalCost
-
         for (let i = 0; i < amountToBuy; i++) {
             clickercost = clickercost * clickermult / 100n
             clicker += 1n
         }
-
         counter.innerHTML = formatNumber(amount) + " pizzas"
-
         clickervalue.innerHTML =
             "Joe x" + amountToBuy + ": " + formatNumber(totalCost)
-
         clickeramount.innerHTML = clicker
-
         updateClickerPrice()
-
+        updateupgcps(1)
     }
 })
 function updateClickerPrice() {
     let amountToBuy = buyamount
-
     if (buyamount === 0) {
         amountToBuy = getMaxAffordable(clickercost, clickermult)
     }
-
     const totalCost = getBulkCost(clickercost, clickermult, amountToBuy)
-
     clickervalue.innerHTML =
         "Joe x" + amountToBuy + ": " + formatNumber(totalCost)
 }
 pizzerupg.addEventListener("click", () => {
     let amountToBuy = buyamount
-
     if (buyamount === 0) {
         amountToBuy = getMaxAffordable(pizzercost, pizzermult)
     }
-
     const totalCost = getBulkCost(pizzercost, pizzermult, amountToBuy)
-
     if (amount >= totalCost) {
         amount -= totalCost
-
         for (let i = 0; i < amountToBuy; i++) {
             pizzercost = pizzercost * pizzermult / 100n
             pizzer += 1n
         }
-
         counter.innerHTML = formatNumber(amount) + " pizzas"
-
         pizzervalue.innerHTML =
             "Pizzeria x" + amountToBuy + ": " + formatNumber(totalCost)
-
         pizzeramount.innerHTML = pizzer
-
         updatePizzerPrice()
 
     }
 })
 function updatePizzerPrice() {
     let amountToBuy = buyamount
-
     if (buyamount === 0) {
         amountToBuy = getMaxAffordable(pizzercost, pizzermult)
     }
-
     const totalCost = getBulkCost(pizzercost, pizzermult, amountToBuy)
-
     pizzervalue.innerHTML =
         "Pizzeria x" + amountToBuy + ": " + formatNumber(totalCost)
 }
 mattressbtn.addEventListener("click", () => {
     let amountToBuy = buyamount
-
     if (buyamount === 0) {
         amountToBuy = getMaxAffordable(mattresscost, mattressmult)
     }
-
     const totalCost = getBulkCost(mattresscost, mattressmult, amountToBuy)
 
     if (amount >= totalCost) {
         amount -= totalCost
-
         for (let i = 0; i < amountToBuy; i++) {
             mattresscost = mattresscost * mattressmult / 100n
             mattress += 1n
         }
-
         counter.innerHTML = formatNumber(amount) + " pizzas"
-
         mattressvalue.innerHTML =
             "Mattress x" + amountToBuy + ": " + formatNumber(totalCost)
-
         mattressamount.innerHTML = mattress
-
         updateMattressPrice()
 
     }
 })
 function updateMattressPrice() {
     let amountToBuy = buyamount
-
     if (buyamount === 0) {
         amountToBuy = getMaxAffordable(mattresscost, mattressmult)
     }
-
     const totalCost = getBulkCost(mattresscost, mattressmult, amountToBuy)
-
     mattressvalue.innerHTML =
         "Mattress x" + amountToBuy + ": " + formatNumber(totalCost)
 }
 constructionbtn.addEventListener("click", () => {
     let amountToBuy = buyamount
-
     if (buyamount === 0) {
-        amountToBuy = getMaxAffordable(construcitoncost, constructionmult)
+        amountToBuy = getMaxAffordable(constructioncost, constructionmult)
     }
-
     const totalCost = getBulkCost(constructioncost, constructionmult, amountToBuy)
-
     if (amount >= totalCost) {
         amount -= totalCost
-
         for (let i = 0; i < amountToBuy; i++) {
             constructioncost = constructioncost * constructionmult / 100n
             construction += 1n
         }
-
         counter.innerHTML = formatNumber(amount) + " pizzas"
-
         constructionvalue.innerHTML =
             "Construction x" + amountToBuy + ": " + formatNumber(totalCost)
-
         constructionamount.innerHTML = construction
-
         updateconstructionPrice()
 
     }
 })
 function updateconstructionPrice() {
     let amountToBuy = buyamount
-
     if (buyamount === 0) {
         amountToBuy = getMaxAffordable(constructioncost, constructionmult)
     }
-
     const totalCost = getBulkCost(constructioncost, constructionmult, amountToBuy)
-
     constructionvalue.innerHTML =
         "Construction x" + amountToBuy + ": " + formatNumber(totalCost)
 }
 upgupg.addEventListener("click", () => {
     let amountToBuy = buyamount
-
     if (buyamount === 0) {
         amountToBuy = getMaxAffordable(upgcost, upgmult)
     }
-
     const totalCost = getBulkCost(upgcost, upgmult, amountToBuy)
-
     if (amount >= totalCost) {
         amount -= totalCost
-
         for (let i = 0; i < amountToBuy; i++) {
             upgcost = upgcost * upgmult / 100n
             upg += 1n
         }
-
         counter.innerHTML = formatNumber(amount) + " pizzas"
-
         upgprice.innerHTML =
             "Oven x" + amountToBuy + ": " + formatNumber(upgcost)
-
         upgamount.innerHTML = upg
-
         updateUpgPrice()
-
+        updateupgcps(2)
     }
 })
 function updateUpgPrice() {
     let amountToBuy = buyamount
-
     if (buyamount === 0) {
         amountToBuy = getMaxAffordable(upgcost, upgmult)
     }
-
     const totalCost = getBulkCost(upgcost, upgmult, amountToBuy)
-
     upgprice.innerHTML =
         "Oven x" + amountToBuy + ": " + formatNumber(totalCost)
 }
 cookie.addEventListener("click", () => {
-    amount += BigInt(upg)
+    amount += upg * upgbuff / 100n
     trackGain(upg)
     spawnFloatingNumber(upg)
     updateprices()
@@ -922,6 +886,7 @@ function dealerplay() {
 }
 let nebulachance = 0
 function finishmatch() {
+    if (!blackjack) return
     if ((!busted && (dcardval1 + dcardval2 + dcardval3 + dcardval4) < (cardval1 + cardval2 + cardval3 + cardval4)) || (dbusted && !busted)) {
         amount += currentbet * (BigInt(winmult) + magicmult) / BigInt(100)
         questwin()
@@ -974,7 +939,7 @@ function questwin() {
     if (cardval1 + cardval2 + cardval3 + cardval4 == 23 && currentdeck == 5) {triggergreen += 1}
     if (currentbet >= 25000000) {win25m += 1}
     if (currentbet >= 1000000000) {win1b += 1}
-    if (magicmult >= 4) {magicstreak += 1}
+    if (magicmult >= 4 && currentdeck == 6) {magicstreak += 1}
     updatequests()
 }
 function spawnFloatingNumber(value, options = {}) {
@@ -1401,7 +1366,7 @@ const page1 = document.getElementById("page1")
 const page2 = document.getElementById("page2")
 const upgradestab = document.getElementById("upgradetab")
 const buffstab = document.getElementById("buffstab")
-const boxestab = document.getElementById("boxesstab")
+const boxestab = document.getElementById("boxestab")
 const itemstab = document.getElementById("itemstab")
 const upgradesbtn = document.getElementById("upgradesbtn")
 const buffsbtn = document.getElementById("buffsbtn")
@@ -1453,25 +1418,25 @@ upgradesbtn.addEventListener("click", () => {
     upgradestab.style.display = "block"
     buffstab.style.display = "none"
     boxestab.style.display = "none"
-    itemsbtn.style.display = "none"
+    itemstab.style.display = "none"
 })
 buffsbtn.addEventListener("click", () => {
     upgradestab.style.display = "none"
     buffstab.style.display = "block"
     boxestab.style.display = "none"
-    itemsbtn.style.display = "none"
+    itemstab.style.display = "none"
 })
 boxesbtn.addEventListener("click", () => {
     upgradestab.style.display = "none"
     buffstab.style.display = "none"
     boxestab.style.display = "block"
-    itemsbtn.style.display = "none"
+    itemstab.style.display = "none"
 })
 itemsbtn.addEventListener("click", () => {
     upgradestab.style.display = "none"
     buffstab.style.display = "none"
     boxestab.style.display = "none"
-    itemsbtn.style.display = "block"
+    itemstab.style.display = "block"
 })
 let reqadd = 1.4
 let chipadd = 1.1
@@ -1562,7 +1527,6 @@ const lvl3 = document.getElementById("lvl3")
 const lvl3decklock = document.getElementById("lvl3decklock")
 const lvl4 = document.getElementById("lvl4")
 const lvl4decklock = document.getElementById("lvl4decklock")
-let lv = 1
 let xp = 0
 let redwins = 0
 let yellowwins = 0
@@ -1650,10 +1614,31 @@ let tier4_3stat = false
 let tier4_4stat = false
 let tier4_5stat = false
 let tier4_6stat = false
-let chips = 0
 function updatequests() {
     end1prog.innerHTML = redwins + " / " + end1req
     end1chip.innerHTML = end1ch
+    end2prog.innerHTML = yellowwins + " / " + end2req
+    end2chip.innerHTML = end2ch
+    end3prog.innerHTML = bluewins + " / " + end3req
+    end3chip.innerHTML = end3ch
+    end4prog.innerHTML = blackwins + " / " + end4req
+    end4chip.innerHTML = end4ch
+    end5prog.innerHTML = decayedwins + " / " + end5req
+    end5chip.innerHTML = end5ch
+    end6prog.innerHTML = greenwins + " / " + end6req
+    end6chip.innerHTML = end6ch
+    end7prog.innerHTML = anaglyphwins + " / " + end7req
+    end7chip.innerHTML = end7ch
+    end8prog.innerHTML = paintedwins + " / " + end8req
+    end8chip.innerHTML = end8ch
+    end9prog.innerHTML = halowins + " / " + end9req
+    end9chip.innerHTML = end9ch
+    end10prog.innerHTML = ghostwins + " / " + end10req
+    end10chip.innerHTML = end10ch
+    end11prog.innerHTML = magicwins + " / " + end11req
+    end11chip.innerHTML = end11ch
+    end12prog.innerHTML = nebulawins + " / " + end12req
+    end12chip.innerHTML = end12ch
     let completedquests = []
     quest1prog.innerHTML = formatNumber(jackearnings) + " / 25K"
     quest2prog.innerHTML = redwins + " / 5"
@@ -1793,6 +1778,12 @@ lvl3.addEventListener("mouseenter", () => {
 lvl3.addEventListener("mouseleave", () => {
     upgrades.innerHTML = "Upgrades"
 })
+lvl4.addEventListener("mouseenter", () => {
+    upgrades.innerHTML = "Complete quests to get to level 4."
+})
+lvl4.addEventListener("mouseleave", () => {
+    upgrades.innerHTML = "Upgrades"
+})
 lvl2decklock.addEventListener("mouseenter", () => {
     deckdisp.innerHTML = "Complete quests to get to level 2."
 })
@@ -1836,7 +1827,7 @@ gdeck.addEventListener("mouseleave", () => {
     deckdisp.innerHTML = "Custom decks"
 })
 mdeck.addEventListener("mouseenter", () => {
-    deckdisp.innerHTML = "Magic Deck: Each win increases winning mult by 1, but losing resets to 0."
+    deckdisp.innerHTML = "Magic Deck: Each win increases winning mult by 0.25, but losing resets to 2x, bust limit increased to 22."
 })
 mdeck.addEventListener("mouseleave", () => {
     deckdisp.innerHTML = "Custom decks"
@@ -1888,4 +1879,51 @@ pdeck.addEventListener("mouseenter", () => {
 })
 pdeck.addEventListener("mouseleave", () => {
     deckdisp.innerHTML = "Custom decks"
+})
+const buffs = document.getElementById("buffs")
+const buff1 = document.getElementById("buff1")
+const buff2 = document.getElementById("buff2")
+const buff3 = document.getElementById("buff3")
+const buff4 = document.getElementById("buff4")
+const buff5 = document.getElementById("buff5")
+const buff6 = document.getElementById("buff6")
+let buff1stat = false
+let buff2stat = false
+let buff3stat = false
+let buff4stat = false
+buff4.style.display = "none"
+buff5.style.display = "none"
+buff6.style.display = "none"
+
+buff1.addEventListener("mouseenter", () => {buffs.innerHTML = "Doubles oven strength"})
+buff2.addEventListener("mouseenter", () => {buffs.innerHTML = "Joe makes 20% more pizzas / second"})
+buff3.addEventListener("mouseenter", () => {buffs.innerHTML = "Joe makes pizzas faster"})
+buff4.addEventListener("mouseenter", () => {buffs.innerHTML = "Boosts oven strength"})
+buff1.addEventListener("mouseleave", () => {buffs.innerHTML = "Buffs"})
+buff2.addEventListener("mouseleave", () => {buffs.innerHTML = "Buffs"})
+buff3.addEventListener("mouseleave", () => {buffs.innerHTML = "Buffs"})
+buff4.addEventListener("mouseleave", () => {buffs.innerHTML = "Buffs"})
+buff1.addEventListener("click", () => {
+    if (chips >= 1500) {
+        upgbuff += 100n
+        buff1.style.display = "none"
+        chips -= 1000
+        chipcounter.innerHTML = formatNumber(chips)
+    }
+})
+buff2.addEventListener("click", () => {
+    if (chips >= 1500) {
+        clickerbuff += 20n
+        buff2.style.display = "none"
+        chips -= 1500
+        chipcounter.innerHTML = formatNumber(chips)
+    }
+})
+buff3.addEventListener("click", () => {
+    if (chips >= 2000) {
+        clickerspeed -= 200
+        buff3.style.display = "none"
+        chips -= 2000
+        chipcounter.innerHTML = formatNumber(chips)
+    }
 })
