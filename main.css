@@ -141,6 +141,11 @@ h1 {
     flex-wrap: wrap;
     align-content: center;
 }
+#lv5quests {
+    display: none;
+    flex-wrap: wrap;
+    align-content: center;
+}
 #page2 {
     display: none;
 }
@@ -187,6 +192,9 @@ h1 {
     display: none;
 }
 #btnconstruction {
+    display: none;
+}
+#btncasino {
     display: none;
 }
 .questname {
@@ -303,6 +311,10 @@ h1 {
     background-color: #fcd151;
     border-color: #fffe98;
 }
+#endpage2 {
+    display: none;
+    flex-wrap: wrap;
+}
 .sidebtntext {
     margin: 0;
     font-size: 35px;
@@ -317,6 +329,9 @@ h1 {
     text-align: right;
 }
 #constructionamount {
+    text-align: right;
+}
+#casinoamount {
     text-align: right;
 }
 #upgamount {
@@ -340,6 +355,12 @@ h1 {
 #buffs {
     font-size: 40px;
     height: 60px;
+    text-align: center;
+}
+#buffmsg {
+    font-size: 40px;
+    width: 100%;
+    display: none;
     text-align: center;
 }
 .chips {
@@ -390,6 +411,7 @@ input::-webkit-inner-spin-button {
 }
 .card {
     width: 150px;
+    image-rendering: pixelated;
     backface-visibility: hidden;
     transform-style: preserve-3d;
     top: 0;
@@ -620,6 +642,7 @@ input::-webkit-inner-spin-button {
 }
 .deckimg {
     width: 100px;
+    image-rendering: pixelated;
 }
 #deckdisplay {
     font-size: 40px;
@@ -753,7 +776,7 @@ input::-webkit-inner-spin-button {
     }
 
     50% {
-        transform: scale(0.94);
+        transform: scale(1.06);
     }
 
     100% {

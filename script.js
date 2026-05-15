@@ -25,6 +25,9 @@ const mattressamount = document.getElementById("mattressamount")
 const constructionbtn = document.getElementById("btnconstruction")
 const constructionvalue = document.getElementById("constructionprice")
 const constructionamount = document.getElementById("constructionamount")
+const casinobtn = document.getElementById("btncasino")
+const casinovalue = document.getElementById("casinoprice")
+const cainoamount = document.getElementById("casinoamount")
 import { fulldeck } from "./deck.js"
 import { bfulldeck } from "./bdeck.js"
 import { gfulldeck } from "./gdeck.js"
@@ -36,11 +39,13 @@ import { pfulldeck } from "./pdeck.js"
 let amount = 100n
 let chips = 0
 let lv = 1
+let xp = 0
 let clicker = 0n
 let clickercost = 20n
 let clickermult = 105n
 let clickerbuff = 100n
-let clickerspeed = 250
+let clickerspeed = 240
+let clickertimer = 0
 let upg = 1n
 let upgmult = 107n
 let upgcost = 15n
@@ -49,18 +54,29 @@ let pizzer = 0n
 let pizzerbuff = 100n
 let pizzercost = 5000n
 let pizzermult = 106n
-let pizzerspeed = 250
+let pizzerspeed = 240
+let pizzertimer = 0
 let mattress = 0n
 let mattresscost = 100000n
 let mattressmult = 107n
 let mattressbuff = 100n
-let mattressspeed = 250
+let mattresstimer = 0
+let mattressspeed = 240
 let construction = 0n   
 let constructioncost = 25000000n
 let constructionmult = 108n
 let constructionbuff = 100n
-let constructionspeed = 250
+let constructionspeed = 240
+let constructiontimer = 0
+let casino = 0n
+let casinocost = 750000000n
+let casinomult = 108n
+let casinobuff = 100n
+let casinospeed = 240
+let casinotimer = 0
+let ovenbuff = 0n
 
+let ovenbonus = 100n + ((upg / 10n) * ovenbuff)
 let gainHistory = []
 
 const card1 = document.getElementById("card1")
@@ -116,16 +132,28 @@ amount5.addEventListener("click", () => {buyamount = 5; updateprices()})
 amount25.addEventListener("click", () => {buyamount = 25; updateprices()})
 amountmax.addEventListener("click", () => {buyamount = 0; updateprices()})
 function updateprices() {
-    updateClickerPrice(); updateUpgPrice(); updatePizzerPrice(); updateMattressPrice(); updateconstructionPrice();
+    updateClickerPrice(); updateUpgPrice(); updatePizzerPrice(); updateMattressPrice(); updateconstructionPrice(); updatecasinoPrice();
 }
 const upgrades = document.getElementById("upgrades")
 function updateupgcps(upgrad) {
     switch (upgrad) {
         case 1:
-            upgrades.innerHTML = "Joe makes the best pizzas<br/>" + formatNumber(((clicker * clickerbuff) / 100n) * 4n) + " pizzas / second"
+            upgrades.innerHTML = "Mama mia!<br/>" + formatNumber((((clicker * clickerbuff * ovenbonus) / 10000n) * 1000n / BigInt(clickerspeed))) + " pizzas / second"
             break
         case 2:
-            upgrades.innerHTML = "Oven for making pizzas manually<br/>" + formatNumber((upg * upgbuff) / 100n) + " pizzas per click"
+            upgrades.innerHTML = "Straight outta Little Italy<br/>" + formatNumber((upg * upgbuff) / 100n) + " pizzas per click"
+            break
+        case 3:
+            upgrades.innerHTML = "Five nights at pizza<br/>" + formatNumber(((pizzer * pizzerbuff * 25n * ovenbonus) / 10000n) * 1000n / BigInt(pizzerspeed)) + " pizzas / second"
+            break
+        case 4:
+            upgrades.innerHTML = "The IRS hates this one simple trick<br/>" + formatNumber(((mattress * mattressbuff * 625n * ovenbonus) / 10000n) * 1000n / BigInt(mattressspeed)) + " pizzas / second"
+            break
+        case 5:
+            upgrades.innerHTML = "Concrete shoes sold separately<br/>" + formatNumber((((construction * constructionbuff * 17500n * ovenbonus) / 10000n) * 1000n / BigInt(constructionspeed))) + " pizzas / second"
+            break
+        case 6:
+            upgrades.innerHTML = "You are the house<br/>" + formatNumber((((casino * casinobuff * 250000n * ovenbonus) / 10000n) * 1000n / BigInt(casinospeed))) + " pizzas / second"
             break
     }
 }
@@ -133,48 +161,56 @@ clickerupg.addEventListener("mouseenter", () => {updateupgcps(1)})
 clickerupg.addEventListener("mouseleave", () => {upgrades.innerHTML = "Upgrades"})
 upgupg.addEventListener("mouseenter", () => {updateupgcps(2)})
 upgupg.addEventListener("mouseleave", () => {upgrades.innerHTML = "Upgrades"})
-pizzerupg.addEventListener("mouseenter", () => {upgrades.innerHTML = "Five nights at pizza, 100 p/s."})
+pizzerupg.addEventListener("mouseenter", () => {updateupgcps(3)})
 pizzerupg.addEventListener("mouseleave", () => {upgrades.innerHTML = "Upgrades"})
-mattressbtn.addEventListener("mouseenter", () => {upgrades.innerHTML = "Who buys this many mattresses? 2.5K p/s."})
+mattressbtn.addEventListener("mouseenter", () => {updateupgcps(4)})
 mattressbtn.addEventListener("mouseleave", () => {upgrades.innerHTML = "Upgrades"})
-constructionbtn.addEventListener("mouseenter", () => {upgrades.innerHTML = "No show jobs, 70K p/s."})
+constructionbtn.addEventListener("mouseenter", () => {updateupgcps(5)})
 constructionbtn.addEventListener("mouseleave", () => {upgrades.innerHTML = "Upgrades"})
+casinobtn.addEventListener("mouseenter", () => {updateupgcps(6)})
+casinobtn.addEventListener("mouseleave", () => {upgrades.innerHTML = "Upgrades"})
 setInterval(() => {
-    if (clicker > 0) {
-        amount += (clicker * clickerbuff) / 100n
-        trackGain((clicker * clickerbuff) / 100n)
-        spawnFloatingNumber((clicker * clickerbuff) / 100n)
+    clickertimer += 40
+    if (clicker > 0 && clickertimer >= clickerspeed) {
+        amount += (clicker * clickerbuff * ovenbonus) / 10000n
+        trackGain((clicker * clickerbuff * ovenbonus) / 10000n)
+        spawnFloatingNumber((clicker * clickerbuff * ovenbonus) / 10000n)
         counter.innerHTML = formatNumber(amount) + " pizzas"
+        clickertimer = 0
     }
-    updateprices()
-}, clickerspeed)
-setInterval(() => {
-    if (pizzer > 0) {
-        amount += (pizzer * pizzerbuff) / 100n * 25n
-        trackGain((pizzer * pizzerbuff) / 100n * 25n)
-        spawnFloatingNumber((pizzer * pizzerbuff) / 100n * 25n)
+    pizzertimer += 40
+    if (pizzer > 0 && pizzertimer >= pizzerspeed) {
+        amount += (pizzer * pizzerbuff * 25n * ovenbonus) / 10000n
+        trackGain((pizzer * pizzerbuff * 25n * ovenbonus) / 10000n)
+        spawnFloatingNumber((pizzer * pizzerbuff * 25n * ovenbonus) / 10000n)
         counter.innerHTML = formatNumber(amount) + " pizzas"
+        pizzertimer = 0
     }
-    updateprices()
-}, pizzerspeed)
-setInterval(() => {
-    if (mattress > 0) {
-        amount += (mattress * mattressbuff) / 100n * 625n
-        trackGain((mattress * mattressbuff) / 100n * 625n)
-        spawnFloatingNumber((mattress * mattressbuff) / 100n * 625n)
+    mattresstimer += 40
+    if (mattress > 0 && mattresstimer >= mattressspeed) {
+        amount += (mattress * mattressbuff * 625n * ovenbonus) / 10000n
+        trackGain((mattress * mattressbuff * 625n * ovenbonus) / 10000n)
+        spawnFloatingNumber((mattress * mattressbuff * 625n * ovenbonus) / 10000n)
         counter.innerHTML = formatNumber(amount) + " pizzas"
+        mattresstimer = 0
     }
-    updateprices()
-}, mattressspeed)
-setInterval(() => {
-    if (construction > 0) {
-        amount += (construction * constructionbuff) / 100n * 17500n
-        trackGain((construction * constructionbuff) / 100n * 17500n)
-        spawnFloatingNumber((construction * constructionbuff) / 100n * 17500n)
+    constructiontimer += 40
+    if (construction > 0 && constructiontimer >= constructionspeed) {
+        amount += (construction * constructionbuff * 17500n * ovenbonus) / 10000n
+        trackGain((construction * constructionbuff * 17500n * ovenbonus) / 10000n)
+        spawnFloatingNumber((construction * constructionbuff * 17500n * ovenbonus) / 10000n)
         counter.innerHTML = formatNumber(amount) + " pizzas"
+        constructiontimer = 0
     }
-    updateprices()
-}, constructionspeed)
+    casinotimer += 40
+    if (casino > 0 && casinotimer >= casinospeed) {
+        amount += (casino * casinobuff * 250000n * ovenbonus) / 10000n
+        trackGain((casino * casinobuff * 250000n * ovenbonus) / 10000n)
+        spawnFloatingNumber((casino * casinobuff * 250000n * ovenbonus) / 10000n)
+        counter.innerHTML = formatNumber(amount) + " pizzas"
+        casinotimer = 0
+    }
+}, 40)
 function getBulkCost(startCost, multiplier, amountToBuy) {
     let cost = startCost
     let total = 0n
@@ -243,6 +279,7 @@ pizzerupg.addEventListener("click", () => {
             "Pizzeria x" + amountToBuy + ": " + formatNumber(totalCost)
         pizzeramount.innerHTML = pizzer
         updatePizzerPrice()
+        updateupgcps(3)
 
     }
 })
@@ -270,9 +307,10 @@ mattressbtn.addEventListener("click", () => {
         }
         counter.innerHTML = formatNumber(amount) + " pizzas"
         mattressvalue.innerHTML =
-            "Mattress x" + amountToBuy + ": " + formatNumber(totalCost)
+            "Mattress store x" + amountToBuy + ": " + formatNumber(totalCost)
         mattressamount.innerHTML = mattress
         updateMattressPrice()
+        updateupgcps(4)
 
     }
 })
@@ -283,7 +321,7 @@ function updateMattressPrice() {
     }
     const totalCost = getBulkCost(mattresscost, mattressmult, amountToBuy)
     mattressvalue.innerHTML =
-        "Mattress x" + amountToBuy + ": " + formatNumber(totalCost)
+        "Mattress store x" + amountToBuy + ": " + formatNumber(totalCost)
 }
 constructionbtn.addEventListener("click", () => {
     let amountToBuy = buyamount
@@ -299,10 +337,10 @@ constructionbtn.addEventListener("click", () => {
         }
         counter.innerHTML = formatNumber(amount) + " pizzas"
         constructionvalue.innerHTML =
-            "Construction x" + amountToBuy + ": " + formatNumber(totalCost)
+            "Construction site x" + amountToBuy + ": " + formatNumber(totalCost)
         constructionamount.innerHTML = construction
         updateconstructionPrice()
-
+        updateupgcps(5)
     }
 })
 function updateconstructionPrice() {
@@ -312,7 +350,45 @@ function updateconstructionPrice() {
     }
     const totalCost = getBulkCost(constructioncost, constructionmult, amountToBuy)
     constructionvalue.innerHTML =
-        "Construction x" + amountToBuy + ": " + formatNumber(totalCost)
+        "Construction site x" + amountToBuy + ": " + formatNumber(totalCost)
+}
+casinobtn.addEventListener("click", () => {
+    let amountToBuy = buyamount
+
+    if (buyamount === 0) {
+        amountToBuy = getMaxAffordable(casinocost, casinomult)
+    }
+
+    const totalCost = getBulkCost(casinocost, casinomult, amountToBuy)
+
+    if (amount >= totalCost) {
+        amount -= totalCost
+
+        for (let i = 0; i < amountToBuy; i++) {
+            casinocost = casinocost * casinomult / 100n
+            casino += 1n
+        }
+
+        counter.innerHTML = formatNumber(amount) + " pizzas"
+        casinovalue.innerHTML =
+            "Casino x" + amountToBuy + ": " + formatNumber(totalCost)
+
+        casinoamount.innerHTML = casino
+        updatecasinoPrice()
+        updateupgcps(6)
+    }
+})
+function updatecasinoPrice() {
+    let amountToBuy = buyamount
+
+    if (buyamount === 0) {
+        amountToBuy = getMaxAffordable(casinocost, casinomult)
+    }
+
+    const totalCost = getBulkCost(casinocost, casinomult, amountToBuy)
+
+    casinovalue.innerHTML =
+        "Casino x" + amountToBuy + ": " + formatNumber(totalCost)
 }
 upgupg.addEventListener("click", () => {
     let amountToBuy = buyamount
@@ -332,6 +408,7 @@ upgupg.addEventListener("click", () => {
         upgamount.innerHTML = upg
         updateUpgPrice()
         updateupgcps(2)
+        ovenbonus = 100n + ((upg / 10n) * ovenbuff)
     }
 })
 function updateUpgPrice() {
@@ -353,7 +430,7 @@ cookie.addEventListener("click", () => {
     void cookie.offsetWidth
     cookie.classList.add("cookie-click")
 })
-
+updateprices()
 let dcardval1 = 0
 let dcardval2 = 0
 let dcardval3 = 0
@@ -376,7 +453,7 @@ let currentbet = BigInt("0")
 let bustamount = 21
 let winmult = 2
 let magicmult = BigInt("0")
-
+let blackjackbuff = 100n
 
 function deckattributes() {
     switch (currentdeck) {
@@ -427,9 +504,23 @@ function deckattributes() {
         case 12: //painted
             bustamount = 21
             winmult = 200
+            break
         case 13: //anaglyph
             bustamount = 21
             winmult = 200
+            break
+        case 14: //burning
+            bustamount = 21
+            winmult = 260
+            break
+        case 15: //even
+            bustamount = 21
+            winmult = 200
+            break
+        case 16: //mountain
+            bustamount = 21
+            winmult = 400
+            break
     }
 }
 function assigndeck() {
@@ -459,6 +550,12 @@ function assigndeck() {
         case 12:
             return [...pfulldeck]
         case 13:
+            return [...fulldeck]
+        case 14:
+            return [...fulldeck]
+        case 15:
+            return [...fulldeck]
+        case 16:
             return [...fulldeck]
     }
 }
@@ -580,10 +677,10 @@ function choosedealercard() {
     return card
 }
 function acecheck() {
-    if (cardval1 + cardval2 + cardval3 + cardval4 > bustamount && cardval1 == 11) cardval1 = 1
-    if (cardval1 + cardval2 + cardval3 + cardval4 > bustamount && cardval2 == 11) cardval2 = 1
-    if (cardval1 + cardval2 + cardval3 + cardval4 > bustamount && cardval3 == 11) cardval3 = 1
-    if (cardval1 + cardval2 + cardval3 + cardval4 > bustamount && cardval4 == 11) cardval4 = 1
+    if (getTotalValue() > bustamount && cardval1 == 11) cardval1 = 1
+    if (getTotalValue() > bustamount && cardval2 == 11) cardval2 = 1
+    if (getTotalValue() > bustamount && cardval3 == 11) cardval3 = 1
+    if (getTotalValue() > bustamount && cardval4 == 11) cardval4 = 1
     if (dcardval1 + dcardval2 + dcardval3 + dcardval4 > 21 && dcardval1 == 11) dcardval1 = 1
     if (dcardval1 + dcardval2 + dcardval3 + dcardval4 > 21 && dcardval2 == 11) dcardval2 = 1 
     if (dcardval1 + dcardval2 + dcardval3 + dcardval4 > 21 && dcardval3 == 11) dcardval3 = 1 
@@ -623,7 +720,7 @@ function checkanaglyph() {
     }
 }
 function halodeck(curr) {
-    let total = cardval1 + cardval2 + cardval3 + cardval4
+    let total = getTotalValue()
     let newtotal = total + getCardValue(curr)
 
     if (newtotal > bustamount && currentdeck == 11) {
@@ -639,6 +736,15 @@ function halodeck(curr) {
 
     return curr
 }
+function getTotalValue() {
+    let total = cardval1 + cardval2 + cardval3 + cardval4
+
+    if (currentdeck == 15) {
+        return total + (card - 1) * 0.25
+    }
+
+    return total
+}
 function drawcard() {
     drawn = choosecard()
     switch (card) {
@@ -650,16 +756,15 @@ function drawcard() {
             card1tier = getcardtier(drawn)
             checkanaglyph()
             acecheck()
-            cardval.innerHTML = "Total value: " + (cardval1 + cardval2 + cardval3 + cardval4)
-            if (cardval1 + cardval2 + cardval3 + cardval4 == bustamount) {
+            cardval.innerHTML = "Total value: " + (getTotalValue())
+            if (getTotalValue() == bustamount) {
                 if (!busted && !stand) {
                     stand = true
                     dealerplay()}
             }
-            if (cardval1 + cardval2 + cardval3 + cardval4 > bustamount) {
-                cardval.innerHTML = "Total value: " + (cardval1 + cardval2 + cardval3 + cardval4) + " (busted)"
+            if (getTotalValue() > bustamount) {
+                cardval.innerHTML = "Total value: " + (getTotalValue()) + " (busted)"
                 busted = true
-                blackjack = false
                 card = 1
                 finishmatch()
             }
@@ -672,16 +777,15 @@ function drawcard() {
             card2tier = getcardtier(drawn)
             checkanaglyph()
             acecheck()
-            cardval.innerHTML = "Total value: " + (cardval1 + cardval2 + cardval3 + cardval4)
-            if (cardval1 + cardval2 + cardval3 + cardval4 == bustamount) {
+            cardval.innerHTML = "Total value: " + (getTotalValue())
+            if (getTotalValue() == bustamount) {
                 if (!busted && !stand) {
                     stand = true
                     dealerplay()}
             }
-            if (cardval1 + cardval2 + cardval3 + cardval4 > bustamount) {
-                cardval.innerHTML = "Total value: " + (cardval1 + cardval2 + cardval3 + cardval4) + " (busted)"
+            if (getTotalValue() > bustamount) {
+                cardval.innerHTML = "Total value: " + (getTotalValue()) + " (busted)"
                 busted = true
-                blackjack = false
                 card = 1
                 finishmatch()
             }
@@ -694,16 +798,15 @@ function drawcard() {
             card3tier = getcardtier(drawn)
             checkanaglyph()
             acecheck()
-            cardval.innerHTML = "Total value: " + (cardval1 + cardval2 + cardval3 + cardval4)
-            if (cardval1 + cardval2 + cardval3 + cardval4 == bustamount) {
+            cardval.innerHTML = "Total value: " + (getTotalValue())
+            if (getTotalValue() == bustamount) {
                 if (!busted && !stand) {
                     stand = true
                     dealerplay()}
             }
-            if (cardval1 + cardval2 + cardval3 + cardval4 > bustamount) {
-                cardval.innerHTML = "Total value: " + (cardval1 + cardval2 + cardval3 + cardval4) + " (busted)"
+            if (getTotalValue() > bustamount) {
+                cardval.innerHTML = "Total value: " + (getTotalValue()) + " (busted)"
                 busted = true
-                blackjack = false
                 card = 1
                 finishmatch()
             }
@@ -716,16 +819,15 @@ function drawcard() {
             card4tier = getcardtier(drawn)
             checkanaglyph()
             acecheck()
-            cardval.innerHTML = "Total value: " + (cardval1 + cardval2 + cardval3 + cardval4)
-            if (cardval1 + cardval2 + cardval3 + cardval4 == bustamount) {
+            cardval.innerHTML = "Total value: " + (getTotalValue())
+            if (getTotalValue() == bustamount) {
                 if (!busted && !stand) {
                     stand = true
                     dealerplay()}
             }
-            if (cardval1 + cardval2 + cardval3 + cardval4 > bustamount) {
-                cardval.innerHTML = "Total value: " + (cardval1 + cardval2 + cardval3 + cardval4) + " (busted)"
+            if (getTotalValue() > bustamount) {
+                cardval.innerHTML = "Total value: " + (getTotalValue()) + " (busted)"
                 busted = true
-                blackjack = false
                 card = 1
                 finishmatch()
             } else {
@@ -762,8 +864,19 @@ function deckimg(number) {
             return "https://balatrowiki.org/images/Painted_Deck.png?5fdce"
         case 13:
             return "https://balatrowiki.org/images/Anaglyph_Deck.png?97cb8"
+        case 14:
+            return "https://static.wikitide.net/balatromodswiki/c/ca/Burnt_Deck_%28Visibility%29.png"
+        case 15:
+            return "https://static.wikitide.net/balatromodswiki/9/91/Calculus_Deck_%28Showdown%29.png"
+        case 16:
+            return "https://static.wikitide.net/balatromodswiki/5/5b/Mountain_Deck_%28UNIK%27s_mod%29.png"
     }
 }
+setInterval(() => {
+    if (currentdeck == 14 && blackjack) {
+        winmult -= 10
+    }
+}, 250)
 hitbtn.addEventListener("click", () => {
     if (!busted && !stand) {
         drawcard()
@@ -887,11 +1000,11 @@ function dealerplay() {
 let nebulachance = 0
 function finishmatch() {
     if (!blackjack) return
-    if ((!busted && (dcardval1 + dcardval2 + dcardval3 + dcardval4) < (cardval1 + cardval2 + cardval3 + cardval4)) || (dbusted && !busted)) {
-        amount += currentbet * (BigInt(winmult) + magicmult) / BigInt(100)
+    if ((!busted && (dcardval1 + dcardval2 + dcardval3 + dcardval4) < (getTotalValue())) || (dbusted && !busted)) {
+        amount += currentbet * (BigInt(winmult) + magicmult) * blackjackbuff / BigInt(10000)
         questwin()
         spawnFloatingNumber(0, {
-            text: "BLACKJACK: +" + formatNumber(currentbet * (BigInt(winmult) +magicmult) / BigInt(100)),
+            text: "BLACKJACK: +" + formatNumber(currentbet * (BigInt(winmult) +magicmult) * blackjackbuff / BigInt(10000)),
             color: "red",
             size: "60px",
             duration: 3000
@@ -899,7 +1012,7 @@ function finishmatch() {
         blackjack = false
         magicmult += BigInt(25)
         counter.innerHTML = formatNumber(amount) + " pizzas"
-    } else if ((!busted && (dcardval1 + dcardval2 + dcardval3 + dcardval4) == (cardval1 + cardval2 + cardval3 + cardval4) && !dbusted)) {
+    } else if ((!busted && (dcardval1 + dcardval2 + dcardval3 + dcardval4) == (getTotalValue()) && !dbusted)) {
         amount += currentbet
         blackjack = false
         counter.innerHTML = formatNumber(amount) + " pizzas"
@@ -907,6 +1020,9 @@ function finishmatch() {
     } else {
         magicmult = BigInt(0)
         nebulachance = Math.random()
+        if (currentdeck == 16) {
+            amount -= currentbet
+        }
         if (nebulachance <= 0.4 && currentdeck == 8) {
             amount += currentbet
             counter.innerHTML = formatNumber(amount) + " pizzas"
@@ -918,7 +1034,9 @@ function finishmatch() {
             duration: 5000
         })
         }
+        counter.innerHTML = formatNumber(amount) + " pizzas"
         blackjack = false
+        if (currentbet >= 1000000000 && currentdeck == 16) {mountainquest += 1; updatequests()}
     }
 }
 function questwin() {
@@ -934,11 +1052,16 @@ function questwin() {
     if (currentdeck == 4) {ghostwins += 1}
     if (currentdeck == 6) {magicwins += 1}
     if (currentdeck == 8) {nebulawins += 1}
-    jackearnings += currentbet * (BigInt(winmult) + magicmult) / BigInt(200)
+    if (currentdeck == 14) {burningwins += 1}
+    if (currentdeck == 15) {decimalwins += 1}
+    if (currentdeck == 16) {mountainwins += 1}
+    jackearnings += currentbet * (BigInt(winmult) + magicmult) * blackjackbuff / BigInt(200) / 100n
     if (currentbet >= 200000) {win200k += 1}
-    if (cardval1 + cardval2 + cardval3 + cardval4 == 23 && currentdeck == 5) {triggergreen += 1}
+    if (getTotalValue() == 23 && currentdeck == 5) {triggergreen += 1}
     if (currentbet >= 25000000) {win25m += 1}
     if (currentbet >= 1000000000) {win1b += 1}
+    if (currentbet >= 100000000000 && currentdeck == 16) {mountain100bwin += 1}
+    if (currentdeck == 14 && winmult >= 2.5) {burningquest += 1}
     if (magicmult >= 4 && currentdeck == 6) {magicstreak += 1}
     updatequests()
 }
@@ -982,16 +1105,16 @@ function trackGain(amount) {
 
     gainHistory.push({ time: now, amount: amount })
 
-    gainHistory = gainHistory.filter(entry => now - entry.time <= 2000)
+    gainHistory = gainHistory.filter(entry => now - entry.time <= 2500)
 }
-function getCPS() {
+function getCPS() { 
     const now = Date.now()
 
-    gainHistory = gainHistory.filter(entry => now - entry.time <= 2000)
+    gainHistory = gainHistory.filter(entry => now - entry.time <= 2500)
 
     const total = gainHistory.reduce((sum, entry) => sum + Number(entry.amount), 0)
 
-    return total / 2
+    return total / 2.5
 }
 let cps = 0
 function updateCPSDisplay() {
@@ -1037,11 +1160,6 @@ function setdeckstatus(number) {
     } else {
         nstatus.innerHTML = "Price: " + formatNumber(ndeckprice)
     }
-    if (zdeckowned) {
-        zstatus.innerHTML = "Owned"
-    } else {
-        zstatus.innerHTML = "Price: " + formatNumber(zdeckprice)
-    }
     if (adeckowned) {
         astatus.innerHTML = "Owned"
     } else {
@@ -1061,6 +1179,21 @@ function setdeckstatus(number) {
         anstatus.innerHTML = "Owned"
     } else {
         anstatus.innerHTML = "Price: " + formatNumber(andeckprice)
+    }
+    if (budeckowned) {
+        bustatus.innerHTML = "Owned"
+    } else {
+        bustatus.innerHTML = "Price: " + formatNumber(budeckprice)
+    }
+    if (evdeckowned) {
+        evstatus.innerHTML = "Owned"
+    } else {
+        evstatus.innerHTML = "Price: " + formatNumber(evdeckprice)
+    }
+    if (modeckowned) {
+        mostatus.innerHTML = "Owned"
+    } else {
+        mostatus.innerHTML = "Price: " + formatNumber(modeckprice)
     }
     switch (number) {
         case 1:
@@ -1129,15 +1262,6 @@ function setdeckstatus(number) {
                 flipCard(card4, deckimg(currentdeck))
             }
             break
-        case 9:
-            if (zdeckowned) {
-                zstatus.innerHTML = "Selected"
-                flipCard(card1, deckimg(currentdeck))
-                flipCard(card2, deckimg(currentdeck))
-                flipCard(card3, deckimg(currentdeck))
-                flipCard(card4, deckimg(currentdeck))
-            }
-            break
         case 10:
             if (adeckowned) {
                 astatus.innerHTML = "Selected"
@@ -1174,6 +1298,33 @@ function setdeckstatus(number) {
                 flipCard(card4, deckimg(currentdeck))
             }
             break
+        case 14:
+            if (budeckowned) {
+                bustatus.innerHTML = "Selected"
+                flipCard(card1, deckimg(currentdeck))
+                flipCard(card2, deckimg(currentdeck))
+                flipCard(card3, deckimg(currentdeck))
+                flipCard(card4, deckimg(currentdeck))
+            }
+            break
+        case 15:
+            if (evdeckowned) {
+                evstatus.innerHTML = "Selected"
+                flipCard(card1, deckimg(currentdeck))
+                flipCard(card2, deckimg(currentdeck))
+                flipCard(card3, deckimg(currentdeck))
+                flipCard(card4, deckimg(currentdeck))
+            }
+            break
+        case 16:
+            if (modeckowned) {
+                mostatus.innerHTML = "Selected"
+                flipCard(card1, deckimg(currentdeck))
+                flipCard(card2, deckimg(currentdeck))
+                flipCard(card3, deckimg(currentdeck))
+                flipCard(card4, deckimg(currentdeck))
+            }
+            break
     }
 }
 
@@ -1194,7 +1345,6 @@ const bldeck = document.getElementById("bldeck")
 const nstatus = document.getElementById("nstatus")
 const ndeck = document.getElementById("ndeck")
 const zstatus = document.getElementById("zstatus")
-const zdeck = document.getElementById("zdeck")
 const astatus = document.getElementById("astatus")
 const adeck = document.getElementById("adeck")
 const hstatus = document.getElementById("hstatus")
@@ -1203,6 +1353,12 @@ const anstatus = document.getElementById("anstatus")
 const andeck = document.getElementById("andeck")
 const pstatus = document.getElementById("pstatus")
 const pdeck = document.getElementById("pdeck")
+const bustatus = document.getElementById("bustatus")
+const budeck = document.getElementById("budeck")
+const evstatus = document.getElementById("evstatus")
+const evdeck = document.getElementById("evdeck")
+const mostatus = document.getElementById("mostatus")
+const modeck = document.getElementById("modeck")
 
 let adeckprice = BigInt("25000")
 let adeckowned = false
@@ -1222,8 +1378,12 @@ let bldeckprice = BigInt("25000")
 let bldeckowned = false
 let ndeckprice = BigInt("200000000")
 let ndeckowned = false
-let zdeckprice = BigInt("3700000000000000000")
-let zdeckowned = false
+let budeckprice = BigInt("10000000000")
+let budeckowned = false
+let evdeckprice = BigInt("10000000000")
+let evdeckowned = false
+let modeckprice = BigInt("10000000000")
+let modeckowned = false
 adeck.addEventListener("click", () => {
     if (amount >= adeckprice && !adeckowned) {
         amount -= adeckprice
@@ -1341,15 +1501,37 @@ ndeck.addEventListener("click", () => {
         setdeckstatus(8)
     }
 })
-zdeck.addEventListener("click", () => {
-    if (amount >= zdeckprice && !zdeckowned) {
-        amount -= zdeckprice
-        zdeckowned = true
+budeck.addEventListener("click", () => {
+    if (amount >= budeckprice && !budeckowned) {
+        amount -= budeckprice
+        budeckowned = true
         counter.innerHTML = formatNumber(amount) + " pizzas"
     }
-    if (!blackjack && zdeckowned) {
-        currentdeck = 9
-        setdeckstatus(9)
+    if (!blackjack && budeckowned) {
+        currentdeck = 14
+        setdeckstatus(14)
+    }
+})
+evdeck.addEventListener("click", () => {
+    if (amount >= evdeckprice && !evdeckowned) {
+        amount -= evdeckprice
+        evdeckowned = true
+        counter.innerHTML = formatNumber(amount) + " pizzas"
+    }
+    if (!blackjack && evdeckowned) {
+        currentdeck = 15
+        setdeckstatus(15)
+    }
+})
+modeck.addEventListener("click", () => {
+    if (amount >= modeckprice && !modeckowned) {
+        amount -= modeckprice
+        modeckowned = true
+        counter.innerHTML = formatNumber(amount) + " pizzas"
+    }
+    if (!blackjack && modeckowned) {
+        currentdeck = 16
+        setdeckstatus(16)
     }
 })
 setdeckstatus(1)
@@ -1438,6 +1620,18 @@ itemsbtn.addEventListener("click", () => {
     boxestab.style.display = "none"
     itemstab.style.display = "block"
 })
+const endpage1 = document.getElementById("endpage1")
+const endpage2 = document.getElementById("endpage2")
+const endpage1btn = document.getElementById("end1pagebtn")
+const endpage2btn = document.getElementById("end2pagebtn")
+endpage1btn.addEventListener("click", () => {
+    endpage1.style.display = "flex"
+    endpage2.style.display = "none"
+})
+endpage2btn.addEventListener("click", () => {
+    endpage1.style.display = "none"
+    endpage2.style.display = "flex"
+})
 let reqadd = 1.4
 let chipadd = 1.1
 const end1 = document.getElementById("end1")
@@ -1521,13 +1715,36 @@ const end12chip = document.getElementById("end12chip")
 let end12ch = 300
 let end12req = 3
 end12.addEventListener("click", () => {if (nebulawins >= end12req) {end12req = Math.floor(end12req * reqadd); chips += end12ch; end12ch = Math.floor(end12ch * chipadd); updatequests(); chipcounter.innerHTML = formatNumber(chips)}})
+
+const end13 = document.getElementById("end13")
+const end13prog = document.getElementById("end13prog")
+const end13chip = document.getElementById("end13chip")
+let end13ch = 300
+let end13req = 3
+end13.addEventListener("click", () => {if (burningwins >= end13req) {end13req = Math.floor(end13req * reqadd); chips += end13ch; end13ch = Math.floor(end13ch * chipadd); updatequests(); chipcounter.innerHTML = formatNumber(chips)}})
+
+const end14 = document.getElementById("end14")
+const end14prog = document.getElementById("end14prog")
+const end14chip = document.getElementById("end14chip")
+let end14ch = 300
+let end14req = 3
+end14.addEventListener("click", () => {if (decimalwins >= end14req) {end14req = Math.floor(end14req * reqadd); chips += end14ch; end14ch = Math.floor(end14ch * chipadd); updatequests(); chipcounter.innerHTML = formatNumber(chips)}})
+
+const end15 = document.getElementById("end15")
+const end15prog = document.getElementById("end15prog")
+const end15chip = document.getElementById("end15chip")
+let end15ch = 300
+let end15req = 3
+end15.addEventListener("click", () => {if (mountainwins >= end15req) {end15req = Math.floor(end15req * reqadd); chips += end15ch; end15ch = Math.floor(end15ch * chipadd); updatequests(); chipcounter.innerHTML = formatNumber(chips)}})
+
 const lvl2 = document.getElementById("lvl2")
 const lvl2decklock = document.getElementById("lvl2decklock")
 const lvl3 = document.getElementById("lvl3")
 const lvl3decklock = document.getElementById("lvl3decklock")
 const lvl4 = document.getElementById("lvl4")
 const lvl4decklock = document.getElementById("lvl4decklock")
-let xp = 0
+const lvl5 = document.getElementById("lvl5")
+const lvl5decklock = document.getElementById("lvl5decklock")
 let redwins = 0
 let yellowwins = 0
 let bluewins = 0
@@ -1545,7 +1762,13 @@ let jackearnings = 0n
 let ghostwins = 0
 let magicwins = 0
 let nebulawins = 0
+let burningwins = 0
+let decimalwins = 0
+let mountainwins = 0
 let win1b = 0
+let mountain100bwin = 0
+let burningquest = 0
+let mountainquest = 0
 let magicstreak = 0
 const levelprog = document.getElementById("levelprog")
 const quest1 = document.getElementById("quest1")
@@ -1592,6 +1815,20 @@ const quest43 = document.getElementById("quest43")
 const quest44 = document.getElementById("quest44")
 const quest45 = document.getElementById("quest45")
 const quest46 = document.getElementById("quest46")
+const quest51prog = document.getElementById("quest51prog")
+const quest52prog = document.getElementById("quest52prog")
+const quest53prog = document.getElementById("quest53prog")
+const quest54prog = document.getElementById("quest54prog")
+const quest55prog = document.getElementById("quest55prog")
+const quest56prog = document.getElementById("quest56prog")
+const quest57prog = document.getElementById("quest57prog")
+const quest51 = document.getElementById("quest51")
+const quest52 = document.getElementById("quest52")
+const quest53 = document.getElementById("quest53")
+const quest54 = document.getElementById("quest54")
+const quest55 = document.getElementById("quest55")
+const quest56 = document.getElementById("quest56")
+const quest57 = document.getElementById("quest57")
 let quest1stat = false
 let quest2stat = false
 let quest3stat = false
@@ -1614,6 +1851,13 @@ let tier4_3stat = false
 let tier4_4stat = false
 let tier4_5stat = false
 let tier4_6stat = false
+let tier5_1stat = false
+let tier5_2stat = false
+let tier5_3stat = false
+let tier5_4stat = false
+let tier5_5stat = false
+let tier5_6stat = false
+let tier5_7stat = false
 function updatequests() {
     end1prog.innerHTML = redwins + " / " + end1req
     end1chip.innerHTML = end1ch
@@ -1639,6 +1883,12 @@ function updatequests() {
     end11chip.innerHTML = end11ch
     end12prog.innerHTML = nebulawins + " / " + end12req
     end12chip.innerHTML = end12ch
+    end13prog.innerHTML = burningwins + " / " + end13req
+    end13chip.innerHTML = end13ch
+    end14prog.innerHTML = decimalwins + " / " + end14req
+    end14chip.innerHTML = end14ch
+    end15prog.innerHTML = mountainwins + " / " + end15req
+    end15chip.innerHTML = end15ch
     let completedquests = []
     quest1prog.innerHTML = formatNumber(jackearnings) + " / 25K"
     quest2prog.innerHTML = redwins + " / 5"
@@ -1662,6 +1912,13 @@ function updatequests() {
     quest44prog.innerHTML = nebulawins + " / 5"
     quest45prog.innerHTML = win1b + " / 1"
     quest46prog.innerHTML = magicstreak + " / 4"
+    quest51prog.innerHTML = formatNumber(jackearnings) + " / 1T"
+    quest52prog.innerHTML = burningwins + " / 5"
+    quest53prog.innerHTML = decimalwins + " / 5"
+    quest54prog.innerHTML = mountainwins + " / 5"
+    quest55prog.innerHTML = mountain100bwin + " / 1"
+    quest56prog.innerHTML = burningquest + " / 1"
+    quest57prog.innerHTML = mountainquest + " / 1"
 if (jackearnings >= 25000 && !quest1stat) {quest1stat = true; completedquests.push("Makin' dough")}
 if (redwins >= 5 && !quest2stat) {quest2stat = true; completedquests.push("The classics")}
 if (yellowwins >= 5 && !quest3stat) {quest3stat = true; completedquests.push("Go big")}
@@ -1684,6 +1941,13 @@ if (magicwins >= 5 && !tier4_3stat) {tier4_3stat = true; completedquests.push("W
 if (nebulawins >= 5 && !tier4_4stat) {tier4_4stat = true; completedquests.push("Astronomical odds")}
 if (win1b && !tier4_5stat) {tier4_5stat = true; completedquests.push("Call Jack, I'm in")}
 if (magicstreak >= 4 && !tier4_6stat) {tier4_6stat = true; completedquests.push("Magic touch")}
+if (jackearnings >= 1000000000000n && !tier5_1stat) {tier5_1stat = true; completedquests.push("Infinite breadsticks")}
+if (burningwins >= 5 && !tier5_2stat) {tier5_2stat = true; completedquests.push("Hot hands")}
+if (decimalwins >= 5 && !tier5_3stat) {tier5_3stat = true; completedquests.push("Counting cards")}
+if (mountainwins >= 5 && !tier5_4stat) {tier5_4stat = true; completedquests.push("Long way down")}
+if (mountain100bwin >= 1 && !tier5_5stat) {tier5_5stat = true; completedquests.push("Everest")}
+if (burningquest >= 1 && !tier5_6stat) {tier5_6stat = true; completedquests.push("Flamethrower")}
+if (mountainquest >= 1 && !tier5_7stat) {tier5_7stat = true; completedquests.push("Sisyphus")}
 if (completedquests.length > 0) {
     showpopup(2, completedquests)}
 }
@@ -1710,62 +1974,84 @@ quest43.addEventListener("click", () => {if (tier4_3stat) {quest43.style.display
 quest44.addEventListener("click", () => {if (tier4_4stat) {quest44.style.display = "none"; xp += 1; levelunlocks(); chips += 1500; chipcounter.innerHTML = formatNumber(chips)}})
 quest45.addEventListener("click", () => {if (tier4_5stat) {quest45.style.display = "none"; xp += 1; levelunlocks(); chips += 1500; chipcounter.innerHTML = formatNumber(chips)}})
 quest46.addEventListener("click", () => {if (tier4_6stat) {quest46.style.display = "none"; xp += 1; levelunlocks(); chips += 1500; chipcounter.innerHTML = formatNumber(chips)}})
+quest51.addEventListener("click", () => {if (tier5_1stat) {quest51.style.display = "none"; xp += 1; levelunlocks(); chips += 2000; chipcounter.innerHTML = formatNumber(chips)}})
+quest52.addEventListener("click", () => {if (tier5_2stat) {quest52.style.display = "none"; xp += 1; levelunlocks(); chips += 2000; chipcounter.innerHTML = formatNumber(chips)}})
+quest53.addEventListener("click", () => {if (tier5_3stat) {quest53.style.display = "none"; xp += 1; levelunlocks(); chips += 2000; chipcounter.innerHTML = formatNumber(chips)}})
+quest54.addEventListener("click", () => {if (tier5_4stat) {quest54.style.display = "none"; xp += 1; levelunlocks(); chips += 2000; chipcounter.innerHTML = formatNumber(chips)}})
+quest55.addEventListener("click", () => {if (tier5_5stat) {quest55.style.display = "none"; xp += 1; levelunlocks(); chips += 2000; chipcounter.innerHTML = formatNumber(chips)}})
+quest56.addEventListener("click", () => {if (tier5_6stat) {quest56.style.display = "none"; xp += 1; levelunlocks(); chips += 2000; chipcounter.innerHTML = formatNumber(chips)}})
+quest57.addEventListener("click", () => {if (tier5_7stat) {quest57.style.display = "none"; xp += 1; levelunlocks(); chips += 2000; chipcounter.innerHTML = formatNumber(chips)}})
 const lvl2decks = document.getElementById("lvl2decks")
 const lvl3decks = document.getElementById("lvl3decks")
 const lvl4decks = document.getElementById("lvl4decks")
+const lvl5decks = document.getElementById("lvl5decks")
 const lv1quests = document.getElementById("lv1quests")
 const lv2quests = document.getElementById("lv2quests")
 const lv3quests = document.getElementById("lv3quests")
 const lv4quests = document.getElementById("lv4quests")
+const lv5quests = document.getElementById("lv5quests")
 function levelunlocks() {
-    if (xp == 4 && lv == 1) {
+    if (xp >= 4 && lv == 1) {
         lv = 2
-        xp = 0
-    }
-    if (xp == 6 && lv == 2) {
-        lv = 3
-        xp = 0
-    }
-    if (xp == 6 && lv == 3) {
-        lv = 4
-        xp = 0
-    }
-    if (xp == 6 && lv == 4) {
-        lv = 5
-        xp = 0
-    }
-    if (lv >= 2) {
+        xp -= 4
         pizzerupg.style.display = "flex"
         lvl2.style.display = "none"
         lvl2decks.style.display = "flex"
         lvl2decklock.style.display = "none"
         lv2quests.style.display = "flex"
         lv1quests.style.display = "none"
+        buff5.style.display = "flex"
+        buff4.style.display = "flex"
+        buff3.style.display = "flex"
     }
-    if (lv >= 3) {
+    if (xp >= 6 && lv == 2) {
+        lv = 3
+        xp -= 6
         lvl3decklock.style.display = "none"
         lvl3decks.style.display = "flex"
         lv2quests.style.display = "none"
         lv3quests.style.display = "flex"
         lvl3.style.display = "none"
         mattressbtn.style.display = "flex"
+        buff6.style.display = "flex"
+        buff7.style.display = "flex"
     }
-    if (lv >= 4) {
+    if (xp >= 6 && lv == 3) {
+        lv = 4
+        xp -= 6
         lvl4decklock.style.display = "none"
         lvl4decks.style.display = "flex"
-        lv2quests.style.display = "none"
         lv3quests.style.display = "none"
         lv4quests.style.display = "flex"
         lvl4.style.display = "none"
         constructionbtn.style.display = "flex"
+        buff8.style.display = "flex"
+        buff9.style.display = "flex"
+        buff10.style.display = "flex"
+        buff11.style.display = "flex"
+    }
+    if (xp >= 6 && lv == 4) {
+        lv = 5
+        xp -= 6
+        lv5quests.style.display = "flex"
+        lv4quests.style.display = "none"
+        lvl5.style.display = "none"
+        buff12.style.display = "flex"
+        buff13.style.display = "flex"
+        buff14.style.display = "flex"
+        buff15.style.display = "flex"
+        buff16.style.display = "flex"
+        lvl5decklock.style.display = "none"
+        lvl5decks.style.display = "flex"
+        casinobtn.style.display = "flex"
     }
     if (lv == 1) levelprog.innerHTML = xp + " / 4 until level 2"
     if (lv == 2) levelprog.innerHTML = xp + " / 6 until level 3"
     if (lv == 3) levelprog.innerHTML = xp + " / 6 until level 4"
     if (lv == 4) levelprog.innerHTML = xp + " / 6 until level 5"
+    if (lv == 5) levelprog.innerHTML = xp + " / 7 until level 6"
 }
 const deckdisp = document.getElementById("deckdisplay")
-levelunlocks()
 lvl2.addEventListener("mouseenter", () => {
     upgrades.innerHTML = "Complete quests to get to level 2."
 })
@@ -1821,13 +2107,13 @@ bdeck.addEventListener("mouseleave", () => {
     deckdisp.innerHTML = "Custom decks"
 })
 gdeck.addEventListener("mouseenter", () => {
-    deckdisp.innerHTML = "Ghost Deck: Remove cards above 9, bust from 130, winning mult = x1.5, a tie = lose."
+    deckdisp.innerHTML = "Ghost Deck: Remove cards above 9, bust from 666, winning mult = x1.5, a tie = lose."
 })
 gdeck.addEventListener("mouseleave", () => {
     deckdisp.innerHTML = "Custom decks"
 })
 mdeck.addEventListener("mouseenter", () => {
-    deckdisp.innerHTML = "Magic Deck: Each win increases winning mult by 0.25, but losing resets to 2x, bust limit increased to 22."
+    deckdisp.innerHTML = "Magic Deck: Each win increases winning mult by 0.25, but losing resets to 2x, bust limit = 22."
 })
 mdeck.addEventListener("mouseleave", () => {
     deckdisp.innerHTML = "Custom decks"
@@ -1848,12 +2134,6 @@ bldeck.addEventListener("mouseenter", () => {
     deckdisp.innerHTML = "Black Deck: Remove cards 2-5 and increase winning mult to 2.1x."
 })
 bldeck.addEventListener("mouseleave", () => {
-    deckdisp.innerHTML = "Custom decks"
-})
-zdeck.addEventListener("mouseenter", () => {
-    deckdisp.innerHTML = "Sacred deck: Adds 8 new cards to deck, hover over card to see its effects."
-})
-zdeck.addEventListener("mouseleave", () => {
     deckdisp.innerHTML = "Custom decks"
 })
 adeck.addEventListener("mouseenter", () => {
@@ -1880,6 +2160,25 @@ pdeck.addEventListener("mouseenter", () => {
 pdeck.addEventListener("mouseleave", () => {
     deckdisp.innerHTML = "Custom decks"
 })
+budeck.addEventListener("mouseenter", () => {
+    deckdisp.innerHTML = "Burning deck: 2.6x win mult, every 0.25 second -0.1 win mult."
+})
+budeck.addEventListener("mouseleave", () => {
+    deckdisp.innerHTML = "Custom decks"
+})
+evdeck.addEventListener("mouseenter", () => {
+    deckdisp.innerHTML = "Decimal deck: Each cards adds an extra 0.25 to total."
+})
+evdeck.addEventListener("mouseleave", () => {
+    deckdisp.innerHTML = "Custom decks"
+})
+modeck.addEventListener("mouseenter", () => {
+    deckdisp.innerHTML = "Mountain deck: 4x win mult, 2x losses (can go into debt)."
+})
+modeck.addEventListener("mouseleave", () => {
+    deckdisp.innerHTML = "Custom decks"
+})
+const buffmsg = document.getElementById("buffmsg")
 const buffs = document.getElementById("buffs")
 const buff1 = document.getElementById("buff1")
 const buff2 = document.getElementById("buff2")
@@ -1887,28 +2186,70 @@ const buff3 = document.getElementById("buff3")
 const buff4 = document.getElementById("buff4")
 const buff5 = document.getElementById("buff5")
 const buff6 = document.getElementById("buff6")
-let buff1stat = false
-let buff2stat = false
-let buff3stat = false
-let buff4stat = false
+const buff7 = document.getElementById("buff7")
+const buff8 = document.getElementById("buff8")
+const buff9 = document.getElementById("buff9")
+const buff10 = document.getElementById("buff10")
+const buff11 = document.getElementById("buff11")
+const buff12 = document.getElementById("buff12")
+const buff13 = document.getElementById("buff13")
+const buff14 = document.getElementById("buff14")
+const buff15 = document.getElementById("buff15")
+const buff16 = document.getElementById("buff16")
+buff3.style.display = "none"
 buff4.style.display = "none"
 buff5.style.display = "none"
 buff6.style.display = "none"
+buff7.style.display = "none"
+buff8.style.display = "none"
+buff9.style.display = "none"
+buff10.style.display = "none"
+buff11.style.display = "none"
+buff12.style.display = "none"
+buff13.style.display = "none"
+buff14.style.display = "none"
+buff15.style.display = "none"
+buff16.style.display = "none"
 
 buff1.addEventListener("mouseenter", () => {buffs.innerHTML = "Doubles oven strength"})
-buff2.addEventListener("mouseenter", () => {buffs.innerHTML = "Joe makes 20% more pizzas / second"})
+buff2.addEventListener("mouseenter", () => {buffs.innerHTML = "Joe makes 20% more pizzas"})
 buff3.addEventListener("mouseenter", () => {buffs.innerHTML = "Joe makes pizzas faster"})
-buff4.addEventListener("mouseenter", () => {buffs.innerHTML = "Boosts oven strength"})
+buff4.addEventListener("mouseenter", () => {buffs.innerHTML = "Pizzerias make 15% more pizzas"})
+buff5.addEventListener("mouseenter", () => {buffs.innerHTML = "Every 10 ovens increases pizzas by 1%"})
+buff6.addEventListener("mouseenter", () => {buffs.innerHTML = "Pizzerias make pizzas faster"})
+buff7.addEventListener("mouseenter", () => {buffs.innerHTML = "Joe makes 30x pizzas"})
+buff8.addEventListener("mouseenter", () => {buffs.innerHTML = "Pizzerias make 20x pizzas"})
+buff9.addEventListener("mouseenter", () => {buffs.innerHTML = "Mattress store makes 4x pizzas"})
+buff10.addEventListener("mouseenter", () => {buffs.innerHTML = "Joe makes 400x pizzas"})
+buff11.addEventListener("mouseenter", () => {buffs.innerHTML = "Extra 0.1x payout from blackjack"})
+buff12.addEventListener("mouseenter", () => {buffs.innerHTML = "Pizzerias make 30x pizzas"})
+buff13.addEventListener("mouseenter", () => {buffs.innerHTML = "Joe makes 1500x pizzas"})
+buff14.addEventListener("mouseenter", () => {buffs.innerHTML = "Pizzerias make 90x pizzas"})
+buff15.addEventListener("mouseenter", () => {buffs.innerHTML = "Mattress stores make 80x pizzas"})
+buff16.addEventListener("mouseenter", () => {buffs.innerHTML = "Construction sites make 7x pizzas"})
 buff1.addEventListener("mouseleave", () => {buffs.innerHTML = "Buffs"})
 buff2.addEventListener("mouseleave", () => {buffs.innerHTML = "Buffs"})
 buff3.addEventListener("mouseleave", () => {buffs.innerHTML = "Buffs"})
 buff4.addEventListener("mouseleave", () => {buffs.innerHTML = "Buffs"})
+buff5.addEventListener("mouseleave", () => {buffs.innerHTML = "Buffs"})
+buff6.addEventListener("mouseleave", () => {buffs.innerHTML = "Buffs"})
+buff7.addEventListener("mouseleave", () => {buffs.innerHTML = "Buffs"})
+buff8.addEventListener("mouseleave", () => {buffs.innerHTML = "Buffs"})
+buff9.addEventListener("mouseleave", () => {buffs.innerHTML = "Buffs"})
+buff10.addEventListener("mouseleave", () => {buffs.innerHTML = "Buffs"})
+buff11.addEventListener("mouseleave", () => {buffs.innerHTML = "Buffs"})
+buff12.addEventListener("mouseleave", () => {buffs.innerHTML = "Buffs"})
+buff13.addEventListener("mouseleave", () => {buffs.innerHTML = "Buffs"})
+buff14.addEventListener("mouseleave", () => {buffs.innerHTML = "Buffs"})
+buff15.addEventListener("mouseleave", () => {buffs.innerHTML = "Buffs"})
+buff16.addEventListener("mouseleave", () => {buffs.innerHTML = "Buffs"})
 buff1.addEventListener("click", () => {
-    if (chips >= 1500) {
+    if (chips >= 500) {
         upgbuff += 100n
         buff1.style.display = "none"
-        chips -= 1000
+        chips -= 500
         chipcounter.innerHTML = formatNumber(chips)
+        checkbuffs()
     }
 })
 buff2.addEventListener("click", () => {
@@ -1917,13 +2258,143 @@ buff2.addEventListener("click", () => {
         buff2.style.display = "none"
         chips -= 1500
         chipcounter.innerHTML = formatNumber(chips)
+        checkbuffs()
     }
 })
 buff3.addEventListener("click", () => {
     if (chips >= 2000) {
-        clickerspeed -= 200
+        clickerspeed -= 80
         buff3.style.display = "none"
         chips -= 2000
         chipcounter.innerHTML = formatNumber(chips)
+        checkbuffs()
     }
 })
+buff4.addEventListener("click", () => {
+    if (chips >= 2500) {
+        pizzerbuff += 15n
+        buff4.style.display = "none"
+        chips -= 2500
+        chipcounter.innerHTML = formatNumber(chips)
+        checkbuffs()
+    }
+})
+buff5.addEventListener("click", () => {
+    if (chips >= 5000) {
+        ovenbuff += 1n
+        ovenbonus = 100n + ((upg / 10n) * ovenbuff)
+        buff5.style.display = "none"
+        chips -= 5000
+        chipcounter.innerHTML = formatNumber(chips)
+        checkbuffs()
+    }
+})
+buff6.addEventListener("click", () => {
+    if (chips >= 2500) {
+        pizzerspeed -= 120
+        buff6.style.display = "none"
+        chips -= 2500
+        chipcounter.innerHTML = formatNumber(chips)
+        checkbuffs()
+    }
+})
+buff7.addEventListener("click", () => {
+    if (chips >= 4000) {
+        clickerbuff += 3000n
+        buff7.style.display = "none"
+        chips -= 4000
+        chipcounter.innerHTML = formatNumber(chips)
+        checkbuffs()
+    }
+})
+buff8.addEventListener("click", () => {
+    if (chips >= 5000) {
+        pizzerbuff += 2000n
+        buff8.style.display = "none"
+        chips -= 5000
+        chipcounter.innerHTML = formatNumber(chips)
+        checkbuffs()
+    }
+})
+buff9.addEventListener("click", () => {
+    if (chips >= 5000) {
+        mattressbuff += 400n
+        buff9.style.display = "none"
+        chips -= 5000
+        chipcounter.innerHTML = formatNumber(chips)
+        checkbuffs()
+    }
+})
+buff10.addEventListener("click", () => {
+    if (chips >= 5000) {
+        clickerbuff += 40000n
+        buff10.style.display = "none"
+        chips -= 5000
+        chipcounter.innerHTML = formatNumber(chips)
+        checkbuffs()
+    }
+})
+buff11.addEventListener("click", () => {
+    if (chips >= 5000) {
+        blackjackbuff += 10n
+        buff11.style.display = "none"
+        chips -= 5000
+        chipcounter.innerHTML = formatNumber(chips)
+        checkbuffs()
+    }
+})
+buff12.addEventListener("click", () => {
+    if (chips >= 5000) {
+        pizzerbuff += 300n
+        buff12.style.display = "none"
+        chips -= 5000
+        chipcounter.innerHTML = formatNumber(chips)
+        checkbuffs()
+    }
+})
+buff13.addEventListener("click", () => {
+    if (chips >= 7000) {
+        clickerbuff += 1500000n
+        buff13.style.display = "none"
+        chips -= 7000
+        chipcounter.innerHTML = formatNumber(chips)
+        checkbuffs()
+    }
+})
+buff14.addEventListener("click", () => {
+    if (chips >= 7000) {
+        pizzerbuff += 90000n
+        buff14.style.display = "none"
+        chips -= 7000
+        chipcounter.innerHTML = formatNumber(chips)
+        checkbuffs()
+    }
+})
+buff15.addEventListener("click", () => {
+    if (chips >= 6000) {
+        mattressbuff += 8000n
+        buff15.style.display = "none"
+        chips -= 6000
+        chipcounter.innerHTML = formatNumber(chips)
+        checkbuffs()
+    }
+})
+buff16.addEventListener("click", () => {
+    if (chips >= 6000) {
+        constructionbuff += 700n
+        buff16.style.display = "none"
+        chips -= 6000
+        chipcounter.innerHTML = formatNumber(chips)
+        checkbuffs()
+    }
+})
+function checkbuffs() {
+    const bufflist = [buff1, buff2, buff3, buff4, buff5, buff6, buff7, buff8, buff9, buff10, buff11, buff12, buff13, buff14, buff15, buff16]
+    buffmsg.style.display = "block"
+    bufflist.forEach(buff => {
+        if (buff.style.display !== "none") {
+            buffmsg.style.display = "none"
+        }
+    })
+}
+levelunlocks()
