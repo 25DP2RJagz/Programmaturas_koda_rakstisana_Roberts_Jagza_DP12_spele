@@ -25,7 +25,14 @@
                 </div>
             </div>
             <section class="playingsection">
-                <h1 class="jackname">Blackjack</h1>
+                <h1 class="jackname" id="blackdisplay">Blackjack</h1>
+                <div id="timingcont">
+                    <div id="timingbar">
+                        <div id="goodzone"></div>
+                        <div id="perfectzone"></div>
+                        <div id="cursor"></div>
+                    </div>
+                </div>
                 <section class="jackup">
                     <button class="jackbtn" id="allinbtn">All In</button>
                     <button class="jackbtn" id="betbtn">Bet</button>
@@ -186,20 +193,20 @@
                         <h1>Level 6</h1>
                     </div>
                     <div class="deckcont" id="lvl6decks">
-                        <div class="deck" id="budeck">
-                            <h1 class="nomargin smalltext">Burning Deck</h1>
-                            <img class="deckimg" src="https://static.wikitide.net/balatromodswiki/c/ca/Burnt_Deck_%28Visibility%29.png">
-                            <h1 class="nomargin smalltext" id="gstatus">Selected</h1>
+                        <div class="deck" id="ecdeck">
+                            <h1 class="nomargin smalltext">Eclipse Deck</h1>
+                            <img class="deckimg" src="https://static.wikitide.net/balatromodswiki/8/80/Syzygy_Deck_%28Manifold%29.png">
+                            <h1 class="nomargin smalltext" id="ecstatus">Selected</h1>
                         </div>
-                        <div class="deck" id="evdeck">
-                            <h1 class="nomargin smalltext">Even Deck</h1>
-                            <img class="deckimg" src="https://static.wikitide.net/balatromodswiki/9/91/Calculus_Deck_%28Showdown%29.png">
-                            <h1 class="nomargin smalltext" id="mstatus">Selected</h1>
+                        <div class="deck" id="rhdeck">
+                            <h1 class="nomargin smalltext">Pulse Deck</h1>
+                            <img class="deckimg" src="https://static.wikitide.net/balatromodswiki/a/a7/Neon_Deck_%28Ortalab%29.png">
+                            <h1 class="nomargin smalltext" id="rhstatus">Selected</h1>
                         </div>
-                        <div class="deck" id="modeck">
-                            <h1 class="nomargin smalltext">Mountain Deck</h1>
-                            <img class="deckimg" src="https://static.wikitide.net/balatromodswiki/5/5b/Mountain_Deck_%28UNIK%27s_mod%29.png">
-                            <h1 class="nomargin smalltext" id="nstatus">Selected</h1>
+                        <div class="deck" id="thdeck">
+                            <h1 class="nomargin smalltext">Thrill Deck</h1>
+                            <img class="deckimg" src="https://static.wikitide.net/balatromodswiki/e/e3/Thrillseeker_Deck_%28Paya%27s_Terrible_Additions%29.png">
+                            <h1 class="nomargin smalltext" id="thstatus">Selected</h1>
                         </div>
                     </div>
                 </section>
@@ -413,7 +420,7 @@
 
                         <div id="lv4quests">
                             <div class="quest" id="quest41">
-                                <h1 class="questname">Infinite money glitch</h1>
+                                <h1 class="questname">House favorite</h1>
                                 <h1 class="questdesc">Earn 10B from blackjack</h1>
                                 <div class="questbot">
                                     <h1 class="questprogress" id="quest41prog">0 / 10B</h1>
@@ -547,7 +554,7 @@
 
                             <div class="quest" id="quest56">
                                 <h1 class="questname">Flamethrower</h1>
-                                <h1 class="questdesc">Win with at least 2.5x mult on burning deck</h1>
+                                <h1 class="questdesc">Win with at least 2.4x mult on burning deck</h1>
                                 <div class="questbot">
                                     <h1 class="questprogress" id="quest56prog">0 / 1</h1>
                                     <div class="chips">
@@ -565,6 +572,103 @@
                                     <div class="chips">
                                         <img class="chip" src="https://balatrowiki.org/images/Green_stake.png?c3cc1">
                                         <h1 class="questchips">2.0K</h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="lv6quests">
+                            <div class="quest" id="quest61">
+                                <h1 class="questname">Infinite money</h1>
+                                <h1 class="questdesc">Earn 100T from blackjack</h1>
+                                <div class="questbot">
+                                    <h1 class="questprogress" id="quest61prog">0 / 10B</h1>
+                                    <div class="chips">
+                                        <img class="chip" src="https://balatrowiki.org/images/Green_stake.png?c3cc1">
+                                        <h1 class="questchips">2.5K</h1>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="quest" id="quest62">
+                                <h1 class="questname">After hours</h1>
+                                <h1 class="questdesc">Win 5 times with eclipse deck</h1>
+                                <div class="questbot">
+                                    <h1 class="questprogress" id="quest62prog">0 / 5</h1>
+                                    <div class="chips">
+                                        <img class="chip" src="https://balatrowiki.org/images/Green_stake.png?c3cc1">
+                                        <h1 class="questchips">2.5K</h1>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="quest" id="quest63">
+                                <h1 class="questname">Stayin' alive</h1>
+                                <h1 class="questdesc">Win 5 times with pulse deck</h1>
+                                <div class="questbot">
+                                    <h1 class="questprogress" id="quest63prog">0 / 5</h1>
+                                    <div class="chips">
+                                        <img class="chip" src="https://balatrowiki.org/images/Green_stake.png?c3cc1">
+                                        <h1 class="questchips">2.5K</h1>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="quest" id="quest64">
+                                <h1 class="questname">No guts no glory</h1>
+                                <h1 class="questdesc">5 wins with thrill deck</h1>
+                                <div class="questbot">
+                                    <h1 class="questprogress" id="quest64prog">0 / 5</h1>
+                                    <div class="chips">
+                                        <img class="chip" src="https://balatrowiki.org/images/Green_stake.png?c3cc1">
+                                        <h1 class="questchips">2.5K</h1>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="quest" id="quest65">
+                                <h1 class="questname">Right on the money</h1>
+                                <h1 class="questdesc">Win with 21 with thrill deck</h1>
+                                <div class="questbot">
+                                    <h1 class="questprogress" id="quest65prog">0 / 1</h1>
+                                    <div class="chips">
+                                        <img class="chip" src="https://balatrowiki.org/images/Green_stake.png?c3cc1">
+                                        <h1 class="questchips">2.5K</h1>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="quest" id="quest66">
+                                <h1 class="questname">Smooth operator</h1>
+                                <h1 class="questdesc">Win with at least 2.6x mult on pulse deck</h1>
+                                <div class="questbot">
+                                    <h1 class="questprogress" id="quest66prog">0 / 1</h1>
+                                    <div class="chips">
+                                        <img class="chip" src="https://balatrowiki.org/images/Green_stake.png?c3cc1">
+                                        <h1 class="questchips">2.5K</h1>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="quest" id="quest67">
+                                <h1 class="questname">Numbers guy</h1>
+                                <h1 class="questdesc">Win whith at least 3 cards eclipsed</h1>
+                                <div class="questbot">
+                                    <h1 class="questprogress" id="quest67prog">0 / 1</h1>
+                                    <div class="chips">
+                                        <img class="chip" src="https://balatrowiki.org/images/Green_stake.png?c3cc1">
+                                        <h1 class="questchips">2.5K</h1>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="quest" id="quest68">
+                                <h1 class="questname">Everything.</h1>
+                                <h1 class="questdesc">Win with a bet over 10T</h1>
+                                <div class="questbot">
+                                    <h1 class="questprogress" id="quest68prog">0 / 1</h1>
+                                    <div class="chips">
+                                        <img class="chip" src="https://balatrowiki.org/images/Green_stake.png?c3cc1">
+                                        <h1 class="questchips">2.5K</h1>
                                     </div>
                                 </div>
                             </div>
@@ -752,12 +856,12 @@
             <img id="thecookie" src="sprites\thepizza.png">
         </section>
         <section class="sidetab">
-            <div class="upgtop">
-                <button id="upgradesbtn" class="upgradesbtn">Upgrades</button>
-                <button id="buffsbtn" class="upgradesbtn">Buffs</button>
-                <button id="boxesbtn" class="upgradesbtn">Boxes</button>
-                <button id="itemsbtn" class="upgradesbtn">Items</button>
-            </div>
+                <div class="upgtop">
+                    <button id="upgradesbtn" class="upgradesbtn">Upgrades</button>
+                    <button id="buffsbtn" class="upgradesbtn">Buffs</button>
+                    <button id="boxesbtn" class="upgradesbtn">Boxes</button>
+                    <button id="itemsbtn" class="upgradesbtn">Items</button>
+                </div>
             <section id="upgradetab">
                 <h1 id="upgrades">Upgrades</h1>
                 <div class="amountbtns">

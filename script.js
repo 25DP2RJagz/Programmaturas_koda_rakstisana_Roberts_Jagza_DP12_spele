@@ -75,7 +75,24 @@ let casinobuff = 100n
 let casinospeed = 240
 let casinotimer = 0
 let ovenbuff = 0n
+document.addEventListener("keypress", (event) => {
+    switch (event.key) {
+        case "e":
+            amount = 10000000000000000000000n
+            counter.innerHTML = formatNumber(amount) + " pizzas"
+            break
 
+        case "r":
+            xp = 1000
+            levelunlocks()
+            break
+
+        case "t":
+            chips = 1000000
+            chipcounter.innerHTML = formatNumber(chips)
+            break
+    }
+})
 let ovenbonus = 100n + ((upg / 10n) * ovenbuff)
 let gainHistory = []
 
@@ -91,33 +108,35 @@ const dcard4 = document.getElementById("dcard4")
 
 function formatNumber(num) {
     if (typeof num === 'bigint') {
+        const negative = num < 0n
+        if (negative) num = -num
+        const sign = negative ? "-" : ""
         const numStr = num.toString()
         const len = numStr.length
+        if (len >= 67) return sign + numStr.slice(0, -66) + "." + numStr.slice(-66, -65) + "Uvg"
+        if (len >= 64) return sign + numStr.slice(0, -63) + "." + numStr.slice(-63, -62) + "Vg"
+        if (len >= 61) return sign + numStr.slice(0, -60) + "." + numStr.slice(-60, -59) + "Nod"
+        if (len >= 58) return sign + numStr.slice(0, -57) + "." + numStr.slice(-57, -56) + "Ocd"
+        if (len >= 55) return sign + numStr.slice(0, -54) + "." + numStr.slice(-54, -53) + "Spd"
+        if (len >= 52) return sign + numStr.slice(0, -51) + "." + numStr.slice(-51, -50) + "Sxd"
+        if (len >= 49) return sign + numStr.slice(0, -48) + "." + numStr.slice(-48, -47) + "Qid"
+        if (len >= 46) return sign + numStr.slice(0, -45) + "." + numStr.slice(-45, -44) + "Qad"
+        if (len >= 43) return sign + numStr.slice(0, -42) + "." + numStr.slice(-42, -41) + "Td"
+        if (len >= 40) return sign + numStr.slice(0, -39) + "." + numStr.slice(-39, -38) + "Dd"
+        if (len >= 37) return sign + numStr.slice(0, -36) + "." + numStr.slice(-36, -35) + "Ud"
+        if (len >= 34) return sign + numStr.slice(0, -33) + "." + numStr.slice(-33, -32) + "Dc"
+        if (len >= 31) return sign + numStr.slice(0, -30) + "." + numStr.slice(-30, -29) + "No"
+        if (len >= 28) return sign + numStr.slice(0, -27) + "." + numStr.slice(-27, -26) + "Oc"
+        if (len >= 25) return sign + numStr.slice(0, -24) + "." + numStr.slice(-24, -23) + "Sp"
+        if (len >= 22) return sign + numStr.slice(0, -21) + "." + numStr.slice(-21, -20) + "Sx"
+        if (len >= 19) return sign + numStr.slice(0, -18) + "." + numStr.slice(-18, -17) + "Qi"
+        if (len >= 16) return sign + numStr.slice(0, -15) + "." + numStr.slice(-15, -14) + "Qa"
+        if (len >= 13) return sign + numStr.slice(0, -12) + "." + numStr.slice(-12, -11) + "T"
+        if (len >= 10) return sign + numStr.slice(0, -9) + "." + numStr.slice(-9, -8) + "B"
+        if (len >= 7) return sign + numStr.slice(0, -6) + "." + numStr.slice(-6, -5) + "M"
+        if (len >= 4) return sign + numStr.slice(0, -3) + "." + numStr.slice(-3, -2) + "K"
 
-        if (len >= 67) return numStr.slice(0, -66) + "." + numStr.slice(-66, -65) + "Uvg"
-        if (len >= 64) return numStr.slice(0, -63) + "." + numStr.slice(-63, -62) + "Vg"
-        if (len >= 61) return numStr.slice(0, -60) + "." + numStr.slice(-60, -59) + "Nod"
-        if (len >= 58) return numStr.slice(0, -57) + "." + numStr.slice(-57, -56) + "Ocd"
-        if (len >= 55) return numStr.slice(0, -54) + "." + numStr.slice(-54, -53) + "Spd"
-        if (len >= 52) return numStr.slice(0, -51) + "." + numStr.slice(-51, -50) + "Sxd"
-        if (len >= 49) return numStr.slice(0, -48) + "." + numStr.slice(-48, -47) + "Qid"
-        if (len >= 46) return numStr.slice(0, -45) + "." + numStr.slice(-45, -44) + "Qad"
-        if (len >= 43) return numStr.slice(0, -42) + "." + numStr.slice(-42, -41) + "Td"
-        if (len >= 40) return numStr.slice(0, -39) + "." + numStr.slice(-39, -38) + "Dd"
-        if (len >= 37) return numStr.slice(0, -36) + "." + numStr.slice(-36, -35) + "Ud"
-        if (len >= 34) return numStr.slice(0, -33) + "." + numStr.slice(-33, -32) + "Dc"
-        if (len >= 31) return numStr.slice(0, -30) + "." + numStr.slice(-30, -29) + "No"
-        if (len >= 28) return numStr.slice(0, -27) + "." + numStr.slice(-27, -26) + "Oc"
-        if (len >= 25) return numStr.slice(0, -24) + "." + numStr.slice(-24, -23) + "Sp"
-        if (len >= 22) return numStr.slice(0, -21) + "." + numStr.slice(-21, -20) + "Sx"
-        if (len >= 19) return numStr.slice(0, -18) + "." + numStr.slice(-18, -17) + "Qi"
-        if (len >= 16) return numStr.slice(0, -15) + "." + numStr.slice(-15, -14) + "Qa"
-        if (len >= 13) return numStr.slice(0, -12) + "." + numStr.slice(-12, -11) + "T"
-        if (len >= 10) return numStr.slice(0, -9) + "." + numStr.slice(-9, -8) + "B"
-        if (len >= 7) return numStr.slice(0, -6) + "." + numStr.slice(-6, -5) + "M"
-        if (len >= 4) return numStr.slice(0, -3) + "." + numStr.slice(-3, -2) + "K"
-
-        return numStr
+        return sign + numStr
     }
 
     return formatNumber(BigInt(Math.floor(num)))
@@ -177,6 +196,7 @@ setInterval(() => {
         spawnFloatingNumber((clicker * clickerbuff * ovenbonus) / 10000n)
         counter.innerHTML = formatNumber(amount) + " pizzas"
         clickertimer = 0
+        updateprices()
     }
     pizzertimer += 40
     if (pizzer > 0 && pizzertimer >= pizzerspeed) {
@@ -185,6 +205,7 @@ setInterval(() => {
         spawnFloatingNumber((pizzer * pizzerbuff * 25n * ovenbonus) / 10000n)
         counter.innerHTML = formatNumber(amount) + " pizzas"
         pizzertimer = 0
+        updateprices()
     }
     mattresstimer += 40
     if (mattress > 0 && mattresstimer >= mattressspeed) {
@@ -193,6 +214,7 @@ setInterval(() => {
         spawnFloatingNumber((mattress * mattressbuff * 625n * ovenbonus) / 10000n)
         counter.innerHTML = formatNumber(amount) + " pizzas"
         mattresstimer = 0
+        updateprices()
     }
     constructiontimer += 40
     if (construction > 0 && constructiontimer >= constructionspeed) {
@@ -201,6 +223,7 @@ setInterval(() => {
         spawnFloatingNumber((construction * constructionbuff * 17500n * ovenbonus) / 10000n)
         counter.innerHTML = formatNumber(amount) + " pizzas"
         constructiontimer = 0
+        updateprices()
     }
     casinotimer += 40
     if (casino > 0 && casinotimer >= casinospeed) {
@@ -209,6 +232,7 @@ setInterval(() => {
         spawnFloatingNumber((casino * casinobuff * 250000n * ovenbonus) / 10000n)
         counter.innerHTML = formatNumber(amount) + " pizzas"
         casinotimer = 0
+        updateprices()
     }
 }, 40)
 function getBulkCost(startCost, multiplier, amountToBuy) {
@@ -470,7 +494,7 @@ function deckattributes() {
             winmult = 260
             break
         case 4: //ghost
-            bustamount = 10000
+            bustamount = 21
             winmult = 150
             break
         case 5: //green
@@ -514,12 +538,24 @@ function deckattributes() {
             winmult = 260
             break
         case 15: //even
-            bustamount = 21
+            bustamount = 22
             winmult = 200
             break
         case 16: //mountain
             bustamount = 21
             winmult = 400
+            break
+        case 17: //eclipse
+            bustamount = 21
+            winmult = 200
+            break
+        case 18: //rhythm
+            bustamount = 21
+            winmult = 200
+            break
+        case 19: //thrill
+            bustamount = 21
+            winmult = 200
             break
     }
 }
@@ -532,7 +568,7 @@ function assigndeck() {
         case 3:
             return [...fulldeck]
         case 4:
-            return [...gfulldeck]
+            return [...fulldeck]
         case 5:
             return [...fulldeck]
         case 6:
@@ -557,8 +593,16 @@ function assigndeck() {
             return [...fulldeck]
         case 16:
             return [...fulldeck]
+        case 17:
+            return [...fulldeck]
+        case 18:
+            return [...fulldeck]
+        case 19:
+            return [...fulldeck]
     }
 }
+const timingbar = document.getElementById("timingcont")
+const cursor = document.getElementById("cursor")
 function startblackjack(betamount) {
             amount -= betamount
             counter.innerHTML = formatNumber(amount) + " pizzas"
@@ -575,41 +619,120 @@ function startblackjack(betamount) {
             dcardval2 = 0
             dcardval3 = 0 
             dcardval4 = 0
+            blackjackgame += 1
             card = 1
             dcard = 1
             stand = false
             busted = false
             dstand = false
             dbusted = false
+            eclipsedcards = 0
+            hitbtn.classList.remove("pulsehit")
+            halotrigger = false
+            ghosttriggered = false
             card1tier = null
             card2tier = null
             card3tier = null
             card4tier = null
+            timingspeed = 2
+            cardreset()
             deckattributes()
-            if (card2.src != deckimg(currentdeck)) {
-                flipCard(card2, deckimg(currentdeck))
-            }
-            if (card3.src != deckimg(currentdeck)) {
-                flipCard(card3, deckimg(currentdeck))
-            }
-            if (card4.src != deckimg(currentdeck)) {
-                flipCard(card4, deckimg(currentdeck))
-            }
-            if (dcard1.src != deckimg(1)) {
-                flipCard(dcard1, deckimg(1))
-            }
-            if (dcard2.src != deckimg(1)) {
-                flipCard(dcard2, deckimg(1))
-            }
-            if (dcard3.src != deckimg(1)) {
-                flipCard(dcard3, deckimg(1))
-            }
-            if (dcard4.src != deckimg(1)) {
-                flipCard(dcard4, deckimg(1))
-            }
             dcardval.innerHTML = "Total value: " + (dcardval1 + dcardval2 + dcardval3 + dcardval4)
-            drawcard()
+            if (currentdeck !== 18) {
+                drawcard()
+            }
             dealerdrawcard()
+            cursorinit()
+}
+let timingspeed = 2
+function cursorreset() {
+    if (currentdeck == 18) {
+        blackjackdisp.style.display = "none"
+        cursor.style.display = "none"
+        timingbar.style.display = "flex"
+    } else {
+        blackjackdisp.style.display = "flex"
+        cursor.style.display = "none"
+        timingbar.style.display = "none"
+    }
+}
+function cursorinit() {
+    if (currentdeck == 18) {
+        let curr = blackjackgame
+        cursor.style.display = "block"
+        cursor.style.animationDuration = timingspeed + "s"
+        timingbar.style.display = "flex"
+        blackjackdisp.style.display = "none"
+        cursor.classList.add("passby")
+        setTimeout(() => {
+            if (curr == blackjackgame) {
+                cursor.classList.remove("passby")
+                cursor.style.display = "none"
+            }
+        }, timingspeed * 1000);
+    } else {
+        timingbar.style.display = "none"
+        blackjackdisp.style.display = "flex"
+    }
+}
+function updatespeed() {
+    cursor.style.animationDuration = timingspeed + "s" 
+}
+function checktiming() {
+    const cursorRect = cursor.getBoundingClientRect()
+    const barRect = timingbar.getBoundingClientRect()
+    const percent = ((cursorRect.left + cursorRect.width / 2 - barRect.left) / barRect.width) * 100
+    if (percent >= 48 && percent <= 52) {
+        return "perfect"
+    }
+    if (percent >= 40 && percent <= 60) {
+        return "good"
+    }
+    return "miss"
+}
+function hitreward() {
+    if (currentdeck == 18 && blackjack) {
+        const result = checktiming()
+        cursor.classList.remove("passby")
+        cursor.style.display = "none"
+        setTimeout(() => {
+            if (blackjack) {
+                cursorinit()
+            }
+        }, 500);
+        switch (result) {
+            case "perfect":
+                timingspeed -= 0.3
+                if (timingspeed < 0.6) {
+                    timingspeed = 0.6
+                }
+                updatespeed()
+                winmult += 50
+                spawnFloatingNumber(0, {
+                    text: "Perfect! +0.5",
+                    color: "green",
+                    size: "70px",
+                    duration: 5000
+                })
+                break
+            case "good":
+                winmult += 10
+                spawnFloatingNumber(0, {
+                    text: "Good! +0.1",
+                    color: "orange",
+                    size: "70px",
+                    duration: 5000
+                })
+                break
+            case "miss":
+                spawnFloatingNumber(0, {
+                    text: "Miss",
+                    color: "red",
+                    size: "70px",
+                    duration: 5000
+                })
+        }
+    }
 }
 let minbetmult = 5
 betbtn.addEventListener("click", () => {
@@ -632,8 +755,15 @@ input.addEventListener("keydown", () => {
 }})
 standbtn.addEventListener("click", () => {
     if (!busted && !stand) {
+        hitreward()
         stand = true
         dealerplay()
+    }
+})
+hitbtn.addEventListener("click", () => {
+    if (!busted && !stand && card <= 4) {
+        drawcard()
+        hitreward()
     }
 })
 bet12btn.addEventListener("click", () => {
@@ -719,22 +849,158 @@ function checkanaglyph() {
         }
     }
 }
+let halotrigger = false
 function halodeck(curr) {
     let total = getTotalValue()
     let newtotal = total + getCardValue(curr)
 
-    if (newtotal > bustamount && currentdeck == 11) {
+    if (newtotal > bustamount && currentdeck == 11 && !halotrigger) {
         spawnFloatingNumber(0, {
             text: "HALO GRACE",
             color: "white",
             size: "70px",
             duration: 5000
         })
-
+        halotrigger = true
         return choosecard()
     }
 
     return curr
+}
+function cardreset() {
+    card1.style.opacity = 1
+    card2.style.opacity = 1
+    card3.style.opacity = 1
+    card4.style.opacity = 1
+    card1.classList.remove("eclipsesun")
+    card1.classList.remove("eclipsemoon")
+    card2.classList.remove("eclipsesun")
+    card2.classList.remove("eclipsemoon")
+    card3.classList.remove("eclipsesun")
+    card3.classList.remove("eclipsemoon")
+    card4.classList.remove("eclipsesun")
+    card4.classList.remove("eclipsemoon")
+    if (card1.src != deckimg(currentdeck)) {
+        flipCard(card1, deckimg(currentdeck))
+    }
+    if (card2.src != deckimg(currentdeck)) {
+        flipCard(card2, deckimg(currentdeck))
+    }
+    if (card3.src != deckimg(currentdeck)) {
+        flipCard(card3, deckimg(currentdeck))
+    }
+    if (card4.src != deckimg(currentdeck)) {
+        flipCard(card4, deckimg(currentdeck))
+    }
+    if (dcard1.src != deckimg(1)) {
+        flipCard(dcard1, deckimg(1))
+    }
+    if (dcard2.src != deckimg(1)) {
+        flipCard(dcard2, deckimg(1))
+    }
+    if (dcard3.src != deckimg(1)) {
+        flipCard(dcard3, deckimg(1))
+    }
+    if (dcard4.src != deckimg(1)) {
+        flipCard(dcard4, deckimg(1))
+    }
+}
+let ghosttriggered = false
+function ghostcheck() {
+    if (currentdeck == 4 && cardval1 + cardval2 + cardval3 + cardval4 >= bustamount && !ghosttriggered) {
+        ghosttriggered = true
+        switch (card) {
+            case 1:
+                if (cardval1 != 1 || cardval1 != 11) {
+                    cardval1 = Math.floor(cardval1 / 2)
+                    card1.style.opacity = 0.7
+                }
+                break
+            case 2:
+                if (cardval2 != 1 || cardval2 != 11) {
+                    cardval2 = Math.floor(cardval2 / 2)
+                    card2.style.opacity = 0.7
+                }
+                break
+            case 3:
+                if (cardval3 != 1 || cardval3 != 11) {
+                    cardval3 = Math.floor(cardval3 / 2)
+                    card3.style.opacity = 0.7
+
+                }
+                break
+            case 4:
+                if (cardval4 != 1 || cardval4 != 11) {
+                    cardval4 = Math.floor(cardval4 / 2)
+                    card4.style.opacity = 0.7
+
+                }
+                break
+        }
+    }
+}
+let eclipsedcards = 0
+let blackjackgame = 0
+function checkeclipse() {
+    if (currentdeck == 17) {
+        let currcard = card - 1
+        let currblackjack = blackjackgame
+        setTimeout(() => {
+            if (currcard == card - 1 && blackjackgame == currblackjack) {
+                eclipsedcards += 1
+                switch (currcard) {
+                    case 1:
+                        if (Math.random() >= 0.5) {
+                            cardval1 = Math.trunc(cardval1 * 2)
+                            card1.classList.add("eclipsesun")
+                        } else {
+                            cardval1 = Math.trunc(cardval1 / 2)
+                            card1.classList.add("eclipsemoon")
+                        }
+                        break
+                    case 2:
+                        if (Math.random() >= 0.5) {
+                            cardval2 = Math.trunc(cardval2 * 2)
+                            card2.classList.add("eclipsesun")
+                        } else {
+                            cardval2 = Math.trunc(cardval2 / 2)
+                            card2.classList.add("eclipsemoon")
+                        }
+                        break
+                    case 3:
+                        if (Math.random() >= 0.5) {
+                            cardval3 = Math.trunc(cardval3 * 2)
+                            card3.classList.add("eclipsesun")
+                        } else {
+                            cardval3 = Math.trunc(cardval3 / 2)
+                            card3.classList.add("eclipsemoon")
+                        }
+                        break
+                    case 4:
+                        if (Math.random() >= 0.5) {
+                            cardval4 = Math.trunc(cardval4 * 2)
+                            card4.classList.add("eclipsesun")
+                        } else {
+                            cardval4 = Math.trunc(cardval4 / 2)
+                            card4.classList.add("eclipsemoon")
+                        }
+                        break
+                }
+            }
+            cardval.innerHTML = "Total value: " + (getTotalValue())
+            if (getTotalValue() > bustamount) {
+                cardval.innerHTML = "Total value: " + (getTotalValue()) + " (busted)"
+                busted = true
+                card = 1
+                finishmatch()
+            }
+        }, 2000);
+    }
+}
+function checkbetpulse() {
+    if (currentdeck == 19 && getTotalValue() >= 16 && getTotalValue() <= 21) {
+        hitbtn.classList.add("pulsehit")
+    } 
 }
 function getTotalValue() {
     let total = cardval1 + cardval2 + cardval3 + cardval4
@@ -742,7 +1008,6 @@ function getTotalValue() {
     if (currentdeck == 15) {
         return total + (card - 1) * 0.25
     }
-
     return total
 }
 function drawcard() {
@@ -752,12 +1017,15 @@ function drawcard() {
             drawn = halodeck(drawn)
             flipCard(card1, drawn.img)
             cardval1 = getCardValue(drawn)
+            acecheck()
+            ghostcheck()
             card++
+            checkeclipse()
             card1tier = getcardtier(drawn)
             checkanaglyph()
-            acecheck()
+            checkbetpulse()
             cardval.innerHTML = "Total value: " + (getTotalValue())
-            if (getTotalValue() == bustamount) {
+            if (getTotalValue() == bustamount && currentdeck !== 18) {
                 if (!busted && !stand) {
                     stand = true
                     dealerplay()}
@@ -773,12 +1041,15 @@ function drawcard() {
             drawn = halodeck(drawn)
             flipCard(card2, drawn.img)
             cardval2 = getCardValue(drawn)
+            acecheck()
+            ghostcheck()
             card++
+            checkeclipse()
             card2tier = getcardtier(drawn)
             checkanaglyph()
-            acecheck()
+            checkbetpulse()
             cardval.innerHTML = "Total value: " + (getTotalValue())
-            if (getTotalValue() == bustamount) {
+            if (getTotalValue() == bustamount && currentdeck !== 18) {
                 if (!busted && !stand) {
                     stand = true
                     dealerplay()}
@@ -794,12 +1065,15 @@ function drawcard() {
             drawn = halodeck(drawn)
             flipCard(card3, drawn.img)
             cardval3 = getCardValue(drawn)
+            acecheck()
+            ghostcheck()
             card++
+            checkeclipse()
             card3tier = getcardtier(drawn)
             checkanaglyph()
-            acecheck()
+            checkbetpulse()
             cardval.innerHTML = "Total value: " + (getTotalValue())
-            if (getTotalValue() == bustamount) {
+            if (getTotalValue() == bustamount && currentdeck !== 18) {
                 if (!busted && !stand) {
                     stand = true
                     dealerplay()}
@@ -815,12 +1089,15 @@ function drawcard() {
             drawn = halodeck(drawn)
             flipCard(card4, drawn.img)
             cardval4 = getCardValue(drawn)
+            acecheck()
+            ghostcheck()
             card++
+            checkeclipse()
             card4tier = getcardtier(drawn)
             checkanaglyph()
-            acecheck()
+            checkbetpulse()
             cardval.innerHTML = "Total value: " + (getTotalValue())
-            if (getTotalValue() == bustamount) {
+            if (getTotalValue() == bustamount && currentdeck !== 18) {
                 if (!busted && !stand) {
                     stand = true
                     dealerplay()}
@@ -830,7 +1107,7 @@ function drawcard() {
                 busted = true
                 card = 1
                 finishmatch()
-            } else {
+            } else if (currentdeck !== 18) {
                 dealerplay()
             }
             break
@@ -870,6 +1147,12 @@ function deckimg(number) {
             return "https://static.wikitide.net/balatromodswiki/9/91/Calculus_Deck_%28Showdown%29.png"
         case 16:
             return "https://static.wikitide.net/balatromodswiki/5/5b/Mountain_Deck_%28UNIK%27s_mod%29.png"
+        case 17:
+            return "https://static.wikitide.net/balatromodswiki/8/80/Syzygy_Deck_%28Manifold%29.png"
+        case 18:
+            return "https://static.wikitide.net/balatromodswiki/a/a7/Neon_Deck_%28Ortalab%29.png"
+        case 19:
+            return "https://static.wikitide.net/balatromodswiki/e/e3/Thrillseeker_Deck_%28Paya%27s_Terrible_Additions%29.png"
     }
 }
 setInterval(() => {
@@ -877,11 +1160,6 @@ setInterval(() => {
         winmult -= 10
     }
 }, 250)
-hitbtn.addEventListener("click", () => {
-    if (!busted && !stand) {
-        drawcard()
-    }
-})
 function flipCard(cardElement, newSrc) {
     cardElement.classList.add("flipping")
 
@@ -987,7 +1265,7 @@ function dealerdrawcard() {
         }
 }
 function dealerplay() {
-    while (dcard <= 4 && !dbusted && !dstand) {
+    while (dcard <= 4 && !dbusted && !dstand && blackjack) {
         if ((dcardval1 + dcardval2 + dcardval3 + dcardval4) < 17) {
             dealerdrawcard()
         } else {
@@ -1000,15 +1278,45 @@ function dealerplay() {
 let nebulachance = 0
 function finishmatch() {
     if (!blackjack) return
+    hitbtn.classList.remove("pulsehit")
+    card = 1
     if ((!busted && (dcardval1 + dcardval2 + dcardval3 + dcardval4) < (getTotalValue())) || (dbusted && !busted)) {
+        if (currentdeck == 19) {
+            switch (getTotalValue()) {
+                case 17:
+                    winmult = 210
+                    break
+                case 18:
+                    winmult = 240
+                    break
+                case 19:
+                    winmult = 270
+                    break
+                case 20:
+                    winmult = 320
+                    break
+                case 21:
+                    winmult = 400
+                    break
+            }
+        }
         amount += currentbet * (BigInt(winmult) + magicmult) * blackjackbuff / BigInt(10000)
         questwin()
-        spawnFloatingNumber(0, {
+        if (currentdeck !== 14) {
+            spawnFloatingNumber(0, {
             text: "BLACKJACK: +" + formatNumber(currentbet * (BigInt(winmult) +magicmult) * blackjackbuff / BigInt(10000)),
             color: "red",
-            size: "60px",
-            duration: 3000
+            size: "70px",
+            duration: 5000
         })
+        } else {
+            spawnFloatingNumber(0, {
+            text: winmult / 100 + "x burning: +" + formatNumber(currentbet * (BigInt(winmult) +magicmult) * blackjackbuff / BigInt(10000)),
+            color: "orange",
+            size: "70px",
+            duration: 6000
+        })
+        }
         blackjack = false
         magicmult += BigInt(25)
         counter.innerHTML = formatNumber(amount) + " pizzas"
@@ -1018,10 +1326,56 @@ function finishmatch() {
         counter.innerHTML = formatNumber(amount) + " pizzas"
         spawnFloatingNumber(currentbet)
     } else {
+        if (currentdeck == 19) {
+            switch (getTotalValue()) {
+                case 22:
+                    amount -= currentbet / 2n
+                    spawnFloatingNumber(0, {
+                        text: "- " + formatNumber(currentbet / 2n), 
+                        color: "black",
+                        size: "70px",
+                        duration: 6000
+                    })
+                    break
+                case 23:
+                    amount -= currentbet / 3n
+                    spawnFloatingNumber(0, {
+                        text: "- " + formatNumber(currentbet / 3n), 
+                        color: "black",
+                        size: "70px",
+                        duration: 6000
+                    })
+                    break
+                case 24:
+                    amount -= currentbet / 4n
+                    spawnFloatingNumber(0, {
+                        text: "- " + formatNumber(currentbet / 4n), 
+                        color: "black",
+                        size: "70px",
+                        duration: 6000
+                    })
+                    break
+                case 25:
+                    amount -= currentbet / 6n
+                    spawnFloatingNumber(0, {
+                        text: "- " + formatNumber(currentbet / 6n), 
+                        color: "black",
+                        size: "70px",
+                        duration: 6000
+                    })
+                    break
+            }
+        }
         magicmult = BigInt(0)
         nebulachance = Math.random()
         if (currentdeck == 16) {
             amount -= currentbet
+            spawnFloatingNumber(0, {
+            text: "- " + formatNumber(currentbet), 
+            color: "black",
+            size: "70px",
+            duration: 6000
+        })
         }
         if (nebulachance <= 0.4 && currentdeck == 8) {
             amount += currentbet
@@ -1055,13 +1409,20 @@ function questwin() {
     if (currentdeck == 14) {burningwins += 1}
     if (currentdeck == 15) {decimalwins += 1}
     if (currentdeck == 16) {mountainwins += 1}
+    if (currentdeck == 17) {eclipsewins += 1}
+    if (currentdeck == 18) {pulsewins += 1}
+    if (currentdeck == 19) {thrillwins += 1}
     jackearnings += currentbet * (BigInt(winmult) + magicmult) * blackjackbuff / BigInt(200) / 100n
     if (currentbet >= 200000) {win200k += 1}
     if (getTotalValue() == 23 && currentdeck == 5) {triggergreen += 1}
     if (currentbet >= 25000000) {win25m += 1}
     if (currentbet >= 1000000000) {win1b += 1}
     if (currentbet >= 100000000000 && currentdeck == 16) {mountain100bwin += 1}
-    if (currentdeck == 14 && winmult >= 2.5) {burningquest += 1}
+    if (currentbet >= 100000000000000) {win10t += 1}
+    if (currentdeck == 14 && winmult >= 240) {burningquest += 1}
+    if (currentdeck == 19 && getTotalValue() == 21) {thrillquest += 1}
+    if (currentdeck == 18 && winmult >= 260) {pulsequest += 1}
+    if (currentdeck == 17 && eclipsedcards >= 3) {eclipsequest += 1}
     if (magicmult >= 4 && currentdeck == 6) {magicstreak += 1}
     updatequests()
 }
@@ -1195,134 +1556,122 @@ function setdeckstatus(number) {
     } else {
         mostatus.innerHTML = "Price: " + formatNumber(modeckprice)
     }
+    if (ecdeckowned) {
+        ecstatus.innerHTML = "Owned"
+    } else {
+        ecstatus.innerHTML = "Price: " + formatNumber(ecdeckprice)
+    }
+    if (rhdeckowned) {
+        rhstatus.innerHTML = "Owned"
+    } else {
+        rhstatus.innerHTML = "Price: " + formatNumber(rhdeckprice)
+    }
+    if (thdeckowned) {
+        thstatus.innerHTML = "Owned"
+    } else {
+        thstatus.innerHTML = "Price: " + formatNumber(thdeckprice)
+    }
     switch (number) {
         case 1:
             rstatus.innerHTML = "Selected"
-            flipCard(card1, deckimg(currentdeck))
-            flipCard(card2, deckimg(currentdeck))
-            flipCard(card3, deckimg(currentdeck))
-            flipCard(card4, deckimg(currentdeck))
+            cardreset()
             break
         case 2:
             bstatus.innerHTML = "Selected"
-            flipCard(card1, deckimg(currentdeck))
-            flipCard(card2, deckimg(currentdeck))
-            flipCard(card3, deckimg(currentdeck))
-            flipCard(card4, deckimg(currentdeck))
+            cardreset()
             break
         case 3:
             ystatus.innerHTML = "Selected"
-            flipCard(card1, deckimg(currentdeck))
-            flipCard(card2, deckimg(currentdeck))
-            flipCard(card3, deckimg(currentdeck))
-            flipCard(card4, deckimg(currentdeck))
+            cardreset()
             break
         case 4:
             if (gdeckowned) {
                 gstatus.innerHTML = "Selected"
-                flipCard(card1, deckimg(currentdeck))
-                flipCard(card2, deckimg(currentdeck))
-                flipCard(card3, deckimg(currentdeck))
-                flipCard(card4, deckimg(currentdeck))
+                cardreset()
             }
             break
         case 5:
             if (grdeckowned) {
                 grstatus.innerHTML = "Selected"
-                flipCard(card1, deckimg(currentdeck))
-                flipCard(card2, deckimg(currentdeck))
-                flipCard(card3, deckimg(currentdeck))
-                flipCard(card4, deckimg(currentdeck))
+                cardreset()
             }
             break
         case 6:
             if (mdeckowned) {
                 mstatus.innerHTML = "Selected"
-                flipCard(card1, deckimg(currentdeck))
-                flipCard(card2, deckimg(currentdeck))
-                flipCard(card3, deckimg(currentdeck))
-                flipCard(card4, deckimg(currentdeck))
+                cardreset()
             }
             break
         case 7:
             if (bldeckowned) {
                 blstatus.innerHTML = "Selected"
-                flipCard(card1, deckimg(currentdeck))
-                flipCard(card2, deckimg(currentdeck))
-                flipCard(card3, deckimg(currentdeck))
-                flipCard(card4, deckimg(currentdeck))
+                cardreset()
             }
             break
         case 8:
             if (ndeckowned) {
                 nstatus.innerHTML = "Selected"
-                flipCard(card1, deckimg(currentdeck))
-                flipCard(card2, deckimg(currentdeck))
-                flipCard(card3, deckimg(currentdeck))
-                flipCard(card4, deckimg(currentdeck))
+                cardreset()
             }
             break
         case 10:
             if (adeckowned) {
                 astatus.innerHTML = "Selected"
-                flipCard(card1, deckimg(currentdeck))
-                flipCard(card2, deckimg(currentdeck))
-                flipCard(card3, deckimg(currentdeck))
-                flipCard(card4, deckimg(currentdeck))
+                cardreset()
             }
             break
         case 11:
             if (hdeckowned) {
                 hstatus.innerHTML = "Selected"
-                flipCard(card1, deckimg(currentdeck))
-                flipCard(card2, deckimg(currentdeck))
-                flipCard(card3, deckimg(currentdeck))
-                flipCard(card4, deckimg(currentdeck))
+                cardreset()
             }
             break
         case 12:
             if (pdeckowned) {
                 pstatus.innerHTML = "Selected"
-                flipCard(card1, deckimg(currentdeck))
-                flipCard(card2, deckimg(currentdeck))
-                flipCard(card3, deckimg(currentdeck))
-                flipCard(card4, deckimg(currentdeck))
+                cardreset()
             }
             break
         case 13:
             if (andeckowned) {
                 anstatus.innerHTML = "Selected"
-                flipCard(card1, deckimg(currentdeck))
-                flipCard(card2, deckimg(currentdeck))
-                flipCard(card3, deckimg(currentdeck))
-                flipCard(card4, deckimg(currentdeck))
+                cardreset()
             }
             break
         case 14:
             if (budeckowned) {
                 bustatus.innerHTML = "Selected"
-                flipCard(card1, deckimg(currentdeck))
-                flipCard(card2, deckimg(currentdeck))
-                flipCard(card3, deckimg(currentdeck))
-                flipCard(card4, deckimg(currentdeck))
+                cardreset()
             }
             break
         case 15:
             if (evdeckowned) {
                 evstatus.innerHTML = "Selected"
-                flipCard(card1, deckimg(currentdeck))
-                flipCard(card2, deckimg(currentdeck))
-                flipCard(card3, deckimg(currentdeck))
-                flipCard(card4, deckimg(currentdeck))
+                cardreset()
             }
             break
         case 16:
             if (modeckowned) {
                 mostatus.innerHTML = "Selected"
-                flipCard(card1, deckimg(currentdeck))
-                flipCard(card2, deckimg(currentdeck))
-                flipCard(card3, deckimg(currentdeck))
-                flipCard(card4, deckimg(currentdeck))
+                cardreset()
+            }
+            break
+        case 17:
+            if (ecdeckowned) {
+                ecstatus.innerHTML = "Selected"
+                cardreset()
+            }
+            break
+        case 18:
+            if (rhdeckowned) {
+                rhstatus.innerHTML = "Selected"
+                cardreset()
+            }
+            break
+        case 19:
+            if (thdeckowned) {
+                thstatus.innerHTML = "Selected"
+                cardreset()
             }
             break
     }
@@ -1359,6 +1708,12 @@ const evstatus = document.getElementById("evstatus")
 const evdeck = document.getElementById("evdeck")
 const mostatus = document.getElementById("mostatus")
 const modeck = document.getElementById("modeck")
+const ecstatus = document.getElementById("ecstatus")
+const ecdeck = document.getElementById("ecdeck")
+const rhstatus = document.getElementById("rhstatus")
+const rhdeck = document.getElementById("rhdeck")
+const thstatus = document.getElementById("thstatus")
+const thdeck = document.getElementById("thdeck")
 
 let adeckprice = BigInt("25000")
 let adeckowned = false
@@ -1384,6 +1739,13 @@ let evdeckprice = BigInt("10000000000")
 let evdeckowned = false
 let modeckprice = BigInt("10000000000")
 let modeckowned = false
+let ecdeckprice = BigInt("1000000000000")
+let ecdeckowned = false
+let rhdeckprice = BigInt("1000000000000")
+let rhdeckowned = false
+let thdeckprice = BigInt("1000000000000")
+let thdeckowned = false
+
 adeck.addEventListener("click", () => {
     if (amount >= adeckprice && !adeckowned) {
         amount -= adeckprice
@@ -1534,6 +1896,39 @@ modeck.addEventListener("click", () => {
         setdeckstatus(16)
     }
 })
+ecdeck.addEventListener("click", () => {
+    if (amount >= ecdeckprice && !ecdeckowned) {
+        amount -= ecdeckprice
+        ecdeckowned = true
+        counter.innerHTML = formatNumber(amount) + " pizzas"
+    }
+    if (!blackjack && ecdeckowned) {
+        currentdeck = 17
+        setdeckstatus(17)
+    }
+})
+rhdeck.addEventListener("click", () => {
+    if (amount >= rhdeckprice && !rhdeckowned) {
+        amount -= rhdeckprice
+        rhdeckowned = true
+        counter.innerHTML = formatNumber(amount) + " pizzas"
+    }
+    if (!blackjack && rhdeckowned) {
+        currentdeck = 18
+        setdeckstatus(18)
+    }
+})
+thdeck.addEventListener("click", () => {
+    if (amount >= thdeckprice && !thdeckowned) {
+        amount -= thdeckprice
+        thdeckowned = true
+        counter.innerHTML = formatNumber(amount) + " pizzas"
+    }
+    if (!blackjack && thdeckowned) {
+        currentdeck = 19
+        setdeckstatus(19)
+    }
+})
 setdeckstatus(1)
 
 const questview = document.querySelector(".queststab")
@@ -1563,6 +1958,7 @@ playtab.addEventListener("click", () => {
     gameview.style.display = "block"
     deckview.style.display = "none"
     questview.style.display = "none"
+    cursorreset()
 })
 
 decktab.addEventListener("click", () => {
@@ -1745,6 +2141,8 @@ const lvl4 = document.getElementById("lvl4")
 const lvl4decklock = document.getElementById("lvl4decklock")
 const lvl5 = document.getElementById("lvl5")
 const lvl5decklock = document.getElementById("lvl5decklock")
+const lvl6 = document.getElementById("lvl6")
+const lvl6decklock = document.getElementById("lvl6decklock")
 let redwins = 0
 let yellowwins = 0
 let bluewins = 0
@@ -1770,6 +2168,13 @@ let mountain100bwin = 0
 let burningquest = 0
 let mountainquest = 0
 let magicstreak = 0
+let eclipsewins = 0
+let pulsewins = 0
+let thrillwins = 0
+let eclipsequest = 0
+let pulsequest = 0
+let thrillquest = 0
+let win10t = 0
 const levelprog = document.getElementById("levelprog")
 const quest1 = document.getElementById("quest1")
 const quest2 = document.getElementById("quest2")
@@ -1829,6 +2234,22 @@ const quest54 = document.getElementById("quest54")
 const quest55 = document.getElementById("quest55")
 const quest56 = document.getElementById("quest56")
 const quest57 = document.getElementById("quest57")
+const quest61prog = document.getElementById("quest61prog")
+const quest62prog = document.getElementById("quest62prog")
+const quest63prog = document.getElementById("quest63prog")
+const quest64prog = document.getElementById("quest64prog")
+const quest65prog = document.getElementById("quest65prog")
+const quest66prog = document.getElementById("quest66prog")
+const quest67prog = document.getElementById("quest67prog")
+const quest68prog = document.getElementById("quest68prog")
+const quest61 = document.getElementById("quest61")
+const quest62 = document.getElementById("quest62")
+const quest63 = document.getElementById("quest63")
+const quest64 = document.getElementById("quest64")
+const quest65 = document.getElementById("quest65")
+const quest66 = document.getElementById("quest66")
+const quest67 = document.getElementById("quest67")
+const quest68 = document.getElementById("quest68")
 let quest1stat = false
 let quest2stat = false
 let quest3stat = false
@@ -1858,6 +2279,14 @@ let tier5_4stat = false
 let tier5_5stat = false
 let tier5_6stat = false
 let tier5_7stat = false
+let tier6_1stat = false
+let tier6_2stat = false
+let tier6_3stat = false
+let tier6_4stat = false
+let tier6_5stat = false
+let tier6_6stat = false
+let tier6_7stat = false
+let tier6_8stat = false
 function updatequests() {
     end1prog.innerHTML = redwins + " / " + end1req
     end1chip.innerHTML = end1ch
@@ -1919,6 +2348,14 @@ function updatequests() {
     quest55prog.innerHTML = mountain100bwin + " / 1"
     quest56prog.innerHTML = burningquest + " / 1"
     quest57prog.innerHTML = mountainquest + " / 1"
+    quest61prog.innerHTML = formatNumber(jackearnings) + " / 100T"
+    quest62prog.innerHTML = eclipsewins + " / 5"
+    quest63prog.innerHTML = pulsewins + " / 5"
+    quest64prog.innerHTML = thrillwins + " / 5"
+    quest65prog.innerHTML = thrillquest + " / 1"
+    quest66prog.innerHTML = pulsequest + " / 1"
+    quest67prog.innerHTML = eclipsequest + " / 1"
+    quest68prog.innerHTML = win10t + " / 1"
 if (jackearnings >= 25000 && !quest1stat) {quest1stat = true; completedquests.push("Makin' dough")}
 if (redwins >= 5 && !quest2stat) {quest2stat = true; completedquests.push("The classics")}
 if (yellowwins >= 5 && !quest3stat) {quest3stat = true; completedquests.push("Go big")}
@@ -1948,6 +2385,14 @@ if (mountainwins >= 5 && !tier5_4stat) {tier5_4stat = true; completedquests.push
 if (mountain100bwin >= 1 && !tier5_5stat) {tier5_5stat = true; completedquests.push("Everest")}
 if (burningquest >= 1 && !tier5_6stat) {tier5_6stat = true; completedquests.push("Flamethrower")}
 if (mountainquest >= 1 && !tier5_7stat) {tier5_7stat = true; completedquests.push("Sisyphus")}
+if (jackearnings >= 100000000000000n && !tier6_1stat) {tier6_1stat = true; completedquests.push("Infinite money")}
+if (eclipsewins >= 5 && !tier6_2stat) {tier6_2stat = true; completedquests.push("After hours")}
+if (pulsewins >= 5 && !tier6_3stat) {tier6_3stat = true; completedquests.push("Stayin' alive")}
+if (thrillwins >= 5 && !tier6_4stat) {tier6_4stat = true; completedquests.push("No guts no glory")}
+if (thrillquest >= 1 && !tier6_5stat) {tier6_5stat = true; completedquests.push("Right on the money")}
+if (pulsequest >= 1 && !tier6_6stat) {tier6_6stat = true; completedquests.push("Smooth operator")}
+if (eclipsequest >= 1 && !tier6_7stat) {tier6_7stat = true; completedquests.push("Numbers guy")}
+if (win10t >= 1 && !tier6_8stat) {tier6_8stat = true; completedquests.push("Everything.")}
 if (completedquests.length > 0) {
     showpopup(2, completedquests)}
 }
@@ -1981,15 +2426,25 @@ quest54.addEventListener("click", () => {if (tier5_4stat) {quest54.style.display
 quest55.addEventListener("click", () => {if (tier5_5stat) {quest55.style.display = "none"; xp += 1; levelunlocks(); chips += 2000; chipcounter.innerHTML = formatNumber(chips)}})
 quest56.addEventListener("click", () => {if (tier5_6stat) {quest56.style.display = "none"; xp += 1; levelunlocks(); chips += 2000; chipcounter.innerHTML = formatNumber(chips)}})
 quest57.addEventListener("click", () => {if (tier5_7stat) {quest57.style.display = "none"; xp += 1; levelunlocks(); chips += 2000; chipcounter.innerHTML = formatNumber(chips)}})
+quest61.addEventListener("click", () => {if (tier6_1stat) {quest61.style.display = "none"; xp += 1; levelunlocks(); chips += 2500; chipcounter.innerHTML = formatNumber(chips)}})
+quest62.addEventListener("click", () => {if (tier6_2stat) {quest62.style.display = "none"; xp += 1; levelunlocks(); chips += 2500; chipcounter.innerHTML = formatNumber(chips)}})
+quest63.addEventListener("click", () => {if (tier6_3stat) {quest63.style.display = "none"; xp += 1; levelunlocks(); chips += 2500; chipcounter.innerHTML = formatNumber(chips)}})
+quest64.addEventListener("click", () => {if (tier6_4stat) {quest64.style.display = "none"; xp += 1; levelunlocks(); chips += 2500; chipcounter.innerHTML = formatNumber(chips)}})
+quest65.addEventListener("click", () => {if (tier6_5stat) {quest65.style.display = "none"; xp += 1; levelunlocks(); chips += 2500; chipcounter.innerHTML = formatNumber(chips)}})
+quest66.addEventListener("click", () => {if (tier6_6stat) {quest66.style.display = "none"; xp += 1; levelunlocks(); chips += 2500; chipcounter.innerHTML = formatNumber(chips)}})
+quest67.addEventListener("click", () => {if (tier6_7stat) {quest67.style.display = "none"; xp += 1; levelunlocks(); chips += 2500; chipcounter.innerHTML = formatNumber(chips)}})
+quest68.addEventListener("click", () => {if (tier6_8stat) {quest68.style.display = "none"; xp += 1; levelunlocks(); chips += 2500; chipcounter.innerHTML = formatNumber(chips)}})
 const lvl2decks = document.getElementById("lvl2decks")
 const lvl3decks = document.getElementById("lvl3decks")
 const lvl4decks = document.getElementById("lvl4decks")
 const lvl5decks = document.getElementById("lvl5decks")
+const lvl6decks = document.getElementById("lvl6decks")
 const lv1quests = document.getElementById("lv1quests")
 const lv2quests = document.getElementById("lv2quests")
 const lv3quests = document.getElementById("lv3quests")
 const lv4quests = document.getElementById("lv4quests")
 const lv5quests = document.getElementById("lv5quests")
+const lv6quests = document.getElementById("lv6quests")
 function levelunlocks() {
     if (xp >= 4 && lv == 1) {
         lv = 2
@@ -2030,7 +2485,7 @@ function levelunlocks() {
         buff10.style.display = "flex"
         buff11.style.display = "flex"
     }
-    if (xp >= 6 && lv == 4) {
+    if (xp >= 7 && lv == 4) {
         lv = 5
         xp -= 6
         lv5quests.style.display = "flex"
@@ -2045,11 +2500,20 @@ function levelunlocks() {
         lvl5decks.style.display = "flex"
         casinobtn.style.display = "flex"
     }
+    if (xp >= 6 && lv == 5) {
+        lv = 6
+        xp -= 7
+        lvl6decklock.style.display = "none"
+        lvl6decks.style.display = "flex"
+        lv5quests.style.display = "none"
+        lv6quests.style.display = "flex"
+    }
     if (lv == 1) levelprog.innerHTML = xp + " / 4 until level 2"
     if (lv == 2) levelprog.innerHTML = xp + " / 6 until level 3"
     if (lv == 3) levelprog.innerHTML = xp + " / 6 until level 4"
     if (lv == 4) levelprog.innerHTML = xp + " / 6 until level 5"
     if (lv == 5) levelprog.innerHTML = xp + " / 7 until level 6"
+    if (lv == 6) levelprog.innerHTML = xp + " / 8 until level 7"
 }
 const deckdisp = document.getElementById("deckdisplay")
 lvl2.addEventListener("mouseenter", () => {
@@ -2107,13 +2571,13 @@ bdeck.addEventListener("mouseleave", () => {
     deckdisp.innerHTML = "Custom decks"
 })
 gdeck.addEventListener("mouseenter", () => {
-    deckdisp.innerHTML = "Ghost Deck: Remove cards above 9, bust from 666, winning mult = x1.5, a tie = lose."
+    deckdisp.innerHTML = "Ghost Deck: Once per round if a card would cause bust then halve its value, win mult = 1.5x"
 })
 gdeck.addEventListener("mouseleave", () => {
     deckdisp.innerHTML = "Custom decks"
 })
 mdeck.addEventListener("mouseenter", () => {
-    deckdisp.innerHTML = "Magic Deck: Each win increases winning mult by 0.25, but losing resets to 2x, bust limit = 22."
+    deckdisp.innerHTML = "Magic Deck: Each win increases winning mult by 0.25, but losing resets to 2x, bust limit = 23."
 })
 mdeck.addEventListener("mouseleave", () => {
     deckdisp.innerHTML = "Custom decks"
@@ -2167,7 +2631,7 @@ budeck.addEventListener("mouseleave", () => {
     deckdisp.innerHTML = "Custom decks"
 })
 evdeck.addEventListener("mouseenter", () => {
-    deckdisp.innerHTML = "Decimal deck: Each cards adds an extra 0.25 to total."
+    deckdisp.innerHTML = "Decimal deck: Each cards adds an extra 0.25 to total, bust from 23."
 })
 evdeck.addEventListener("mouseleave", () => {
     deckdisp.innerHTML = "Custom decks"
@@ -2178,6 +2642,103 @@ modeck.addEventListener("mouseenter", () => {
 modeck.addEventListener("mouseleave", () => {
     deckdisp.innerHTML = "Custom decks"
 })
+ecdeck.addEventListener("mouseenter", () => {
+    deckdisp.innerHTML = "Eclipse deck: If 2 seconds pass after drawing a card, the latest card is either doubled or halved."
+})
+ecdeck.addEventListener("mouseleave", () => {
+    deckdisp.innerHTML = "Custom decks"
+})
+rhdeck.addEventListener("mouseenter", () => {
+    deckdisp.innerHTML = "Pulse deck: Timing hit / stand gives more mult."
+})
+rhdeck.addEventListener("mouseleave", () => {
+    deckdisp.innerHTML = "Custom decks"
+})
+thdeck.addEventListener("mouseenter", () => {
+    deckdisp.innerHTML = "Thrill deck: Higher totals give higher win mults, but busting near 21 increases lose mult."
+})
+thdeck.addEventListener("mouseleave", () => {
+    deckdisp.innerHTML = "Custom decks"
+})
+const blackjackdisp = document.getElementById("blackdisplay")
+allinbtn.addEventListener("mouseenter", () => {
+    if (cps > 0 && currentdeck == 16 && amount > 0) {
+        blackjackdisp.innerHTML = "!!! " + formattime(Number((amount * 2n) / BigInt(Math.trunc(cps)))) + " to escape debt !!!"
+        blackjackdisp.style.color = "red"
+        blackjackdisp.classList.add("pulsewarning")
+    } else if (cps > 0 && currentdeck == 19 && amount > 0) {
+        blackjackdisp.innerHTML = "!!! " + formattime(Number(amount / BigInt(Math.trunc(cps)))) + " to escape debt !!!"
+        blackjackdisp.style.color = "red"
+        blackjackdisp.classList.add("pulsewarning")
+    }
+})
+allinbtn.addEventListener("mouseleave", () => {
+    blackjackdisp.innerHTML = "Blackjack"
+    blackjackdisp.style.color = "black"
+    blackjackdisp.classList.remove("pulsewarning")
+})
+bet12btn.addEventListener("mouseenter", () => {
+    if (cps > 0 && currentdeck == 16 && amount > 0) {
+        blackjackdisp.innerHTML = "!!! " + formattime(Number(amount / BigInt(Math.trunc(cps)))) + " to escape debt !!!"
+        blackjackdisp.style.color = "red"
+        blackjackdisp.classList.add("pulsewarning")
+    } else if (cps > 0 && currentdeck == 19 && amount > 0) {
+        blackjackdisp.innerHTML = "!!! " + formattime(Number((amount / 2n) / BigInt(Math.trunc(cps)))) + " to escape debt !!!"
+        blackjackdisp.style.color = "red"
+        blackjackdisp.classList.add("pulsewarning")
+    }
+})
+bet12btn.addEventListener("mouseleave", () => {
+    blackjackdisp.innerHTML = "Blackjack"
+    blackjackdisp.style.color = "black"
+    blackjackdisp.classList.remove("pulsewarning")
+})
+bet14btn.addEventListener("mouseenter", () => {
+    if (cps > 0 && currentdeck == 16 && amount > 0) {
+        blackjackdisp.innerHTML = "!!! " + formattime(Number((amount / 2n) / BigInt(Math.trunc(cps)))) + " to escape debt !!!"
+        blackjackdisp.style.color = "red"
+        blackjackdisp.classList.add("pulsewarning")
+    } else if (cps > 0 && currentdeck == 19 && amount > 0) {
+        blackjackdisp.innerHTML = "!!! " + formattime(Number((amount / 4n) / BigInt(Math.trunc(cps)))) + " to escape debt !!!"
+        blackjackdisp.style.color = "red"
+        blackjackdisp.classList.add("pulsewarning")
+    }
+})
+bet14btn.addEventListener("mouseleave", () => {
+    blackjackdisp.innerHTML = "Blackjack"
+    blackjackdisp.style.color = "black"
+    blackjackdisp.classList.remove("pulsewarning")
+})
+function formattime(time) {
+    if (time < 60) {
+        return Math.floor(time) + " seconds"
+    } 
+    if (time < 3600) {
+        return Math.round(time / 60, 2) + " minutes"
+    }
+    if (time < 86400) {
+        return Math.round(time / 3600, 2) + " hours"
+    }
+    if (time < 604800) {
+        return Math.round(time / 86400, 2) + " days"
+    }
+    if (time < 2419200) {
+        return formatNumber(Math.round(time / 604800, 2)) + " weeks"
+    }
+    if (time < 29030400) {
+        return formatNumber(Math.round(time / 2419200, 2)) + " months"
+    }
+    if (time < 290304000) {
+        return formatNumber(Math.round(time / 29030400, 2)) + " years"
+    }
+    if (time < 2903040000) {
+        return formatNumber(Math.round(time / 290304000, 2)) + " decades"
+    }
+    if (time < 29030400000) {
+        return formatNumber(Math.round(time / 2903040000, 2)) + " centuries"
+    }
+    return formatNumber(Math.round(time / 29030400000, 2)) + " millennia"
+}
 const buffmsg = document.getElementById("buffmsg")
 const buffs = document.getElementById("buffs")
 const buff1 = document.getElementById("buff1")

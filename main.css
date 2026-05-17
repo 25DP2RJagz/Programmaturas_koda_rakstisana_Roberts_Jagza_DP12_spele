@@ -146,6 +146,11 @@ h1 {
     flex-wrap: wrap;
     align-content: center;
 }
+#lv6quests {
+    display: none;
+    flex-wrap: wrap;
+    align-content: center;
+}
 #page2 {
     display: none;
 }
@@ -224,6 +229,14 @@ h1 {
     animation: scrollBG2 20s linear infinite;
     display: flex;
     align-items: center;
+}
+#upgtopp {
+    background-color: #f5d399;
+    background-image: url("data:image/svg+xml,%3Csvg width='42' height='44' viewBox='0 0 42 44' xmlns='http://www.w3.org/2000/svg'%3E%3Cg id='Page-1' fill='none' fill-rule='evenodd'%3E%3Cg id='brick-wall' fill='%23ab7100' fill-opacity='0.2'%3E%3Cpath d='M0 0h42v44H0V0zm1 1h40v20H1V1zM0 23h20v20H0V23zm22 0h20v20H22V23z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    animation: scrollBG2 10s linear infinite;
+    border-style: solid;
+    border-color: goldenrod;
+    margin-bottom: 10px;
 }
 .lock {
     width: 50px;
@@ -744,6 +757,67 @@ input::-webkit-inner-spin-button {
     flex-direction: column;
     align-items: center;
 }
+#timingbar {
+    position: relative;
+    width: 400px;
+    height: 30px;
+    background-color: #000000;
+    background-image: url("data:image/svg+xml,%3Csvg width='84' height='16' viewBox='0 0 84 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M78 7V4h-2v3h-3v2h3v3h2V9h3V7h-3zM30 7V4h-2v3h-3v2h3v3h2V9h3V7h-3zM10 0h2v16h-2V0zm6 0h4v16h-4V0zM2 0h4v16H2V0zm50 0h2v16h-2V0zM38 0h2v16h-2V0zm28 0h2v16h-2V0zm-8 0h6v16h-6V0zM42 0h6v16h-6V0z' fill='%23353535' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
+    border: 3px solid white;
+    overflow: hidden;
+    animation: scrollBG2 20s linear infinite;
+}
+
+#perfectzone {
+    position: absolute;
+    left: 48%;
+    width: 4%;
+    height: 100%;
+    animation: scrollBG2 20s linear infinite;
+    background-color: #16a404;
+    background-image: url("data:image/svg+xml,%3Csvg width='84' height='16' viewBox='0 0 84 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M78 7V4h-2v3h-3v2h3v3h2V9h3V7h-3zM30 7V4h-2v3h-3v2h3v3h2V9h3V7h-3zM10 0h2v16h-2V0zm6 0h4v16h-4V0zM2 0h4v16H2V0zm50 0h2v16h-2V0zM38 0h2v16h-2V0zm28 0h2v16h-2V0zm-8 0h6v16h-6V0zM42 0h6v16h-6V0z' fill='%2326df04' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
+    border-left-style: solid;
+    border-right-style: solid;
+    border-color: rgb(62, 141, 6);
+    border-width: 2px;
+}
+#goodzone {
+    position: absolute;
+    left: 40%;
+    width: 20%;
+    height: 100%;
+    animation: scrollBG2 20s linear infinite;
+    background-color: #dc9000;
+    background-image: url("data:image/svg+xml,%3Csvg width='84' height='16' viewBox='0 0 84 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M78 7V4h-2v3h-3v2h3v3h2V9h3V7h-3zM30 7V4h-2v3h-3v2h3v3h2V9h3V7h-3zM10 0h2v16h-2V0zm6 0h4v16h-4V0zM2 0h4v16H2V0zm50 0h2v16h-2V0zM38 0h2v16h-2V0zm28 0h2v16h-2V0zm-8 0h6v16h-6V0zM42 0h6v16h-6V0z' fill='%23dedf04' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
+    border-left-style: solid;
+    border-right-style: solid;
+    border-color: rgb(169, 104, 0);
+    border-width: 2px;
+}
+#timingcont {
+    width: 100%;
+    display: none;
+    justify-content: center;
+}
+#cursor {
+    position: absolute;
+    width: 6px;
+    height: 100%;
+    background: red;
+    border-style: solid;
+    border-color: #8e2222;
+    border-width: 2px;
+    left: 0%;
+    display: none;
+    box-sizing: border-box;
+}
+@keyframes passbar {
+    0% {left: 0%;}
+    100% {left: calc(100% - 10px);}
+}
+.passby {
+    animation: passbar 2s infinite;
+}
 @keyframes scrollBG {
     0% {
         background-position: 0px 0px;
@@ -783,10 +857,61 @@ input::-webkit-inner-spin-button {
         transform: scale(1);
     }
 }
+@keyframes pulsered {
+    0% {
+        color: red;
+    }
+
+    50% {
+        color: rgb(78, 8, 8);
+    }
+
+    100% {
+        color: red;
+    }
+}
+.pulsewarning {
+    animation: pulsered 0.5s infinite;
+}
+@keyframes pulsehit {
+    0% {
+        color: rgb(129, 9, 9);
+        background-color: rgb(255, 156, 27);
+    }
+
+    50% {
+        color: rgb(58, 0, 0);
+        background-color: rgb(244, 132, 132);
+    }
+
+    100% {
+        color: rgb(129, 9, 9);
+        background-color: rgb(255, 156, 27);
+    }
+}
+.pulsehit {
+    animation:
+        scrollBG2 20s linear infinite,
+        pulsehit 1s infinite !important;
+}
 @keyframes flip {
     0%   { transform: rotateY(0deg); }
     50%  { transform: rotateY(90deg); }
     100% { transform: rotateY(0deg); }
+}
+@keyframes sun {
+    0%   { filter: brightness(100%); }
+    100% { filter: brightness(170%) saturate(230%);}
+}
+@keyframes moon {
+    0%   { filter: brightness(100%);}
+    100% { filter: brightness(50%);}
+}
+.card.eclipsemoon {
+    animation: moon 0.3s ease forwards;
+}
+.card.eclipsesun {
+    animation: sun 0.3s ease forwards;
 }
 .card.flipping {
     animation: flip 0.4s ease;
