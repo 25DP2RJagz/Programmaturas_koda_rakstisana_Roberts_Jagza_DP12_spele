@@ -2,9 +2,21 @@ body {
     margin: 0px;
     padding: 0px;
     user-select: none;
+    overflow: hidden;
 }
 * {
     user-select: none;
+}
+.sidetab,
+.blackjacktab,
+.maintab {
+    box-sizing: border-box;
+}
+.uptab {
+    display:flex;
+    justify-content: space-between;
+    height: 100vh;
+    width: 100vw;
 }
 .nomargin {
     margin: 0px;
@@ -50,10 +62,15 @@ body {
     position: fixed;
     bottom: 0;
     display: flex;
-    right: 45.6%;
+    right: 46.5%;
     align-items: center;
     transform: translate(-50%, 120%);
     transition: transform 0.4s ease;
+}
+.redpopup {
+    border-color: #790606;
+    background-color: #f59f9f;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23f32222' fill-opacity='0.4'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3Cpath d='M6 5V0H5v5H0v1h5v94h1V6h94V5H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 #tpoptext {
     margin: 5px;
@@ -82,23 +99,40 @@ h1 {
     font-style: normal;
     user-select: none;
 }
-.uptab {
-    display:flex;
-    justify-content: space-between;
-}
 .sidetab {
-    flex: 0 0 300px;
-    height: 100vh;
+    width: 600px;
+    min-width: 600px;
+    max-width: 600px;
+    overflow-x: hidden;
+    overflow-y: auto;
     padding: 20px 10px;
     background-color: #ffdcac;
     background-image: url("data:image/svg+xml,%3Csvg width='42' height='44' viewBox='0 0 42 44' xmlns='http://www.w3.org/2000/svg'%3E%3Cg id='Page-1' fill='none' fill-rule='evenodd'%3E%3Cg id='brick-wall' fill='%23ab7100' fill-opacity='0.2'%3E%3Cpath d='M0 0h42v44H0V0zm1 1h40v20H1V1zM0 23h20v20H0V23zm22 0h20v20H22V23z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     animation: scrollBG 10s linear infinite;
 }
+.sidetab::-webkit-scrollbar {
+    width: 10px;
+}
+.sidetab::-webkit-scrollbar-track {
+    background-color: #c79856;
+    border-left: 2px solid #e28802;
+}
+.sidetab::-webkit-scrollbar-thumb {
+    background-color: #fffe98;
+    border: 2px solid goldenrod;
+}
+.sidetab::-webkit-scrollbar-thumb:hover {
+    background: #fcd151;
+}
+.sidetab::-webkit-scrollbar-button {
+    display: none;
+}
 .blackjacktab {
+    height: 100%;
     box-sizing: border-box;
     flex: 1;
     min-width: 0;
-    padding: 30px 5px;
+    padding: 10px 5px 0px 5px;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -107,9 +141,9 @@ h1 {
     animation: scrollBG 15s linear infinite;
 }
 .maintab{
+    height: 100%;
     flex: 0.9;
     min-width: 0;
-    height: 100vh;
     padding-top: 30px;
     animation: scrollBG2 25s linear infinite;
     display: flex;
@@ -151,7 +185,15 @@ h1 {
     flex-wrap: wrap;
     align-content: center;
 }
+#lv7quests {
+    display: none;
+    flex-wrap: wrap;
+    align-content: center;
+}
 #page2 {
+    display: none;
+}
+#page3 {
     display: none;
 }
 .queststab {
@@ -200,6 +242,15 @@ h1 {
     display: none;
 }
 #btncasino {
+    display: none;
+}
+#btnport {
+    display: none;
+}
+#btnbank {
+    display: none;
+}
+#btnvegas {
     display: none;
 }
 .questname {
@@ -272,8 +323,9 @@ h1 {
     padding: 10px 15px;
     border-width: 3px;
     width: 90%;
-    height: 100px;
-    margin-bottom: 30px;
+    height: 188px;
+    margin-bottom: 15px;
+    margin-top: 15;
     animation: scrollBG2 20s linear infinite;
     display: flex;
     align-items: center;
@@ -332,28 +384,7 @@ h1 {
     margin: 0;
     font-size: 35px;
 }
-#clickeramount {
-    text-align: right;
-}
-#pizzeramount {
-    text-align: right;
-}
-#mattressamount {
-    text-align: right;
-}
-#constructionamount {
-    text-align: right;
-}
-#casinoamount {
-    text-align: right;
-}
-#upgamount {
-    text-align: right;
-}
-#cdamount {
-    text-align: right;
-}
-#pwamount {
+.lefttextalign {
     text-align: right;
 }
 .sidebtn:hover {
@@ -423,17 +454,40 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 .card {
+    z-index: 1;
     width: 150px;
     image-rendering: pixelated;
     backface-visibility: hidden;
     transform-style: preserve-3d;
-    top: 0;
-    left: 0;
 }
 .carddiv {
     width: 150px;
     position: relative;
+    height: 210px;
     perspective: 800px
+}
+.card,
+.peekcard {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+.peekcard {
+    opacity: 0;
+    pointer-events: none;
+    z-index: 2;
+    filter:
+        brightness(1.2)
+        saturate(0);
+
+    mix-blend-mode: screen;
+    animation: prophecy 1s infinite alternate;
+}
+@keyframes prophecy {
+    0% { opacity: 0.7; }
+    100% { opacity: 0.9; }
 }
 .jackname {
     font-size: 50px;
@@ -551,8 +605,30 @@ input::-webkit-inner-spin-button {
 }
 #hitbtn:hover {
     border-color: rgb(220, 57, 57);
-    color: black;
     background-color: #8e2222;
+}
+#prophetbtn {
+    display: none;
+    user-select: none;
+    border-style: solid;
+    border-color: rgb(128, 0, 113);
+    border-width: 3px;
+    color: black;
+    font-family: "Jersey 10", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    cursor: pointer;
+    font-size: 45px;
+    padding: 0px 30px;
+    margin-bottom: 20px;
+    margin-left: 30px;
+    animation: scrollBG2 20s linear infinite;
+    background-color: #fe9dfc;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23a635f7' fill-opacity='0.4'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3Cpath d='M6 5V0H5v5H0v1h5v94h1V6h94V5H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+#prophetbtn:hover {
+    border-color: rgb(220, 57, 201);
+    background-color: #8e228e;
 }
 #endpage1 {
     display: flex;
