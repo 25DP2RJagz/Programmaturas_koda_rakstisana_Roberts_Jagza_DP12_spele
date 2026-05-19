@@ -1158,6 +1158,10 @@ function halodeck(curr) {
     return curr
 }
 function cardreset() {
+    card1.classList.remove("paintflash")
+    card2.classList.remove("paintflash")
+    card3.classList.remove("paintflash")
+    card4.classList.remove("paintflash")
     card1.classList.remove("anaglyph")
     card2.classList.remove("anaglyph")
     card3.classList.remove("anaglyph")
@@ -1306,6 +1310,19 @@ function checkbetpulse() {
         hitbtn.classList.add("pulsehit")
     } 
 }
+function handlePaintDeck() {
+    if (currentdeck !== 12) return
+
+    if (card1tier === "a") triggerPaint(card1)
+    if (card2tier === "a") triggerPaint(card2)
+    if (card3tier === "a") triggerPaint(card3)
+    if (card4tier === "a") triggerPaint(card4)
+}
+function triggerPaint(cardEl) {
+    cardEl.classList.remove("paintflash")
+    void cardEl.offsetWidth
+    cardEl.classList.add("paintflash")
+}
 function getTotalValue() {
     let total = cardval1 + cardval2 + cardval3 + cardval4
 
@@ -1315,6 +1332,7 @@ function getTotalValue() {
     return total
 }
 function drawcard() {
+    if (card >= 5) {return}
     if (drawn == -1) {
         drawn = choosecard()
     }
@@ -1335,6 +1353,7 @@ function drawcard() {
             card1tier = getcardtier(drawn)
             checkanaglyph()
             checkbetpulse()
+            handlePaintDeck()
             cardval.innerHTML = "Total value: " + (getTotalValue())
             if (getTotalValue() == bustamount && currentdeck !== 18) {
                 if (!busted && !stand) {
@@ -1359,6 +1378,7 @@ function drawcard() {
             card2tier = getcardtier(drawn)
             checkanaglyph()
             checkbetpulse()
+            handlePaintDeck()
             cardval.innerHTML = "Total value: " + (getTotalValue())
             if (getTotalValue() == bustamount && currentdeck !== 18) {
                 if (!busted && !stand) {
@@ -1383,6 +1403,7 @@ function drawcard() {
             card3tier = getcardtier(drawn)
             checkanaglyph()
             checkbetpulse()
+            handlePaintDeck()
             cardval.innerHTML = "Total value: " + (getTotalValue())
             if (getTotalValue() == bustamount && currentdeck !== 18) {
                 if (!busted && !stand) {
@@ -1407,6 +1428,7 @@ function drawcard() {
             card4tier = getcardtier(drawn)
             checkanaglyph()
             checkbetpulse()
+            handlePaintDeck()
             cardval.innerHTML = "Total value: " + (getTotalValue())
             if (getTotalValue() == bustamount && currentdeck !== 18) {
                 if (!busted && !stand) {
@@ -1418,12 +1440,25 @@ function drawcard() {
                 busted = true
                 card = 1
                 finishmatch()
-            } else if (currentdeck !== 18) {
+            } else if (currentdeck !== 18 && currentdeck !== 17) {
                 dealerplay()
+                stand = true
             }
             break
     }
     drawn = -1
+    if (currentdeck == 5 && getTotalValue() == 22) {
+        cardval.classList.add("tilt-oncegr")
+        setTimeout(() => {
+            cardval.classList.remove("tilt-oncegr")
+        }, 500);
+    }
+    if (currentdeck == 6 && getTotalValue() == 22) {
+        cardval.classList.add("tilt-oncema")
+        setTimeout(() => {
+            cardval.classList.remove("tilt-oncema")
+        }, 500);
+    }
 }
 function deckimg(number) {
     switch (number){
@@ -1483,8 +1518,6 @@ async function flipCard(cardElement, newSrc) {
 
     const img = new Image()
     img.src = newSrc
-
-    await img.decode()
 
     setTimeout(() => {
         cardElement.src = newSrc
@@ -1809,6 +1842,10 @@ function finishmatch() {
             size: "70px",
             duration: 5000
         })
+        nebulaOverlay.classList.add("nebula-active")
+        setTimeout(() => {
+            nebulaOverlay.classList.remove("nebula-active")
+        }, 2000)
         playSfx("holo1", 0.5, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
         } else {
             playSfx("timpani", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
@@ -1818,6 +1855,7 @@ function finishmatch() {
         if (currentbet >= 1000000000 && currentdeck == 16) {mountainquest += 1; updatequests()}
     }
 }
+const nebulaOverlay = document.getElementById("nebulaOverlay")
 function questwin() {
     if (currentdeck == 1) {redwins += 1}
     if (currentdeck == 3) {yellowwins += 1}
@@ -1855,8 +1893,17 @@ function questwin() {
     updatequests()
 }
 function spawnFloatingNumber(value, options = {}) {
+    const defaultStyle =
+        !("color" in options) &&
+        !("size" in options) &&
+        !("duration" in options)
+
+    let defaultText = "+" + formatNumber(value)
+
+    if (compactFloatingNumbers && defaultStyle) { return }
+
     const {
-        text = "+" + formatNumber(value),
+        text = defaultText,
         color = "rgb(184, 141, 1)",
         size = "45px",
         duration = 1000
@@ -1918,8 +1965,13 @@ function updateCPSDisplay() {
 updateCPSDisplay()
 
 let currentdeck = 1
-
+const body = document.getElementById("body")
 function setdeckstatus(number) {
+    if (currentdeck == 10) {
+        body.classList.add("blackandwhite")
+    } else {
+        body.classList.remove("blackandwhite")
+    }
     magicmult = BigInt("0")
     rstatus.innerHTML = "Owned"
     bstatus.innerHTML = "Owned"
@@ -2229,7 +2281,7 @@ adeck.addEventListener("click", () => {
         currentdeck = 10
         setdeckstatus(10)
         playSfx("cardfan", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
-        fadesong(1)
+        fadesong(6)
     }
 })
 pdeck.addEventListener("click", () => {
@@ -2255,7 +2307,7 @@ andeck.addEventListener("click", () => {
         currentdeck = 13
         setdeckstatus(13)
         playSfx("cardfan", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
-        fadesong(2)
+        fadesong(7)
     }
 })
 hdeck.addEventListener("click", () => {
@@ -2344,7 +2396,7 @@ bldeck.addEventListener("click", () => {
         currentdeck = 7
         setdeckstatus(7)
         playSfx("cardfan", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
-        fadesong(1)
+        fadesong(10)
     }
 })
 ndeck.addEventListener("click", () => {
@@ -2370,7 +2422,7 @@ budeck.addEventListener("click", () => {
         currentdeck = 14
         setdeckstatus(14)
         playSfx("cardfan", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
-        fadesong(1)
+        fadesong(5)
     }
 })
 evdeck.addEventListener("click", () => {
@@ -2396,7 +2448,7 @@ modeck.addEventListener("click", () => {
         currentdeck = 16
         setdeckstatus(16)
         playSfx("cardfan", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
-        fadesong(1)
+        fadesong(10)
     }
 })
 ecdeck.addEventListener("click", () => {
@@ -2409,7 +2461,7 @@ ecdeck.addEventListener("click", () => {
         currentdeck = 17
         setdeckstatus(17)
         playSfx("cardfan", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
-        fadesong(4)
+        fadesong(9)
     }
 })
 rhdeck.addEventListener("click", () => {
@@ -2422,7 +2474,7 @@ rhdeck.addEventListener("click", () => {
         currentdeck = 18
         setdeckstatus(18)
         playSfx("cardfan", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
-        fadesong(1)
+        fadesong(8)
     }
 })
 thdeck.addEventListener("click", () => {
@@ -2474,7 +2526,7 @@ dudeck.addEventListener("click", () => {
         currentdeck = 22
         setdeckstatus(22)
         playSfx("cardfan", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
-        fadesong(1)
+        fadesong(10)
     }
 })
 setdeckstatus(1)
@@ -3031,7 +3083,7 @@ bldeck.addEventListener("mouseleave", () => {
     deckdisp.innerHTML = "Custom decks"
 })
 adeck.addEventListener("mouseenter", () => {
-    deckdisp.innerHTML = "Tainted deck: Removes every face card, winning mult = 2.5x."
+    deckdisp.innerHTML = "Lonely deck: Removes every face card, winning mult = 2.5x."
 })
 adeck.addEventListener("mouseleave", () => {
     deckdisp.innerHTML = "Custom decks"
@@ -3043,7 +3095,7 @@ hdeck.addEventListener("mouseleave", () => {
     deckdisp.innerHTML = "Custom decks"
 })
 andeck.addEventListener("mouseenter", () => {
-    deckdisp.innerHTML = "Twin deck: Removes A, 2, 3, K. Two matching ranks in a row instantly set total to 21."
+    deckdisp.innerHTML = "Twin deck: Removes A, 2, 3, 4, K. Two matching ranks in a row instantly set total to 21."
 })
 andeck.addEventListener("mouseleave", () => {
     deckdisp.innerHTML = "Custom decks"
@@ -3396,8 +3448,8 @@ function checkbuffs() {
     playSfx("button", 0.7, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
 }
 levelunlocks()
-let globalSfxVolume = 0.3
-let globalMusicVolume = 0.1
+let globalSfxVolume = 0.2
+let globalMusicVolume = 0.2
 const SFX = {
   button: new Audio("sfx/button.ogg"),
   card1: new Audio("sfx/card1.ogg"),
@@ -3446,26 +3498,31 @@ const musicA = new Audio("music/theme.mp3")
 const musicB = new Audio("music/shop.mp3")
 const musicC = new Audio("music/celestial.mp3")
 const musicD = new Audio("music/arcana.mp3")
-const tracks = [musicA, musicB, musicC, musicD]
+const musicE = new Audio("music/exotic.mp3")
+const musicF = new Audio("music/piano.mp3")
+const musicH = new Audio("music/synthwave.mp3")
+const musicI = new Audio("music/breakcore.mp3")
+const musicJ = new Audio("music/starve.mp3")
+const musicK = new Audio("music/jazz.mp3")
+const tracks = [musicA, musicB, musicC, musicD, musicE, musicF, musicH, musicI, musicJ, musicK]
 tracks.forEach(m => {
   m.loop = true
+  m.mixVolume = 0
   m.volume = 0
 })
-const fadeHandles = new Map()
-function fade(audio, target, speed = 0.005) {
-  const old = fadeHandles.get(audio)
-  if (old) cancelAnimationFrame(old)
+function fade(audio, target, speed = 0.015) {
+  cancelAnimationFrame(audio._fadeId)
 
   const step = () => {
-    audio.volume += (target - audio.volume) * speed
+    audio.mixVolume += (target - audio.mixVolume) * speed
 
-    if (Math.abs(audio.volume - target) < 0.001) {
-      audio.volume = target
-      return
+    if (Math.abs(audio.mixVolume - target) < 0.001) {
+      audio.mixVolume = target
     }
 
-    const id = requestAnimationFrame(step)
-    fadeHandles.set(audio, id)
+    audio.volume = audio.mixVolume * globalMusicVolume
+
+    audio._fadeId = requestAnimationFrame(step)
   }
 
   step()
@@ -3477,24 +3534,204 @@ function fadesong(song) {
             fade(musicB, 0)
             fade(musicC, 0)
             fade(musicD, 0)
+            fade(musicE, 0)
+            fade(musicF, 0)
+            fade(musicH, 0)
+            fade(musicI, 0)
+            fade(musicJ, 0)
+            fade(musicK, 0)
             break
         case 2:
             fade(musicA, 0)
             fade(musicB, 0.2)
             fade(musicC, 0)
             fade(musicD, 0)
+            fade(musicE, 0)
+            fade(musicF, 0)
+            fade(musicH, 0)
+            fade(musicI, 0)
+            fade(musicJ, 0)
+            fade(musicK, 0)
             break
         case 3:
             fade(musicA, 0)
             fade(musicB, 0)
             fade(musicC, 0.2)
             fade(musicD, 0)
+            fade(musicE, 0)
+            fade(musicF, 0)
+            fade(musicH, 0)
+            fade(musicI, 0)
+            fade(musicJ, 0)
+            fade(musicK, 0)
             break
         case 4:
             fade(musicA, 0)
             fade(musicB, 0)
             fade(musicC, 0)
             fade(musicD, 0.2)
+            fade(musicE, 0)
+            fade(musicF, 0)
+            fade(musicH, 0)
+            fade(musicI, 0)
+            fade(musicJ, 0)
+            fade(musicK, 0)
+            break
+        case 5:
+            fade(musicA, 0)
+            fade(musicB, 0)
+            fade(musicC, 0)
+            fade(musicD, 0)
+            fade(musicE, 0.2)
+            fade(musicF, 0)
+            fade(musicH, 0)
+            fade(musicI, 0)
+            fade(musicJ, 0)
+            fade(musicK, 0)
+            break
+        case 6:
+            fade(musicA, 0)
+            fade(musicB, 0)
+            fade(musicC, 0)
+            fade(musicD, 0)
+            fade(musicE, 0)
+            fade(musicF, 0.2)
+            fade(musicH, 0)
+            fade(musicI, 0)
+            fade(musicJ, 0)
+            fade(musicK, 0)
+            break
+        case 7:
+            fade(musicA, 0)
+            fade(musicB, 0)
+            fade(musicC, 0)
+            fade(musicD, 0)
+            fade(musicE, 0)
+            fade(musicF, 0)
+            fade(musicH, 0.2)
+            fade(musicI, 0)
+            fade(musicJ, 0)
+            fade(musicK, 0)
+            break
+        case 8:
+            fade(musicA, 0)
+            fade(musicB, 0)
+            fade(musicC, 0)
+            fade(musicD, 0)
+            fade(musicE, 0)
+            fade(musicF, 0)
+            fade(musicH, 0)
+            fade(musicI, 0.2)
+            fade(musicJ, 0)
+            fade(musicK, 0)
+            break
+        case 9:
+            fade(musicA, 0)
+            fade(musicB, 0)
+            fade(musicC, 0)
+            fade(musicD, 0)
+            fade(musicE, 0)
+            fade(musicF, 0)
+            fade(musicH, 0)
+            fade(musicI, 0)
+            fade(musicJ, 0.2)
+            fade(musicK, 0)
+            break
+        case 10:
+            fade(musicA, 0)
+            fade(musicB, 0)
+            fade(musicC, 0)
+            fade(musicD, 0)
+            fade(musicE, 0)
+            fade(musicF, 0)
+            fade(musicH, 0)
+            fade(musicI, 0)
+            fade(musicJ, 0)
+            fade(musicK, 0.2)
             break
     }
 }
+const volumeBarm = document.getElementById("volumeBarm")
+const volumeFillm = document.getElementById("volumeFillm")
+let draggingVolumem = false
+function updateVolumem(e) {
+    const rect = volumeBarm.getBoundingClientRect()
+
+    let x = e.clientX - rect.left
+    let percent = x / rect.width
+
+    percent = Math.max(0, Math.min(1, percent))
+
+    globalMusicVolume = percent
+
+    volumeFillm.style.width = (percent * 100) + "%"
+
+    tracks.forEach(t => {
+        t.volume = t.mixVolume * globalMusicVolume
+    })
+}
+volumeBarm.addEventListener("mousedown", (e) => {
+    draggingVolumem = true
+    updateVolumem(e)
+})
+document.addEventListener("mousemove", (e) => {
+    if (draggingVolumem) {
+        updateVolumem(e)
+    }
+})
+document.addEventListener("mouseup", () => {
+    draggingVolumem = false
+})
+const volumeBars = document.getElementById("volumeBars")
+const volumeFills = document.getElementById("volumeFills")
+let draggingVolumes = false
+function updateVolumes(e) {
+    const rect = volumeBars.getBoundingClientRect()
+
+    let x = e.clientX - rect.left
+    let percent = x / rect.width
+
+    percent = Math.max(0, Math.min(1, percent))
+
+    globalSfxVolume = percent
+
+    volumeFills.style.width = (percent * 100) + "%"
+
+    globalSfxVolume = percent
+}
+
+volumeBars.addEventListener("mousedown", (e) => {
+    draggingVolumes = true
+    updateVolumes(e)
+})
+
+document.addEventListener("mousemove", (e) => {
+    if (draggingVolumes) {
+        updateVolumes(e)
+    }
+})
+
+document.addEventListener("mouseup", () => {
+    draggingVolumes = false
+})
+let settingopen = false
+const settingbtn = document.getElementById("settingbtn")
+const settingtab = document.getElementById("settingtab")
+settingbtn.addEventListener("click", () => {
+    if (settingopen) {
+        settingtab.style.display = "none"
+    } else {
+        settingtab.style.display = "block"
+    }
+    settingopen = !settingopen
+})
+let compactFloatingNumbers = false
+const numbertogbtn = document.getElementById("numbertogbtn")
+numbertogbtn.addEventListener("click", () => {
+    compactFloatingNumbers = !compactFloatingNumbers
+    if (compactFloatingNumbers) {
+        numbertogbtn.innerHTML = "Off"
+    } else {
+        numbertogbtn.innerHTML = "On"
+    }
+})

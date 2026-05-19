@@ -4,11 +4,6 @@ export const gfulldeck = [
   { name: "10h", img: "https://balatrowiki.org/images/thumb/10_of_Hearts.png/180px-10_of_Hearts.png?d0e33" },
   { name: "10s", img: "https://balatrowiki.org/images/thumb/10_of_Spades.png/180px-10_of_Spades.png?d0e33" },
 
-  { name: "4c", img: "https://balatrowiki.org/images/thumb/4_of_Clubs.png/180px-4_of_Clubs.png" },
-  { name: "4d", img: "https://balatrowiki.org/images/thumb/4_of_Diamonds.png/180px-4_of_Diamonds.png?6f537" },
-  { name: "4h", img: "https://balatrowiki.org/images/thumb/4_of_Hearts.png/180px-4_of_Hearts.png?d0e33" },
-  { name: "4s", img: "https://balatrowiki.org/images/thumb/4_of_Spades.png/180px-4_of_Spades.png?b0dc9" },
-
   { name: "5c", img: "https://balatrowiki.org/images/thumb/5_of_Clubs.png/180px-5_of_Clubs.png?ba228" },
   { name: "5d", img: "https://balatrowiki.org/images/thumb/5_of_Diamonds.png/180px-5_of_Diamonds.png?d0e33" },
   { name: "5h", img: "https://balatrowiki.org/images/thumb/5_of_Hearts.png/180px-5_of_Hearts.png?d0e33" },

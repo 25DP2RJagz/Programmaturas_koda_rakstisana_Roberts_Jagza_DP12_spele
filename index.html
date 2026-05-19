@@ -9,7 +9,7 @@
     <link rel="icon" type="image/x-icon" href="sprites\favicon.ico">
     <title>Mafia Blicker</title>
 </head>
-<body>
+<body id="body">
     <section class="uptab">
         <section class="blackjacktab">
             <div class="buttons">
@@ -134,7 +134,7 @@
                             <h1 class="nomargin smalltext" id="blstatus">Selected</h1>
                         </div>
                         <div class="deck" id="adeck">
-                            <h1 class="nomargin smalltext">Tainted Deck</h1>
+                            <h1 class="nomargin smalltext">Lonely Deck</h1>
                             <img class="deckimg" src="https://balatrowiki.org/images/Abandoned_Deck.png?e6d1d">
                             <h1 class="nomargin smalltext" id="astatus">Selected</h1>
                         </div>
@@ -387,8 +387,8 @@
                         </div>
 
                         <div class="quest" id="quest24">
-                            <h1 class="questname">Forget about it</h1>
-                            <h1 class="questdesc">Win 5 times with tainted deck</h1>
+                            <h1 class="questname">Im Mr. Lonely</h1>
+                            <h1 class="questdesc">Win 5 times with lonely deck</h1>
                             <div class="questbot">
                                 <h1 class="questprogress" id="quest24prog">0 / 5</h1>
                                 <div class="chips">
@@ -853,11 +853,36 @@
             </section>
         </section>
         <section class="maintab">
-            <div class="topdisplay">
+            <section class="toptab">
+                <div class="topdisplay">
                 <h1 id="amount">100 Pizzas</h1>
             </div>
             <h1 id="cps"></h1>
             <img id="thecookie" src="sprites\thepizza.png">
+            </section>
+            <section class="bottab">
+                <section id=settingtab>
+                    <div class="setting">
+                        <h1 class="settingtext">Number pop-up's</h1>
+                        <button id="numbertogbtn">On</button>
+                    </div>
+                    <div class="setting">
+                        <h1 class="settingtext">Music volume</h1>
+                        <div id="volumeBarm" class="volumebar">
+                            <div id="volumeFillm" class="volumefill"></div>
+                        </div>
+                    </div>
+                    <div class="setting">
+                        <h1 class="settingtext">Sfx volume</h1>
+                        <div id="volumeBars" class="volumebar">
+                            <div id="volumeFills" class="volumefill"></div>
+                        </div>
+                    </div>
+                </section>
+                <div class="rightalign">
+                    <button id="settingbtn">Settings</button>
+                </div>
+            </section>
         </section>
         <section class="sidetab">
                 <div class="upgtop">
@@ -1094,6 +1119,7 @@
             </section>
         </section>
     </section>
+    <div id="nebulaOverlay"></div>
 </body>
 <script type="module" src="script.js" defer></script>
 </html>
