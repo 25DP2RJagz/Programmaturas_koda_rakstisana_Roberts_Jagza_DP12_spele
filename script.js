@@ -196,10 +196,10 @@ const amount5 = document.getElementById("amount5")
 const amount25 = document.getElementById("amount25")
 const amountmax = document.getElementById("amountmax")
 let buyamount = 1
-amount1.addEventListener("click", () => {buyamount = 1; updateprices()})
-amount5.addEventListener("click", () => {buyamount = 5; updateprices()})
-amount25.addEventListener("click", () => {buyamount = 25; updateprices()})
-amountmax.addEventListener("click", () => {buyamount = 0; updateprices()})
+amount1.addEventListener("click", () => {buyamount = 1; updateprices(); playSfx("button", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)})
+amount5.addEventListener("click", () => {buyamount = 5; updateprices(); playSfx("button", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)})
+amount25.addEventListener("click", () => {buyamount = 25; updateprices(); playSfx("button", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)})
+amountmax.addEventListener("click", () => {buyamount = 0; updateprices(); playSfx("button", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)})
 function updateprices() {
     updateClickerPrice(); updateUpgPrice(); updatePizzerPrice(); updateMattressPrice(); updateconstructionPrice(); updatecasinoPrice(); updateportPrice(); updatebankPrice();
 }
@@ -354,6 +354,7 @@ clickerupg.addEventListener("click", () => {
         clickeramount.innerHTML = clicker
         updateClickerPrice()
         updateupgcps(1)
+        playSfx("button", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
     }
 })
 function updateClickerPrice() {
@@ -383,6 +384,7 @@ pizzerupg.addEventListener("click", () => {
         pizzeramount.innerHTML = pizzer
         updatePizzerPrice()
         updateupgcps(3)
+        playSfx("button", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
 
     }
 })
@@ -414,6 +416,7 @@ mattressbtn.addEventListener("click", () => {
         mattressamount.innerHTML = mattress
         updateMattressPrice()
         updateupgcps(4)
+        playSfx("button", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
 
     }
 })
@@ -444,6 +447,7 @@ constructionbtn.addEventListener("click", () => {
         constructionamount.innerHTML = construction
         updateconstructionPrice()
         updateupgcps(5)
+        playSfx("button", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
     }
 })
 function updateconstructionPrice() {
@@ -479,6 +483,7 @@ casinobtn.addEventListener("click", () => {
         casinoamount.innerHTML = casino
         updatecasinoPrice()
         updateupgcps(6)
+        playSfx("button", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
     }
 })
 function updatecasinoPrice() {
@@ -517,6 +522,7 @@ portbtn.addEventListener("click", () => {
         portamount.innerHTML = port
         updateportPrice()
         updateupgcps(7)
+        playSfx("button", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
     }
 })
 
@@ -559,6 +565,7 @@ bankbtn.addEventListener("click", () => {
         bankamount.innerHTML = bank
         updatebankPrice()
         updateupgcps(8)
+        playSfx("button", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
     }
 })
 
@@ -593,6 +600,7 @@ upgupg.addEventListener("click", () => {
         updateUpgPrice()
         updateupgcps(2)
         ovenbonus = 100n + ((upg / 10n) * ovenbuff)
+        playSfx("button", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
     }
 })
 function updateUpgPrice() {
@@ -613,6 +621,7 @@ cookie.addEventListener("click", () => {
     cookie.classList.remove("cookie-click")
     void cookie.offsetWidth
     cookie.classList.add("cookie-click")
+    playSfx("paper", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
 })
 updateprices()
 let dcardval1 = 0
@@ -658,8 +667,8 @@ function deckattributes() {
             winmult = 150
             break
         case 5: //green
-            bustamount = 222
-            winmult = 200
+            bustamount = 22
+            winmult = 180
             break
         case 6: //magic
             bustamount = 22
@@ -671,7 +680,7 @@ function deckattributes() {
             break
         case 8: //nebula
             bustamount = 21
-            winmult = 250
+            winmult = 200
             break
         case 9: //sacred
             bustamount = 21
@@ -758,7 +767,7 @@ function assigndeck() {
         case 12:
             return [...pfulldeck]
         case 13:
-            return [...fulldeck]
+            return [...gfulldeck]
         case 14:
             return [...fulldeck]
         case 15:
@@ -834,6 +843,8 @@ let prophetused = false
 prophetbtn.addEventListener("click", () => {
     if (blackjack && currentdeck == 20 && !prophetused) {
         prophetused = true
+        playSfx("button", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
+        playSfx("foil2", 0.5, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
         drawn = choosecard()
         switch (card) {
             case 1:
@@ -895,11 +906,14 @@ function checktiming() {
     const barRect = timingbar.getBoundingClientRect()
     const percent = ((cursorRect.left + cursorRect.width / 2 - barRect.left) / barRect.width) * 100
     if (percent >= 48 && percent <= 52) {
+        playSfx("multihit2", 0.5, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
         return "perfect"
     }
     if (percent >= 40 && percent <= 60) {
+        playSfx("multihit1", 0.5, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
         return "good"
     }
+    playSfx("cancel", 0.5, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
     return "miss"
 }
 function hitreward() {
@@ -953,6 +967,7 @@ function hitreward() {
 }
 let minbetmult = 5
 betbtn.addEventListener("click", () => {
+    playSfx("button", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
     if (input.value >= cps * minbetmult) {
         if (input.value > 0 && input.value <= amount && !blackjack) {
             startblackjack(BigInt(input.value))
@@ -963,6 +978,7 @@ betbtn.addEventListener("click", () => {
 })
 input.addEventListener("keydown", () => {
     if (event.key === "Enter") {
+        playSfx("button", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
         if (input.value >= cps * minbetmult) {
             if (input.value > 0 && input.value <= amount && !blackjack) {
                 startblackjack(BigInt(input.value))
@@ -972,6 +988,7 @@ input.addEventListener("keydown", () => {
 }})
 standbtn.addEventListener("click", () => {
     if (!busted && !stand) {
+        playSfx("button", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
         hitreward()
         stand = true
         dealerplay()
@@ -987,6 +1004,7 @@ standbtn.addEventListener("click", () => {
 })
 hitbtn.addEventListener("click", () => {
     if (!busted && !stand && card <= 4) {
+        playSfx("button", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
         drawcard()
         hitreward()
         peek1.style.display = "none"
@@ -1000,6 +1018,7 @@ hitbtn.addEventListener("click", () => {
     }
 })
 bet12btn.addEventListener("click", () => {
+    playSfx("button", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
     if (!blackjack && amount / BigInt(2) >= cps * minbetmult) {
             startblackjack(amount / BigInt(2))
     } else if (!blackjack && !popup) {
@@ -1007,6 +1026,7 @@ bet12btn.addEventListener("click", () => {
     }
 })
 bet14btn.addEventListener("click", () => {
+    playSfx("button", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
     if (!blackjack && amount / BigInt(4) >= cps * minbetmult) {
             startblackjack(amount / BigInt(4))
     } else if (!blackjack && !popup) {
@@ -1014,6 +1034,7 @@ bet14btn.addEventListener("click", () => {
     }
 })
 allinbtn.addEventListener("click", () => {
+    playSfx("button", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
     if (!blackjack && amount >= cps * minbetmult) {
             startblackjack(amount)
     } else if (!blackjack && !popup) {
@@ -1064,21 +1085,30 @@ function checkanaglyph() {
             cardval2 = 0
             cardval3 = 0
             cardval4 = 0
+            card1.classList.add("anaglyph")
+            card2.classList.add("anaglyph")
             triggeranaglyph += 1
+            playSfx("holo1", 0.5, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
         }
         if (card == 4 && card2tier == card3tier) {
             cardval1 = 21
             cardval2 = 0
             cardval3 = 0
             cardval4 = 0
+            card2.classList.add("anaglyph")
+            card3.classList.add("anaglyph")
             triggeranaglyph += 1
+            playSfx("holo1", 0.5, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
         }
         if (card == 5 && card3tier == card4tier) {
             cardval1 = 21
             cardval2 = 0
             cardval3 = 0
             cardval4 = 0
+            card3.classList.add("anaglyph")
+            card4.classList.add("anaglyph")
             triggeranaglyph += 1
+            playSfx("holo1", 0.5, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
         }
     }
 }
@@ -1094,6 +1124,33 @@ function halodeck(curr) {
             size: "70px",
             duration: 5000
         })
+        playSfx("foil1", 0.4, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
+        switch (card) {
+            case 1:
+                card1.classList.add("haloeffect")
+                setTimeout(() => {
+                    card1.classList.remove("haloeffect")
+                }, 2000);
+                break
+            case 2:
+                card2.classList.add("haloeffect")
+                setTimeout(() => {
+                    card2.classList.remove("haloeffect")
+                }, 2000);
+                break
+            case 3:
+                card3.classList.add("haloeffect")
+                setTimeout(() => {
+                    card3.classList.remove("haloeffect")
+                }, 2000);
+                break
+            case 4:
+                card4.classList.add("haloeffect")
+                setTimeout(() => {
+                    card4.classList.remove("haloeffect")
+                }, 2000);
+                break
+        }
         halotrigger = true
         return choosecard()
     }
@@ -1101,6 +1158,18 @@ function halodeck(curr) {
     return curr
 }
 function cardreset() {
+    card1.classList.remove("anaglyph")
+    card2.classList.remove("anaglyph")
+    card3.classList.remove("anaglyph")
+    card4.classList.remove("anaglyph")
+    peek1.style.display = "none"
+    peek2.style.display = "none"
+    peek3.style.display = "none"
+    peek4.style.display = "none"
+    peek1.src = null
+    peek2.src = null
+    peek3.src = null
+    peek4.src = null
     card1.style.opacity = 1
     card2.style.opacity = 1
     card3.style.opacity = 1
@@ -1142,6 +1211,7 @@ let ghosttriggered = false
 function ghostcheck() {
     if (currentdeck == 4 && cardval1 + cardval2 + cardval3 + cardval4 >= bustamount && !ghosttriggered) {
         ghosttriggered = true
+        playSfx("neg", 0.2, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch + 0.3)
         switch (card) {
             case 1:
                 if (cardval1 != 1 || cardval1 != 11) {
@@ -1181,6 +1251,7 @@ function checkeclipse() {
         setTimeout(() => {
             if (currcard == card - 1 && blackjackgame == currblackjack) {
                 eclipsedcards += 1
+                playSfx("neg", 0.4, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
                 switch (currcard) {
                     case 1:
                         if (Math.random() >= 0.5) {
@@ -1246,6 +1317,11 @@ function getTotalValue() {
 function drawcard() {
     if (drawn == -1) {
         drawn = choosecard()
+    }
+    if (Math.random() < 0.5) {
+        playSfx("card1", 1, 1)
+    } else {
+        playSfx("card2", 1, 1)
     }
     switch (card) {
         case 1:
@@ -1402,8 +1478,13 @@ setInterval(() => {
         winmult -= 10
     }
 }, 250)
-function flipCard(cardElement, newSrc) {
+async function flipCard(cardElement, newSrc) {
     cardElement.classList.add("flipping")
+
+    const img = new Image()
+    img.src = newSrc
+
+    await img.decode()
 
     setTimeout(() => {
         cardElement.src = newSrc
@@ -1429,6 +1510,7 @@ function showpopup(message, quest) {
             }, 3000)
             tpoptext.innerHTML = "Too low bet"
             bpoptext.innerHTML = "Current min bet: " + formatNumber(cps * minbetmult)
+            playSfx("tarot2", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
             break
         case 2:
             jackpopup.classList.add("show")
@@ -1444,10 +1526,12 @@ function showpopup(message, quest) {
             } else {
                 tpoptext.innerHTML = "Quests complete"
             }
-
+            playSfx("tarot2", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
             bpoptext.innerHTML = quest.join(", ")
     }
 }
+let sfxmaxpitch = 1
+let sfxminpitch = 0.6
 function dealerdrawcard() {
     const drawn = choosedealercard()
         switch (dcard) {
@@ -1514,10 +1598,10 @@ function dealerplay() {
             dealerdrawcard()
         } else {
             dstand = true
+            playSfx("cardfan", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
             finishmatch()
         }
     }
-
 }
 function givechips() {
     let addchips = 0
@@ -1596,6 +1680,11 @@ function givechips() {
             duration: 4000
         })
         chipcounter.innerHTML = formatNumber(chips)
+    if (Math.random >= 0.5) {
+        playSfx("chip1", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
+    } else {
+        playSfx("chip2", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
+    }
 }
 let nebulachance = 0
 function finishmatch() {
@@ -1605,6 +1694,14 @@ function finishmatch() {
     hitbtn.classList.remove("pulsehit")
     card = 1
     if ((!busted && (dcardval1 + dcardval2 + dcardval3 + dcardval4) < (getTotalValue())) || (dbusted && !busted)) {
+        let cashrandom = Math.random()
+        if (cashrandom >= 6) {
+            playSfx("coin1", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
+        } else if (cashrandom >= 3) {
+            playSfx("coin2", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
+        } else {
+            playSfx("coin3", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
+        }
         if (currentdeck == 19) {
             switch (getTotalValue()) {
                 case 17:
@@ -1702,7 +1799,7 @@ function finishmatch() {
             duration: 6000
         })
         }
-        if (nebulachance <= 0.4 && currentdeck == 8) {
+        if (nebulachance <= 0.3 && currentdeck == 8) {
             amount += currentbet
             counter.innerHTML = formatNumber(amount) + " pizzas"
             spawnFloatingNumber(currentbet)
@@ -1712,6 +1809,9 @@ function finishmatch() {
             size: "70px",
             duration: 5000
         })
+        playSfx("holo1", 0.5, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
+        } else {
+            playSfx("timpani", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
         }
         counter.innerHTML = formatNumber(amount) + " pizzas"
         blackjack = false
@@ -2128,6 +2228,8 @@ adeck.addEventListener("click", () => {
     if (!blackjack && adeckowned) {
         currentdeck = 10
         setdeckstatus(10)
+        playSfx("cardfan", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
+        fadesong(1)
     }
 })
 pdeck.addEventListener("click", () => {
@@ -2139,6 +2241,8 @@ pdeck.addEventListener("click", () => {
     if (!blackjack && pdeckowned) {
         currentdeck = 12
         setdeckstatus(12)
+        playSfx("cardfan", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
+        fadesong(1)
     }
 })
 andeck.addEventListener("click", () => {
@@ -2150,6 +2254,8 @@ andeck.addEventListener("click", () => {
     if (!blackjack && andeckowned) {
         currentdeck = 13
         setdeckstatus(13)
+        playSfx("cardfan", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
+        fadesong(2)
     }
 })
 hdeck.addEventListener("click", () => {
@@ -2161,24 +2267,32 @@ hdeck.addEventListener("click", () => {
     if (!blackjack && hdeckowned) {
         currentdeck = 11
         setdeckstatus(11)
+        playSfx("cardfan", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
+        fadesong(1)
     }
 })
 rdeck.addEventListener("click", () => {
     if (!blackjack) {
         currentdeck = 1
         setdeckstatus(1)
+        playSfx("cardfan", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
+        fadesong(1)
     }
 })
 bdeck.addEventListener("click", () => {
     if (!blackjack) {
         currentdeck = 2
         setdeckstatus(2)
+        playSfx("cardfan", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
+        fadesong(1)
     }
 })
 ydeck.addEventListener("click", () => {
     if (!blackjack) {
         currentdeck = 3
         setdeckstatus(3)
+        playSfx("cardfan", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
+        fadesong(2)
     }
 })
 gdeck.addEventListener("click", () => {
@@ -2190,6 +2304,8 @@ gdeck.addEventListener("click", () => {
     if (!blackjack && gdeckowned) {
         currentdeck = 4
         setdeckstatus(4)
+        playSfx("cardfan", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
+        fadesong(3)
     }
 })
 grdeck.addEventListener("click", () => {
@@ -2201,6 +2317,8 @@ grdeck.addEventListener("click", () => {
     if (!blackjack && grdeckowned) {
         currentdeck = 5
         setdeckstatus(5)
+        playSfx("cardfan", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
+        fadesong(1)
     }
 })
 mdeck.addEventListener("click", () => {
@@ -2212,6 +2330,8 @@ mdeck.addEventListener("click", () => {
     if (!blackjack && mdeckowned) {
         currentdeck = 6
         setdeckstatus(6)
+        playSfx("cardfan", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
+        fadesong(4)
     }
 })
 bldeck.addEventListener("click", () => {
@@ -2223,6 +2343,8 @@ bldeck.addEventListener("click", () => {
     if (!blackjack && bldeckowned) {
         currentdeck = 7
         setdeckstatus(7)
+        playSfx("cardfan", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
+        fadesong(1)
     }
 })
 ndeck.addEventListener("click", () => {
@@ -2234,6 +2356,8 @@ ndeck.addEventListener("click", () => {
     if (!blackjack && ndeckowned) {
         currentdeck = 8
         setdeckstatus(8)
+        playSfx("cardfan", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
+        fadesong(3)
     }
 })
 budeck.addEventListener("click", () => {
@@ -2245,6 +2369,8 @@ budeck.addEventListener("click", () => {
     if (!blackjack && budeckowned) {
         currentdeck = 14
         setdeckstatus(14)
+        playSfx("cardfan", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
+        fadesong(1)
     }
 })
 evdeck.addEventListener("click", () => {
@@ -2256,6 +2382,8 @@ evdeck.addEventListener("click", () => {
     if (!blackjack && evdeckowned) {
         currentdeck = 15
         setdeckstatus(15)
+        playSfx("cardfan", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
+        fadesong(1)
     }
 })
 modeck.addEventListener("click", () => {
@@ -2267,6 +2395,8 @@ modeck.addEventListener("click", () => {
     if (!blackjack && modeckowned) {
         currentdeck = 16
         setdeckstatus(16)
+        playSfx("cardfan", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
+        fadesong(1)
     }
 })
 ecdeck.addEventListener("click", () => {
@@ -2278,6 +2408,8 @@ ecdeck.addEventListener("click", () => {
     if (!blackjack && ecdeckowned) {
         currentdeck = 17
         setdeckstatus(17)
+        playSfx("cardfan", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
+        fadesong(4)
     }
 })
 rhdeck.addEventListener("click", () => {
@@ -2289,6 +2421,8 @@ rhdeck.addEventListener("click", () => {
     if (!blackjack && rhdeckowned) {
         currentdeck = 18
         setdeckstatus(18)
+        playSfx("cardfan", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
+        fadesong(1)
     }
 })
 thdeck.addEventListener("click", () => {
@@ -2300,6 +2434,8 @@ thdeck.addEventListener("click", () => {
     if (!blackjack && thdeckowned) {
         currentdeck = 19
         setdeckstatus(19)
+        playSfx("cardfan", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
+        fadesong(2)
     }
 })
 prdeck.addEventListener("click", () => {
@@ -2311,6 +2447,8 @@ prdeck.addEventListener("click", () => {
     if (!blackjack && prdeckowned) {
         currentdeck = 20
         setdeckstatus(20)
+        playSfx("cardfan", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
+        fadesong(3)
     }
 })
 nideck.addEventListener("click", () => {
@@ -2322,6 +2460,8 @@ nideck.addEventListener("click", () => {
     if (!blackjack && nideckowned) {
         currentdeck = 21
         setdeckstatus(21)
+        playSfx("cardfan", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
+        fadesong(1)
     }
 })
 dudeck.addEventListener("click", () => {
@@ -2333,6 +2473,8 @@ dudeck.addEventListener("click", () => {
     if (!blackjack && dudeckowned) {
         currentdeck = 22
         setdeckstatus(22)
+        playSfx("cardfan", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
+        fadesong(1)
     }
 })
 setdeckstatus(1)
@@ -2359,6 +2501,7 @@ const boxesbtn = document.getElementById("boxesbtn")
 const itemsbtn = document.getElementById("itemsbtn")
 
 playtab.addEventListener("click", () => {
+    playSfx("button", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
     gameview.style.display = "block"
     deckview.style.display = "none"
     questview.style.display = "none"
@@ -2370,6 +2513,7 @@ playtab.addEventListener("click", () => {
 
 decktab.addEventListener("click", () => {
     if (!blackjack) {
+        playSfx("button", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
         gameview.style.display = "none"
         deckview.style.display = "block"
         questview.style.display = "none"
@@ -2377,6 +2521,7 @@ decktab.addEventListener("click", () => {
 })
 questtab.addEventListener("click", () => {
     if (!blackjack) {
+        playSfx("button", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
         gameview.style.display = "none"
         deckview.style.display = "none"
         questview.style.display = "flex"
@@ -2387,40 +2532,47 @@ page1btn.addEventListener("click", () => {
     page1.style.display = "flex"
     page2.style.display = "none"
     page3.style.display = "none"
+    playSfx("button", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
 })
 page2btn.addEventListener("click", () => {
     page1.style.display = "none"
     page2.style.display = "flex"
     page3.style.display = "none"
+    playSfx("button", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
 })
 page3btn.addEventListener("click", () => {
     page1.style.display = "none"
     page2.style.display = "none"
     page3.style.display = "flex"
+    playSfx("button", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
 })
 upgradesbtn.addEventListener("click", () => {
     upgradestab.style.display = "block"
     buffstab.style.display = "none"
     boxestab.style.display = "none"
     itemstab.style.display = "none"
+    playSfx("button", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
 })
 buffsbtn.addEventListener("click", () => {
     upgradestab.style.display = "none"
     buffstab.style.display = "block"
     boxestab.style.display = "none"
     itemstab.style.display = "none"
+    playSfx("button", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
 })
 boxesbtn.addEventListener("click", () => {
     upgradestab.style.display = "none"
     buffstab.style.display = "none"
     boxestab.style.display = "block"
     itemstab.style.display = "none"
+    playSfx("button", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
 })
 itemsbtn.addEventListener("click", () => {
     upgradestab.style.display = "none"
     buffstab.style.display = "none"
     boxestab.style.display = "none"
     itemstab.style.display = "block"
+    playSfx("button", 1, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
 })
 const lvl2 = document.getElementById("lvl2")
 const lvl2decklock = document.getElementById("lvl2decklock")
@@ -2861,13 +3013,13 @@ mdeck.addEventListener("mouseleave", () => {
     deckdisp.innerHTML = "Custom decks"
 })
 grdeck.addEventListener("mouseenter", () => {
-    deckdisp.innerHTML = "Green Deck: Bust from 24."
+    deckdisp.innerHTML = "Green Deck: Bust from 23, win mult = 1.8x."
 })
 grdeck.addEventListener("mouseleave", () => {
     deckdisp.innerHTML = "Custom decks"
 })
 ndeck.addEventListener("mouseenter", () => {
-    deckdisp.innerHTML = "Nebula Deck: Remove cards 2-5, 40% chance to save money when losing and winning mult = 2.5x."
+    deckdisp.innerHTML = "Nebula Deck: Remove cards 2-5, 30% chance to save money."
 })
 ndeck.addEventListener("mouseleave", () => {
     deckdisp.innerHTML = "Custom decks"
@@ -2891,13 +3043,13 @@ hdeck.addEventListener("mouseleave", () => {
     deckdisp.innerHTML = "Custom decks"
 })
 andeck.addEventListener("mouseenter", () => {
-    deckdisp.innerHTML = "Twin deck: Getting two of the same tier cards in a row sets total card value to 21."
+    deckdisp.innerHTML = "Twin deck: Removes A, 2, 3, K. Two matching ranks in a row instantly set total to 21."
 })
 andeck.addEventListener("mouseleave", () => {
     deckdisp.innerHTML = "Custom decks"
 })
 pdeck.addEventListener("mouseenter", () => {
-    deckdisp.innerHTML = "Painted deck: Adds 6 more aces, removes all nines."
+    deckdisp.innerHTML = "Painted deck: Adds 8 more aces, removes all nines."
 })
 pdeck.addEventListener("mouseleave", () => {
     deckdisp.innerHTML = "Custom decks"
@@ -3241,5 +3393,108 @@ function checkbuffs() {
             buffmsg.style.display = "none"
         }
     })
+    playSfx("button", 0.7, Math.random() * (sfxmaxpitch - sfxminpitch) + sfxminpitch)
 }
 levelunlocks()
+let globalSfxVolume = 0.3
+let globalMusicVolume = 0.1
+const SFX = {
+  button: new Audio("sfx/button.ogg"),
+  card1: new Audio("sfx/card1.ogg"),
+  card2: new Audio("sfx/card3.ogg"),
+  chips1: new Audio("sfx/chips1.ogg"),
+  chips2: new Audio("sfx/chips2.ogg"),
+  coin1: new Audio("sfx/coin1.ogg"),
+  coin2: new Audio("sfx/coin2.ogg"),
+  coin3: new Audio("sfx/coin3.ogg"),
+  foil1: new Audio("sfx/foil1.ogg"),
+  foil2: new Audio("sfx/foil2.ogg"),
+  neg: new Audio("sfx/negative.ogg"),
+  holo1: new Audio("sfx/holo1.ogg"),
+  cardfan: new Audio("sfx/cardFan2.ogg"),
+  intropad: new Audio("sfx/introPad1.ogg"),
+  paper: new Audio("sfx/paper1.ogg"),
+  timpani: new Audio("sfx/timpani.ogg"),
+  tarot2: new Audio("sfx/tarot2.ogg"),
+  cancel: new Audio("sfx/cancel.ogg"),
+  multihit1: new Audio("sfx/multhit1.ogg"),
+  multihit2: new Audio("sfx/multhit2.ogg")
+}
+Object.values(SFX).forEach(s => {
+  s.preload = "auto"
+  s.volume = 0.5
+})
+function playSfx(name, volume = 1, pitch = 1) {
+  const base = SFX[name]
+  if (!base) return
+
+  const clone = base.cloneNode()
+  clone.volume = volume * globalSfxVolume
+
+  clone.playbackRate = pitch
+
+  clone.play()
+}
+document.addEventListener("click", () => {
+  tracks.forEach(m => {
+    m.play().catch(() => {})
+  })
+  fadesong(1)
+  playSfx("intropad", 0.2, 1)
+}, { once: true })
+const musicA = new Audio("music/theme.mp3")
+const musicB = new Audio("music/shop.mp3")
+const musicC = new Audio("music/celestial.mp3")
+const musicD = new Audio("music/arcana.mp3")
+const tracks = [musicA, musicB, musicC, musicD]
+tracks.forEach(m => {
+  m.loop = true
+  m.volume = 0
+})
+const fadeHandles = new Map()
+function fade(audio, target, speed = 0.005) {
+  const old = fadeHandles.get(audio)
+  if (old) cancelAnimationFrame(old)
+
+  const step = () => {
+    audio.volume += (target - audio.volume) * speed
+
+    if (Math.abs(audio.volume - target) < 0.001) {
+      audio.volume = target
+      return
+    }
+
+    const id = requestAnimationFrame(step)
+    fadeHandles.set(audio, id)
+  }
+
+  step()
+}
+function fadesong(song) {
+    switch (song) {
+        case 1:
+            fade(musicA, 0.2)
+            fade(musicB, 0)
+            fade(musicC, 0)
+            fade(musicD, 0)
+            break
+        case 2:
+            fade(musicA, 0)
+            fade(musicB, 0.2)
+            fade(musicC, 0)
+            fade(musicD, 0)
+            break
+        case 3:
+            fade(musicA, 0)
+            fade(musicB, 0)
+            fade(musicC, 0.2)
+            fade(musicD, 0)
+            break
+        case 4:
+            fade(musicA, 0)
+            fade(musicB, 0)
+            fade(musicC, 0)
+            fade(musicD, 0.2)
+            break
+    }
+}

@@ -49,6 +49,8 @@ export const pfulldeck = [
   { name: "ah", img: "https://balatrowiki.org/images/thumb/Ace_of_Hearts.png/180px-Ace_of_Hearts.png?d0e33" },
   { name: "as", img: "https://balatrowiki.org/images/thumb/Ace_of_Spades.png/180px-Ace_of_Spades.png?d0e33" },
 
+  { name: "ac", img: "https://balatrowiki.org/images/thumb/Ace_of_Clubs.png/180px-Ace_of_Clubs.png?d0e33" },
+  { name: "ad", img: "https://balatrowiki.org/images/thumb/Ace_of_Diamonds.png/180px-Ace_of_Diamonds.png?d0e33" },
   { name: "ah", img: "https://balatrowiki.org/images/thumb/Ace_of_Hearts.png/180px-Ace_of_Hearts.png?d0e33" },
   { name: "as", img: "https://balatrowiki.org/images/thumb/Ace_of_Spades.png/180px-Ace_of_Spades.png?d0e33" },
 
